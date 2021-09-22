@@ -702,6 +702,28 @@
         </Group>
         <Group>
           <GroupName>ELIB</GroupName>
+          <Files>
+            <File>
+              <FileName>ILI9341.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\System\Library\elib\src\ILI9341.c</FilePath>
+            </File>
+            <File>
+              <FileName>ILI9341.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\System\Library\elib\inc\ILI9341.h</FilePath>
+            </File>
+            <File>
+              <FileName>rgb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\System\Library\elib\src\rgb.c</FilePath>
+            </File>
+            <File>
+              <FileName>rgb.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\System\Library\elib\inc\rgb.h</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>CORE</GroupName>

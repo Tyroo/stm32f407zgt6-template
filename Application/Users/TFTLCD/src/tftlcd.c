@@ -4,11 +4,13 @@
 TFTLCD_Config TFTLCD_Conf;
 
 
+
+
 #ifdef USE_FSMC
 /* 使用FSMC的情况下 */
 
 // TFTLCD初始化函数
-__weak void TFTLCD_Init(void) {
+void TFTLCD_Init(void) {
 	
 	u8 GPIOD_AF_Array[9] = {0,1,4,5,8,9,10,14,15};
 	u8 GPIOE_AF_Array[9] = {7,8,9,10,11,12,13,14,15};
@@ -31,10 +33,13 @@ __weak void TFTLCD_Init(void) {
 	
 	/* 配置GPIO */
 	// GPIOB配置
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;						//PB15 推挽输出,控制背光
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;					//普通输出模式
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;			//50MHz
-  GPIO_Init(GPIOB, &GPIO_InitStructure);								//初始化 //PB15 推挽输出,控制背光
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;						// PB15 推挽输出,控制背光
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;					// 普通输出模式
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;				// 推挽输出
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;			// 50MHz
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;					// 上拉
+  GPIO_Init(GPIOB, &GPIO_InitStructure);								// 初始化 //PB15 推挽输出,控制背光
+	GPIO_SetBits(GPIOB, GPIO_Pin_15);											// 开启背光
 	// GPIOD配置
 	GPIO_InitStructure.GPIO_Pin =  (0x33)|(7<<8)|(3<<14); // PD0,1,4,5,8~15,NOE,NWE
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;					// 复用输出
@@ -62,15 +67,15 @@ __weak void TFTLCD_Init(void) {
 	// FSMC读写时序配置
 	FSMC_ReadWriteTiming.FSMC_AddressSetupTime = 0xF; //地址建立时间为 16 个 HCLK
 	FSMC_ReadWriteTiming.FSMC_AddressHoldTime = 0x00; //地址保持时间模式 A 未用到
-	FSMC_ReadWriteTiming.FSMC_DataSetupTime = 24; 	//数据保存时间为 25个 HCLK
+	FSMC_ReadWriteTiming.FSMC_DataSetupTime = 60; 	//数据保存时间为 25个 HCLK
 	FSMC_ReadWriteTiming.FSMC_BusTurnAroundDuration = 0x00;
 	FSMC_ReadWriteTiming.FSMC_CLKDivision = 0x00;
 	FSMC_ReadWriteTiming.FSMC_DataLatency = 0x00;
 	FSMC_ReadWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A; //模式 A 
 	// FSMC写时序
-	FSMC_WriteTiming.FSMC_AddressSetupTime = 0x08; //地址建立时间为 16 个 HCLK
+	FSMC_WriteTiming.FSMC_AddressSetupTime = 0x03; //地址建立时间为 3 个 HCLK
 	FSMC_WriteTiming.FSMC_AddressHoldTime = 0x00; //地址保持时间模式 A 未用到
-	FSMC_WriteTiming.FSMC_DataSetupTime = 0x08; 	//数据保存时间为 24个 HCLK
+	FSMC_WriteTiming.FSMC_DataSetupTime = 0x02; 	//数据保存时间为 3个 HCLK
 	FSMC_WriteTiming.FSMC_BusTurnAroundDuration = 0x00;
 	FSMC_WriteTiming.FSMC_CLKDivision = 0x00;
 	FSMC_WriteTiming.FSMC_DataLatency = 0x00;
@@ -98,13 +103,21 @@ __weak void TFTLCD_Init(void) {
 	FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM4, ENABLE); // 使能BANK1区域4
 	
 	/* TFTLCD设备初始化 */
-	TFTLCD_Conf.TFTLCD_Dir = 0; // 竖屏模式
-	TFTLCD_Conf.TFTLCD_Height = 280;	// 屏幕高度
-	TFTLCD_Conf.TFTLCD_Width = 200; // 屏幕宽度
+	TFTLCD_Conf.TFTLCD_Dir = 0; 		// 竖屏模式
+	TFTLCD_Conf.TFTLCD_Height = 320;// 屏幕高度320
+	TFTLCD_Conf.TFTLCD_Width = 240; // 屏幕宽度240
 	TFTLCD_Conf.TFTLCD_Cmd = (TFTLCD_CMD){0xD3,0x36,0x2A,0x2B,0x2C,0x2E};// IC指令
+
+	TFTLCD_ReadDeviceId();																// 获取TFTLCD IC ID
+	ILI9341_Init(&TFTLCD.RWCD_REG, &TFTLCD.RWCD_RAM);	// ILI9341初始化
+	TFTLCD_SetScanDir(TFTLCD_Conf.TFTLCD_Dir);						// 设置屏幕方向
+	TFTLCD_SetWindow(0, TFTLCD_Conf.TFTLCD_Width-1, 0, TFTLCD_Conf.TFTLCD_Height-1);	// 在屏幕上开窗
+	
+	TFTLCD_Clear(0xFFFFFF);	
+
 }
 
-
+ 
 // 以指定命令读TFTLCD RAM
 uint16_t TFTLCD_ReadRAM(uint16_t REG_Addr) {
 	TFTLCD.RWCD_REG = REG_Addr;
@@ -130,9 +143,9 @@ void TFTLCD_ReadDeviceId(void) {
 }
 
 
-void TFTLCD_SetScanDir(uint8_t Dir) {
+void TFTLCD_SetScanDir(uint16_t Dir) {
 	// Dir=0，竖屏；Dir=1，横屏
-	TFTLCD_WriteRAM(TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_ScanDir, (Dir<<6)|(Dir<<5));
+	TFTLCD_WriteRAM(TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_ScanDir, Dir);
 }
 
 
@@ -140,35 +153,63 @@ void TFTLCD_SetCursor(uint16_t XPos, uint16_t YPos) {
 	
 	// 设置X坐标
 	TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_XPos;
-	TFTLCD.RWCD_RAM = XPos>8;
+	TFTLCD.RWCD_RAM = XPos>>8;
 	TFTLCD.RWCD_RAM = XPos&0xFF;
 	// 设置Y坐标
 	TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_YPos;
-	TFTLCD.RWCD_RAM = YPos>8;
+	TFTLCD.RWCD_RAM = YPos>>8;
 	TFTLCD.RWCD_RAM = YPos&0xFF;
 	
 }
 
 
+void TFTLCD_DrawPoint(uint16_t XPos, uint16_t YPos, uint32_t Color) {
+	
+	uint16_t Color16;
+	
+	Color16 = RGB_To_U16(Color);
+	TFTLCD_SetCursor(XPos, YPos);	// 设置点坐标
+	
+	TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_ColorCode;
+	TFTLCD.RWCD_RAM = Color16;
+}
+
+
+// 以指定颜色清屏
+void TFTLCD_Clear(uint32_t Color) {
+	
+	uint32_t PointSum;
+	uint32_t PointIndex;
+	uint16_t Color16;
+	
+	Color16 = RGB_To_U16(Color);
+	PointSum = TFTLCD_Conf.TFTLCD_Height * TFTLCD_Conf.TFTLCD_Width;
+	
+	TFTLCD_SetCursor(0, 0);
+	
+	TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_ColorCode;
+	for(PointIndex=0;PointIndex<PointSum;PointIndex++) {
+		TFTLCD.RWCD_RAM = Color16;	
+	}
+	
+}
+
+
 // 在屏幕上开辟一个窗口
-void TFTLCD_SetScreenFrame(void) {
-	
-	uint16_t EndXPos;
-	uint16_t EndYPos;
-	
-	// 计算屏幕边缘对应的X、Y坐标
-	EndXPos = TFTLCD_Conf.TFTLCD_Width - 1;
-	EndYPos = TFTLCD_Conf.TFTLCD_Height - 1;
+void TFTLCD_SetWindow(uint16_t StarXPos, uint16_t EndXPos,
+	uint16_t StarYPos, uint16_t EndYPos) {
 	
 	// 规划屏幕的横向宽度
-	TFTLCD_WriteRAM(TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_XPos, 0x00);
-	TFTLCD.RWCD_RAM = 0x00;
+	TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_XPos;
+	TFTLCD.RWCD_RAM = StarXPos>8;
+	TFTLCD.RWCD_RAM = StarXPos&0xFF;
 	TFTLCD.RWCD_RAM = EndXPos>8;
 	TFTLCD.RWCD_RAM = EndXPos&0xFF;
 	
 	// 规划屏幕的纵向高度
-	TFTLCD_WriteRAM(TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_YPos, 0x00);
-	TFTLCD.RWCD_RAM = 0x00;
+	TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_YPos;
+	TFTLCD.RWCD_RAM = StarYPos>8;
+	TFTLCD.RWCD_RAM = StarYPos&0xFF;
 	TFTLCD.RWCD_RAM = EndYPos>8;
 	TFTLCD.RWCD_RAM = EndYPos&0xFF;
 }

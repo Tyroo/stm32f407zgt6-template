@@ -13,6 +13,7 @@
 #include "fsmc.h"
 #include "uart.h"
 #include "can.h"
+#include "tftlcd.h"
 #include "TestSlave.h"
 
 #endif
