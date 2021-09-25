@@ -3,7 +3,7 @@
 
 													
 // 显示单个字符
-void TFTLCD_Word16(uint16_t AxisX, uint16_t AxisY, 
+void TFTLCD_Word(uint16_t AxisX, uint16_t AxisY, 
 			uint8_t* WordArr, TFTLCD_Word_Font WordFont) {
 				
 	uint8_t Row, Col;
@@ -21,13 +21,9 @@ void TFTLCD_Word16(uint16_t AxisX, uint16_t AxisY,
 		for(Col=0;Col<WordFont.Word_FontSize;Col++) {
 			
 			if (RowValue&0x8000) 
-			{
-					TFTLCD.RWCD_RAM = 0x001F;
-			}
+					TFTLCD.RWCD_RAM = WordFont.Word_FontColor;
 			else 
-			{
-					TFTLCD.RWCD_RAM = 0xFFFF;
-			}	
+					TFTLCD.RWCD_RAM = WordFont.Word_FontBackground;
 			RowValue<<=1;
 		}
 		RowIndex += 2;
@@ -36,7 +32,7 @@ void TFTLCD_Word16(uint16_t AxisX, uint16_t AxisY,
 
 
 // 显示多个字符
-void TFTLCD_Words16(uint16_t AxisArrsX, uint16_t AxisArrsY, 
+void TFTLCD_Words(uint16_t AxisArrsX, uint16_t AxisArrsY, 
 			uint8_t* WordArrs, TFTLCD_Word_Font WordFont) {
 	// pass
 }

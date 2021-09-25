@@ -7,6 +7,7 @@
 #include "fsmc.h"
 #include "tftlcd_conf.h"
 #include "tftlcd_word.h"
+#include "tftlcd_element.h"
 #include "ILI9341.h"
 #include "rgb.h"
 
