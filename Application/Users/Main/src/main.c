@@ -10,7 +10,7 @@ uint8_t WordsArr[32] = {0x04,0x80,0x0E,0xA0,0x78,0x90,0x08,0x90,
       0x09,0x20,0x0A,0x14,0x28,0x14,0x10,0x0C};
 
 TFTLCD_Word_Font WordFont = { 16, 0, 0xFF0000,0x0000FF };
-TFTLCD_Ele_Box EleBox = {20, 260, 0xFF0000, { 10, 0xFFFF00, 0 }};
+TFTLCD_EleProp_Type EleBox = {20, 260, 0xFF0000, 1, { 10, 0xFFFF00, 0 }};
 
 
 int main() {
@@ -19,6 +19,8 @@ int main() {
 //	CanTxMsg CANTxMessage;
 
 	uint8_t EleBoxIndex;
+	
+	TFTLCD_EleObj_Type* EleObj_Box;
 	
 	Nvic_Init(2);				// 中断分组，中断分组2
 	Delay_Init();				// 初始化延时模块
@@ -36,11 +38,16 @@ int main() {
 	TFTLCD_Init();	// 初始化LCDTFT模块
 	
 	Delay_Ms(100);
+	
 //	TFTLCD_Word(50, 50, WordsArr, WordFont);
-	for(EleBoxIndex=0;EleBoxIndex<6;EleBoxIndex++) {
-		EleBox.Ele_Box_Height -= 35;
-		DrawBox(EleBoxIndex*40, 20, EleBox);
-	}
+	
+	EleObj_Box = EleCreateObj(ELE_BOX, EleBox);
+	EleObj_Box->Ele_Box_Obj.Display(40, 20, EleBox);
+	
+//	for(EleBoxIndex=0;EleBoxIndex<6;EleBoxIndex++) {
+//		EleBox.Ele_BoxProp.Ele_Box_Height -= 35;
+//		DrawBox(EleBoxIndex*40, 20, EleBox);
+//	}
 	
 	
 	

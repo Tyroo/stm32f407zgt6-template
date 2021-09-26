@@ -22,6 +22,9 @@
 #define TFTLCD_DATA_MODE
 #endif
 
+#define TFTLCD_REG(CMD) (TFTLCD.RWCD_REG = CMD)
+#define TFTLCD_RAM(DATA) (TFTLCD.RWCD_RAM = DATA)
+
 
 void TFTLCD_Init(void);
 

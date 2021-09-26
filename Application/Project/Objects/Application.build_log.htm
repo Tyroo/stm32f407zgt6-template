@@ -28,14 +28,24 @@ Project File Date:  09/25/2021
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\Keil\keil_v5\ARM\ARMCC\Bin'
 Build Project 'Application' - Target 'Application'
 Note: source file '..\System\Core\startup_stm32f40_41xxx.s' - object file renamed from '.\Objects\startup_stm32f40_41xxx.o' to '.\Objects\startup_stm32f40_41xxx_1.o'.
-compiling main.c...
-E:\KeilProjects\Template-STM32F407ZGT6\Application\Users\TFTLCD\inc\tftlcd_element.h(32): warning:  #1-D: last line of file ends without a newline
+compiling tftlcd_element.c...
+E:\KeilProjects\Template-STM32F407ZGT6\Application\Users\TFTLCD\inc\tftlcd_element.h(66): warning:  #1-D: last line of file ends without a newline
   #endif
-..\Users\Main\src\main.c: 1 warning, 0 errors
+E:\KeilProjects\Template-STM32F407ZGT6\Application\Users\TFTLCD\inc\tftlcd_element.h(66): warning:  #1-D: last line of file ends without a newline
+  #endif
+E:\KeilProjects\Template-STM32F407ZGT6\Application\Users\TFTLCD\src\tftlcd_element.c(76): warning:  #1-D: last line of file ends without a newline
+  }
+..\Users\TFTLCD\src\tftlcd_element.c: 3 warnings, 0 errors
+compiling main.c...
+E:\KeilProjects\Template-STM32F407ZGT6\Application\Users\TFTLCD\inc\tftlcd_element.h(66): warning:  #1-D: last line of file ends without a newline
+  #endif
+E:\KeilProjects\Template-STM32F407ZGT6\Application\Users\Main\src\main.c(21): warning:  #177-D: variable "EleBoxIndex"  was declared but never referenced
+  	uint8_t EleBoxIndex;
+..\Users\Main\src\main.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=5212 RO-data=432 RW-data=92 ZI-data=1115932  
+Program Size: Code=5416 RO-data=432 RW-data=96 ZI-data=1115936  
 FromELF: creating hex file...
-".\Objects\Application.axf" - 0 Error(s), 1 Warning(s).
+".\Objects\Application.axf" - 0 Error(s), 5 Warning(s).
 
 <h2>Software Packages used:</h2>
 
