@@ -10,7 +10,8 @@ uint8_t WordsArr[32] = {0x04,0x80,0x0E,0xA0,0x78,0x90,0x08,0x90,
       0x09,0x20,0x0A,0x14,0x28,0x14,0x10,0x0C};
 
 TFTLCD_Word_Font WordFont = { 16, 0, 0xFF0000,0x0000FF };
-TFTLCD_EleProp_Type EleBox = {20, 260, 0xFF0000, 1, { 10, 0xFFFF00, 0 }};
+
+
 
 
 int main() {
@@ -20,7 +21,13 @@ int main() {
 
 	uint8_t EleBoxIndex;
 	
-	TFTLCD_EleObj_Type* EleObj_Box;
+//	TFTLCD_Ele_ObjType EleObj;
+//	TFTLCD_Ele_PropType EleProp;
+	
+//	Ele_Box_PropType BoxProp;
+	Ele_Box_ObjType BoxObj;
+	
+	BoxObj.Ele_BoxProp = (Ele_Box_PropType){20, 260, 0xFF0000, 1, { 10, 10, 0, 0xFFFF00 }};
 	
 	Nvic_Init(2);				// 中断分组，中断分组2
 	Delay_Init();				// 初始化延时模块
@@ -41,8 +48,13 @@ int main() {
 	
 //	TFTLCD_Word(50, 50, WordsArr, WordFont);
 	
-	EleObj_Box = EleCreateObj(ELE_BOX, EleBox);
-	EleObj_Box->Ele_Box_Obj.Display(40, 20, EleBox);
+//	EleObj = CreateEleObj(ELE_BOX_OBJ, &EleProp);
+	
+//	BoxProp = EleProp.Ele_BoxProp;
+//	BoxObj = EleObj.Ele_Box_Obj;
+	
+//	BoxObj.SetBg(0x0000FF, 1, &BoxProp);
+//	BoxObj.Display(40, 20, EleProp);
 	
 //	for(EleBoxIndex=0;EleBoxIndex<6;EleBoxIndex++) {
 //		EleBox.Ele_BoxProp.Ele_Box_Height -= 35;
