@@ -167,7 +167,7 @@ void TFTLCD_DrawPoint(uint16_t XPos, uint16_t YPos, uint32_t Color) {
 	
 	uint16_t Color16;
 	
-	Color16 = RGB_To_U16(Color);
+	Color16 = COLOR16(Color);
 	TFTLCD_SetCursor(XPos, YPos);	// ÉèÖÃµã×ø±ê
 	
 	TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_ColorCode;
@@ -182,7 +182,7 @@ void TFTLCD_Clear(uint32_t Color) {
 	uint32_t PointIndex;
 	uint16_t Color16;
 	
-	Color16 = RGB_To_U16(Color);
+	Color16 = COLOR16(Color);
 	PointSum = TFTLCD_Conf.TFTLCD_Height * TFTLCD_Conf.TFTLCD_Width;
 	
 	TFTLCD_SetCursor(0, 0);

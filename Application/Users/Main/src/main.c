@@ -16,18 +16,21 @@ TFTLCD_Word_Font WordFont = { 16, 0, 0xFF0000,0x0000FF };
 
 int main() {
 	
-//	u8 KeyCode;					// 按钮状态定义
+	u8 KeyCode;					// 按钮状态定义
 //	CanTxMsg CANTxMessage;
 
-	uint8_t EleBoxIndex;
+//	uint8_t EleBoxIndex;
 	
 //	TFTLCD_Ele_ObjType EleObj;
 //	TFTLCD_Ele_PropType EleProp;
 	
 //	Ele_Box_PropType BoxProp;
-	Ele_Box_ObjType BoxObj;
+	Ele_Box_ObjType  BoxObj;
+	Ele_Box_PropType BoxProp;
 	
-	BoxObj.Ele_BoxProp = (Ele_Box_PropType){20, 260, 0xFF0000, 1, { 10, 10, 0, 0xFFFF00 }};
+	BoxProp = (Ele_Box_PropType){20, 200, 0xFF0000, 1, { 10, 10, 0, 0xFFFF00 }};
+	
+	CreateBoxObject(&BoxObj, BoxProp);
 	
 	Nvic_Init(2);				// 中断分组，中断分组2
 	Delay_Init();				// 初始化延时模块
@@ -52,9 +55,12 @@ int main() {
 	
 //	BoxProp = EleProp.Ele_BoxProp;
 //	BoxObj = EleObj.Ele_Box_Obj;
-	
-//	BoxObj.SetBg(0x0000FF, 1, &BoxProp);
-//	BoxObj.Display(40, 20, EleProp);
+
+//	BoxObj.SetBg(0xFF0000, 80, 80, 1, &BoxObj);
+//    BoxObj.SetBd(0xFF0000, 5, 10, 0, &BoxObj);
+    BoxProp.Ele_Box_Color = 0x0000FF;
+    BoxObj.SetBg(0xFFFF00, 80, 80, 1, &BoxObj);
+	BoxObj.Display(40, 40, &BoxObj);
 	
 //	for(EleBoxIndex=0;EleBoxIndex<6;EleBoxIndex++) {
 //		EleBox.Ele_BoxProp.Ele_Box_Height -= 35;
@@ -70,22 +76,27 @@ int main() {
 //	CANTxMessage.StdId = 0x12;
 //	CANTxMessage.ExtId = 0x12;		// 扩展标识符为0
 //	CANTxMessage.RTR = 0;					// 数据帧
-	
+
 	while(1) {
 		
-//		KeyCode = Key_Scan(0);	// 按键扫描
-//		
-//		if (KeyCode == 1) {
+		KeyCode = Key_Scan(0);	// 按键扫描
+		
+		if (KeyCode == 1) {
+//            Color += 500;
+//            if(Color > 0xFFFFFF)
+//                Color = 0x0000FF;
+//            BoxObj.SetBg(Color, 80, 80, 1, &BoxObj);
+//            BoxObj.Display(40, 20, &BoxObj);
 //			CAN1_Send_Msg(&CANTxMessage);
-////			FsmcSram_Write(Fsmc_Rx_Buff, 0, 1);
-////			Led_Control(1);
-////			SendChar = (u8)FsmcSram_Read(0);
-////			Uart1_Send((char*)&SendChar);
-//			
-//		} 
-//		else {
-//			Led_Control(0);
-//		}
+//			FsmcSram_Write(Fsmc_Rx_Buff, 0, 1);
+//			Led_Control(1);
+//			SendChar = (u8)FsmcSram_Read(0);
+//			Uart1_Send((char*)&SendChar);
+			
+		} 
+		else {
+			Led_Control(1);
+		}
 		
 	}
 }
