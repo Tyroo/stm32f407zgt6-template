@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\Application.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\Application.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Tue Sep 28 21:23:13 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Wed Sep 29 22:49:22 2021
 <BR><P>
 <H3>Maximum Stack Usage =        292 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -904,6 +904,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = TFTLCD_SetWindow
 </UL>
 <BR>[Called By]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TFTLCD_Init
+<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[9e]"></a>TFTLCD_WriteRAM</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, tftlcd.o(i.TFTLCD_WriteRAM))
@@ -974,10 +975,11 @@ Global Symbols
 <P><STRONG><a name="[7]"></a>UsageFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.UsageFault_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f40_41xxx_1.o(RESET)
 </UL>
-<P><STRONG><a name="[71]"></a>main</STRONG> (Thumb, 134 bytes, Stack size 80 bytes, main.o(i.main))
+<P><STRONG><a name="[71]"></a>main</STRONG> (Thumb, 146 bytes, Stack size 80 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 292<LI>Call Chain = main &rArr; TFTLCD_Init &rArr; Fsmc_AF_Config &rArr; GPIO_PinAFConfig
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Uart1_Init
+<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TFTLCD_SetWindow
 <LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TFTLCD_Init
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Nvic_Init
 <LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Led_Init

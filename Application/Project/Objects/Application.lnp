@@ -64,6 +64,7 @@
 ".\objects\tftlcd_shape.o"
 ".\objects\tftlcd_word.o"
 ".\objects\tftlcd_conf.o"
+".\objects\tftlcd_event.o"
 ".\objects\testmaster.o"
 ".\objects\canfestival.o"
 ".\objects\dcf.o"

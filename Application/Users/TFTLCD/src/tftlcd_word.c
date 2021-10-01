@@ -3,36 +3,46 @@
 
 													
 // 显示单个字符
-void TFTLCD_Word(uint16_t AxisX, uint16_t AxisY, 
-			uint8_t* WordArr, TFTLCD_Word_Font WordFont) {
-				
+void TFTLCD_Word(uint16_t XPix, uint16_t YPix, void* _Obj) 
+{			
 	uint8_t Row, Col;
-	uint8_t RowIndex;
 	uint16_t RowValue;
-	
-	RowIndex = 0;
+    
+    TFTLCD_Word_PropType* WordObj;
+    
+    WordObj = (TFTLCD_Word_PropType*)_Obj;
+    WordObj->XPix = XPix;
+    WordObj->YPix = YPix;
 				
-	for(Row=0;Row<WordFont.Word_FontSize;Row++) {
+	for(Row=0;Row<WordObj->FontSize;Row++) 
+    {
+		RowValue = ((WordObj->WordBuff[2*Row]<<8)|(WordObj->WordBuff[2*Row+1]));
+		TFTLCD_SetCursor(XPix, YPix+Row);
+		TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_ColorCode;
 		
-		RowValue = ((WordArr[RowIndex]<<8)|(WordArr[RowIndex+1]));
-		TFTLCD_SetCursor(AxisX, AxisY+Row);
-		TFTLCD.RWCD_REG = 0x2C;
-		
-		for(Col=0;Col<WordFont.Word_FontSize;Col++) {
-			
+		for(Col=0;Col<WordObj->FontSize;Col++) 
+        {
 			if (RowValue&0x8000) 
-					TFTLCD.RWCD_RAM = WordFont.Word_FontColor;
+                TFTLCD.RWCD_RAM = WordObj->FontFg;
 			else 
-					TFTLCD.RWCD_RAM = WordFont.Word_FontBackground;
+                TFTLCD.RWCD_RAM = WordObj->FontBg;
 			RowValue<<=1;
 		}
-		RowIndex += 2;
 	}
 }
 
 
 // 显示多个字符
-void TFTLCD_Words(uint16_t AxisArrsX, uint16_t AxisArrsY, 
-			uint8_t* WordArrs, TFTLCD_Word_Font WordFont) {
-	// pass
+void TFTLCD_Words(uint16_t XPix, uint16_t YPix, 
+    uint16_t Width, uint16_t Height, void* _Obj) 
+{
+    TFTLCD_Words_ObjType* WordsObj;
+    WordsObj = (TFTLCD_Words_ObjType*)_Obj;
+
+	Width = Width/8;
+    
+//    for ()
+//    WordsObj->WordObj.Display()
+    
 }
+

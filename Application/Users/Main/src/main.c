@@ -55,12 +55,14 @@ int main() {
 	
 //	BoxProp = EleProp.Ele_BoxProp;
 //	BoxObj = EleObj.Ele_Box_Obj;
-
+    TFTLCD_SetWindow(10, 11, 10, 11);
 //	BoxObj.SetBg(0xFF0000, 80, 80, 1, &BoxObj);
 //    BoxObj.SetBd(0xFF0000, 5, 10, 0, &BoxObj);
     BoxProp.Ele_Box_Color = 0x0000FF;
     BoxObj.SetBg(0xFFFF00, 80, 80, 1, &BoxObj);
 	BoxObj.Display(40, 40, &BoxObj);
+    
+    
 	
 //	for(EleBoxIndex=0;EleBoxIndex<6;EleBoxIndex++) {
 //		EleBox.Ele_BoxProp.Ele_Box_Height -= 35;

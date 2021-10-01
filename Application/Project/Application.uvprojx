@@ -778,6 +778,16 @@
               <FileType>5</FileType>
               <FilePath>..\Users\TFTLCD\inc\tftlcd_conf.h</FilePath>
             </File>
+            <File>
+              <FileName>tftlcd_event.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\TFTLCD\src\tftlcd_event.c</FilePath>
+            </File>
+            <File>
+              <FileName>tftlcd_event.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Users\TFTLCD\inc\tftlcd_event.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

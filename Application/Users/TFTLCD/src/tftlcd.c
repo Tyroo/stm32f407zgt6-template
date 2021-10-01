@@ -17,7 +17,7 @@ void TFTLCD_Init(void) {
 	u8 GPIOF_AF_Array[1] = {12};
 	u8 GPIOG_AF_Array[1] = {12};
 	
-		/* 定义配置结构体 */
+	/* 定义配置结构体 */
 	GPIO_InitTypeDef GPIO_InitStructure;
 	FSMC_NORSRAMInitTypeDef FSMC_InitStructure;
 	FSMC_NORSRAMTimingInitTypeDef FSMC_ReadWriteTiming; 
@@ -34,19 +34,19 @@ void TFTLCD_Init(void) {
 	/* 配置GPIO */
 	// GPIOB配置
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;						// PB15 推挽输出,控制背光
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;					// 普通输出模式
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;					// 普通输出模式
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;				// 推挽输出
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;			// 50MHz
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;			// 50MHz
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;					// 上拉
-  GPIO_Init(GPIOB, &GPIO_InitStructure);								// 初始化 //PB15 推挽输出,控制背光
+    GPIO_Init(GPIOB, &GPIO_InitStructure);								// 初始化 //PB15 推挽输出,控制背光
 	GPIO_SetBits(GPIOB, GPIO_Pin_15);											// 开启背光
 	// GPIOD配置
 	GPIO_InitStructure.GPIO_Pin =  (0x33)|(7<<8)|(3<<14); // PD0,1,4,5,8~15,NOE,NWE
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;					// 复用输出
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;				// 推挽输出
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;		// 100MHz
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;					// 上拉
-  GPIO_Init(GPIOD, &GPIO_InitStructure);								// 初始化数据线
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;					// 复用输出
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;				// 推挽输出
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;		// 100MHz
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;					// 上拉
+    GPIO_Init(GPIOD, &GPIO_InitStructure);								// 初始化数据线
 	// GPIOE配置
 	GPIO_InitStructure.GPIO_Pin =  (0X1FF<<7);			// PE0,1,7~15,NBL0,NBL1
 	GPIO_Init(GPIOE, &GPIO_InitStructure);					// 初始化数据线
