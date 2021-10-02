@@ -49,15 +49,19 @@ typedef struct {
 
 	UINT8 EventNumber;
 	UINT8 EventStatus;
-	void(*OnFunc)(UINT16 EventCnt, void* pEvenObj);
+    UINT16 _EventInitCtn;   // Don't change
+    UINT16 EventPeriodCnt;  // Set range: [0,65534]
+    
+	void(*OnFunc)(void* pEvenObj);
 
 } CycleEventType;
 
 
 typedef struct {
 
-	UINT8 EventNumber;
-	UINT8 EventStatus;
+	UINT8  EventNumber;
+	UINT8  EventStatus;
+
 	void(*OnFunc)(void* pEvenObj);
 	void(*OnCbFunc)(void);
 
@@ -67,24 +71,34 @@ typedef struct {
 void TFTLCD_EventProcess(void);
 
 bool TFTLCD_CycleEventRegister(
-	void(*OnFunc)(UINT16 EventCnt, void* EventObj),
-	void* EventObj);
+    void(*OnFunc)(void* EventObj),
+    UINT16 PeriodCnt,   // Set range:[0,65534]
+    CycleEventType* pEventObj);
 
 bool TFTLCD_OnceEventRegister(
 	void(*OnFunc)(void* EventObj),
 	void(*OnCbFunc)(void),
-	void* EventObj);
+	OnceEventType* EventObj);
+    
+void TFTLCD_SetCycleEventPriority(UINT8 GradeNumber, 
+    CycleEventType* pEventObj);
 
-static UINT8 TFTLCD_GetCycleEventNumber(void);
+void TFTLCD_SetOnceEventPriority(UINT8 GradeNumber, 
+    OnceEventType* pEventObj);
 
-static UINT8 TFTLCD_GetOnceEventNumber(void);
+static UINT8 _TFTLCD_GetCycleEQNumber(void);
+
+static UINT8 _TFTLCD_GetOnceEQNumber(void);
+    
+static void _TFTLCD_CycleBaseOnFunc(UINT16 EventCnt, 
+    CycleEventType* _Obj);
 
 
 /* User event register function */
 
-void PrintCycleCnt(UINT16 Cnt, void* EventObj);
+void PrintCycleCnt(void* EventObj);
 
-void PrintCycleCnt1(UINT16 Cnt, void* EventObj);
+void PrintCycleCnt1(void* EventObj);
 
 
 #endif

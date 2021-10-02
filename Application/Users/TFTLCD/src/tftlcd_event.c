@@ -1,26 +1,30 @@
 #include "tftlcd_event.h"
 
 
-/* Golbal cycle and once event queue */
-CycleEventType* CycleEventQueue[CYCLE_EVENT_QUEUE_NUM];
-OnceEventType*  OnceEventQueue[ONCE_EVENT_QUEUE_NUM];
+/* Static cycle and once event queue */
+static CycleEventType* CycleEventQueue[CYCLE_EVENT_QUEUE_NUM];
+static OnceEventType*  OnceEventQueue[ONCE_EVENT_QUEUE_NUM];
 
 
 void TFTLCD_EventProcess(void)
 {
-	static UINT16 EventCycleCnt = 0;
-	UINT8  EventIndex;
+	static UINT16 EventCycleCnt = 1;
+	static UINT8  EventIndex;
+    static CycleEventType* pCycleEventObj;
+    static OnceEventType*  pOnceEventObj;
 
 	for(EventIndex = 0;
 		EventIndex<ONCE_EVENT_QUEUE_NUM;
 		EventIndex++)
 	{
-		if ((*(OnceEventQueue + EventIndex)) == NULL) continue;
-		if (((*(OnceEventQueue + EventIndex))->EventStatus) == EVENT_STATE_ACTIVE)
+        pOnceEventObj = (*(OnceEventQueue + EventIndex));
+        
+		if (pOnceEventObj == NULL) continue;
+		if ((pOnceEventObj->EventStatus) == EVENT_STATE_ACTIVE)
 		{
-			(*(OnceEventQueue + EventIndex))->OnFunc((*(OnceEventQueue + EventIndex)));
-			(*(OnceEventQueue + EventIndex))->EventStatus = EVENT_STATE_INACTIVE;
-			(*(OnceEventQueue + EventIndex))->OnCbFunc();
+			pOnceEventObj->OnFunc(pOnceEventObj);
+			pOnceEventObj->EventStatus = EVENT_STATE_INACTIVE;
+			pOnceEventObj->OnCbFunc();
 		}
 	}
 
@@ -28,57 +32,109 @@ void TFTLCD_EventProcess(void)
 		EventIndex<CYCLE_EVENT_QUEUE_NUM;
 		EventIndex++)
 	{
-		if ((*(CycleEventQueue + EventIndex)) == NULL) continue;
-		if (((*(CycleEventQueue + EventIndex))->EventStatus) == EVENT_STATE_ACTIVE)
+        pCycleEventObj = (*(CycleEventQueue + EventIndex));
+        
+		if (pCycleEventObj == NULL) continue;
+		if ((pCycleEventObj->EventStatus) == EVENT_STATE_ACTIVE)
 		{
-			(*(CycleEventQueue + EventIndex))->OnFunc(EventCycleCnt, 
-                (*(CycleEventQueue + EventIndex)));
+            _TFTLCD_CycleBaseOnFunc(EventCycleCnt, pCycleEventObj);
 		}
 	}
 
-	EventCycleCnt++;
 	EventCycleCnt %= EVENT_CYCLE_CNT_VALUE;
+    EventCycleCnt++;
 }
 
 
-bool TFTLCD_CycleEventRegister(void(*OnFunc)(UINT16 EventCnt, void* EventObj),
-	void* pEventObj)
+static void _TFTLCD_CycleBaseOnFunc(UINT16 EventCnt, 
+    CycleEventType* _Obj)
+{
+    if (!_Obj->_EventInitCtn)
+        _Obj->_EventInitCtn = EventCnt;
+    
+	if ((((EVENT_CYCLE_CNT_VALUE + EventCnt - _Obj->_EventInitCtn)% 
+        EVENT_CYCLE_CNT_VALUE)% 
+        _Obj->EventPeriodCnt) == 0)
+    {
+        _Obj->OnFunc(_Obj);
+    }
+}
+
+
+bool TFTLCD_CycleEventRegister(void(*OnFunc)(void* EventObj),
+    UINT16 PeriodCnt, CycleEventType* pEventObj)
 {
 	UINT8 EventNumber;
 
-	EventNumber = TFTLCD_GetCycleEventNumber();
-	if (EventNumber == 0xFF) return False;
+	EventNumber = _TFTLCD_GetCycleEQNumber();
+	if (!EventNumber) return False;
 
-	((CycleEventType*)(pEventObj))->EventStatus = EVENT_STATE_INACTIVE;
-	((CycleEventType*)(pEventObj))->OnFunc = OnFunc;
-	((CycleEventType*)(pEventObj))->EventNumber = EventNumber;
+	pEventObj->EventStatus = EVENT_STATE_INACTIVE;
+	pEventObj->OnFunc = OnFunc;
+	pEventObj->EventNumber = EventNumber;
+    pEventObj->_EventInitCtn = 0;
+    pEventObj->EventPeriodCnt = PeriodCnt;
 
-	(*(CycleEventQueue + EventNumber)) = ((CycleEventType*)(pEventObj));
+	(*(CycleEventQueue + EventNumber - 1)) = pEventObj;
 
 	return True;
 }
 
 
 bool TFTLCD_OnceEventRegister(void(*OnFunc)(void* EventObj), 
-	void(*OnCbFunc)(void), void* pEventObj)
+	void(*OnCbFunc)(void), OnceEventType* pEventObj)
 {
 	UINT8 EventNumber;
 
-	EventNumber = TFTLCD_GetOnceEventNumber();
-	if (EventNumber == 0xFF) return False;
+	EventNumber = _TFTLCD_GetOnceEQNumber();
+	if (!EventNumber) return False;
 
 	((OnceEventType*)(pEventObj))->EventStatus = EVENT_STATE_INACTIVE;
 	((OnceEventType*)(pEventObj))->OnFunc = OnFunc;
 	((OnceEventType*)(pEventObj))->OnCbFunc = OnCbFunc;
 	((OnceEventType*)(pEventObj))->EventNumber = EventNumber;
 
-	(*(OnceEventQueue + EventNumber)) = ((OnceEventType*)(pEventObj));
+	(*(OnceEventQueue + EventNumber - 1)) = ((OnceEventType*)(pEventObj));
 
 	return True;
 }
 
 
-static UINT8 TFTLCD_GetCycleEventNumber() {
+void TFTLCD_SetOnceEventPriority(UINT8 GradeNumber, 
+    OnceEventType* pEventObj)
+{
+    OnceEventType* pOnceEvent;
+    
+    if ((GradeNumber<1) || (GradeNumber>ONCE_EVENT_QUEUE_NUM+1))
+        return;
+    
+    pOnceEvent = (*(OnceEventQueue+GradeNumber));
+    
+    (*(OnceEventQueue+GradeNumber)) = pEventObj;
+    (*(OnceEventQueue+pEventObj->EventNumber)) = pOnceEvent;
+    
+    pEventObj->EventNumber = GradeNumber;
+}
+
+
+void TFTLCD_SetCycleEventPriority(UINT8 GradeNumber, 
+    CycleEventType* pEventObj)
+{
+    CycleEventType* pCycleEvent;
+    
+    if ((GradeNumber<1) || (GradeNumber>CYCLE_EVENT_QUEUE_NUM+1))
+        return;
+    
+    pCycleEvent = (*(CycleEventQueue+GradeNumber));
+    
+    (*(CycleEventQueue+GradeNumber)) = pEventObj;
+    (*(CycleEventQueue+pEventObj->EventNumber)) = pCycleEvent;
+    
+    pEventObj->EventNumber = GradeNumber;
+}
+
+
+static UINT8 _TFTLCD_GetCycleEQNumber(void) {
 
 	UINT8 EventIndex;
 
@@ -87,16 +143,16 @@ static UINT8 TFTLCD_GetCycleEventNumber() {
 		EventIndex--)
 	{
 		if (CycleEventQueue[EventIndex - 1] == NULL)
-			return (EventIndex - 1);
+			return EventIndex;
 		if (CycleEventQueue[EventIndex - 1]->EventNumber == EVENT_STATE_LOGOUT)
-			return (EventIndex - 1);
+			return EventIndex;
 	}
 
-	return 0xFF;
+	return 0;
 }
 
 
-static UINT8 TFTLCD_GetOnceEventNumber() {
+static UINT8 _TFTLCD_GetOnceEQNumber(void) {
 
 	UINT8 EventIndex;
 
@@ -105,51 +161,31 @@ static UINT8 TFTLCD_GetOnceEventNumber() {
 		EventIndex--)
 	{
 		if (OnceEventQueue[EventIndex - 1] == NULL)
-			return (EventIndex - 1);
+			return EventIndex;
 		if (OnceEventQueue[EventIndex - 1]->EventNumber == EVENT_STATE_LOGOUT)
-			return (EventIndex - 1);
+			return EventIndex;
 	}
-	return 0xFF;
+	return 0;
 }
 
 
 /* User event function register */
-void PrintCycleCnt(UINT16 Cnt, void* EventObj) 
+void PrintCycleCnt(void* EventObj) 
 {
-	static UINT16 CurrentCnt;
-	static UINT16 TriggerCnt;
-
-	if (CurrentCnt == 0) CurrentCnt = Cnt;
-
-	if (((EVENT_CYCLE_CNT_VALUE + Cnt - CurrentCnt) % EVENT_CYCLE_CNT_VALUE) > 5000)
-	{
-		TriggerCnt++;
-		if (TriggerCnt>50000)
-		{
-			TriggerCnt = 0;
-			((CycleEventType*)EventObj)->EventStatus = EVENT_STATE_INACTIVE;
-			printf("Current cycle value:%d\n", CurrentCnt);
-		}
-	}	
+    CycleEventType* CycleEventObj;
+    CycleEventObj = (CycleEventType*)EventObj;
+    
+    CycleEventObj->EventStatus = EVENT_STATE_INACTIVE;
+    printf("Current cycle value:%d\n", CycleEventObj->EventNumber);
 }
 
 
-void PrintCycleCnt1(UINT16 Cnt, void* EventObj)
+void PrintCycleCnt1(void* EventObj)
 {
-	static UINT16 CurrentCnt;
-	static UINT16 TriggerCnt;
-
-	if (CurrentCnt == 0) CurrentCnt = Cnt;
-
-	if (((EVENT_CYCLE_CNT_VALUE + Cnt - CurrentCnt) % EVENT_CYCLE_CNT_VALUE) > 50000)
-	{
-		TriggerCnt++;
-		if (TriggerCnt>50000)
-		{
-			TriggerCnt = 0;
-			((CycleEventType*)EventObj)->EventStatus = EVENT_STATE_INACTIVE;
-			printf("Current cycle valueAAA:%d\n", CurrentCnt);
-		}
-	}
+    CycleEventType* CycleEventObj;
+    CycleEventObj = (CycleEventType*)EventObj;
+    
+    CycleEventObj->EventStatus = EVENT_STATE_INACTIVE;
+    printf("Current cycle value1:%d\n", CycleEventObj->EventNumber);
 }
 
