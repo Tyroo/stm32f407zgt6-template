@@ -2,21 +2,21 @@
 
 
 // 内存池，指定32字节位对齐
-__align(32) u8 Memory_Pond_Int[MEM1_MAX_SIZE];																	// 内部内存块
-__align(32) u8 Memory_Pond_Ext[MEM2_MAX_SIZE] __attribute__((at(0x68000000)));	// 外部SRAM内存
-__align(32) u8 Memory_Pond_Ccm[MEM3_MAX_SIZE] __attribute__((at(0x10000000)));	// 内部CCM内存
+__align(32) uint8_t Memory_Pond_Int[MEM1_MAX_SIZE];																	// 内部内存块
+__align(32) uint8_t Memory_Pond_Ext[MEM2_MAX_SIZE] __attribute__((at(0x68000000)));	// 外部SRAM内存
+__align(32) uint8_t Memory_Pond_Ccm[MEM3_MAX_SIZE] __attribute__((at(0x10000000)));	// 内部CCM内存
 
 // 内存管理表
-u16 Memory_Table_Int[MEM1_TABLE_SIZE]; 																									// 内部SRAM内存管理表
-u16 Memory_Table_Ext[MEM2_TABLE_SIZE] __attribute__((at(0X68000000 + MEM2_MAX_SIZE)));	// 外部SRAM内存管理表
-u16 Memory_Table_Ccm[MEM3_TABLE_SIZE] __attribute__((at(0X10000000 + MEM3_MAX_SIZE)));	// 内部CCM内存管理表
+uint16_t Memory_Table_Int[MEM1_TABLE_SIZE]; 																									// 内部SRAM内存管理表
+uint16_t Memory_Table_Ext[MEM2_TABLE_SIZE] __attribute__((at(0X68000000 + MEM2_MAX_SIZE)));	// 外部SRAM内存管理表
+uint16_t Memory_Table_Ccm[MEM3_TABLE_SIZE] __attribute__((at(0X10000000 + MEM3_MAX_SIZE)));	// 内部CCM内存管理表
 
 // 内存大小数组
-const u32 MallocTableSizeArr[MEM_TYPE_SIZE] = {MEM1_TABLE_SIZE,
+const uint32_t MallocTableSizeArr[MEM_TYPE_SIZE] = {MEM1_TABLE_SIZE,
 MEM2_TABLE_SIZE, MEM3_TABLE_SIZE}; //内存表大小
-const u32 MallocPondSizeArr[MEM_TYPE_SIZE] = {MEM1_MAX_SIZE, MEM2_MAX_SIZE,
+const uint32_t MallocPondSizeArr[MEM_TYPE_SIZE] = {MEM1_MAX_SIZE, MEM2_MAX_SIZE,
 MEM3_MAX_SIZE}; //内存分块大小
-const u32 MallocBankSizeArr[MEM_TYPE_SIZE] = {MEM1_BANK_SIZE,MEM2_BANK_SIZE,
+const uint32_t MallocBankSizeArr[MEM_TYPE_SIZE] = {MEM1_BANK_SIZE,MEM2_BANK_SIZE,
 MEM3_BANK_SIZE};
 
 // 内存管理结构体定义
@@ -54,7 +54,7 @@ void Malloc_Set(void* DesAddr, uint16_t Value, uint16_t Len) {
 
 
 // 释放指定内存（内部调用）
-uint8_t _Malloc_Free(uint8_t MemType, uint32_t Offset) {
+static uint8_t _Malloc_Free(uint8_t MemType, uint32_t Offset) {
 	
 	uint32_t BankOffset;
 	uint32_t BankIndex;
@@ -99,7 +99,7 @@ void Malloc_Free(uint8_t MemType, void* Ptr) {
 
 
 // 开辟指定大小内存，返回偏移地址（内部调用）
-void* _Malloc_Open(uint8_t MemType, uint16_t Size) {
+static void* _Malloc_Apply(uint8_t MemType, uint16_t Size) {
 	
 	uint32_t BankNum;
 	uint32_t CurrBankNum;
@@ -136,10 +136,10 @@ void* _Malloc_Open(uint8_t MemType, uint16_t Size) {
 
 
 // 开辟指定大小内存，返回首地址
-void* Malloc_Open(uint8_t MemType, uint16_t Size) {
+void* Malloc_Apply(uint8_t MemType, uint16_t Size) {
 	
 	uint32_t Offset;
-	Offset = (uint32_t)_Malloc_Open(MemType, Size);
+	Offset = (uint32_t)_Malloc_Apply(MemType, Size);
 	
 	if (Offset == 0xFFFFFFFF) 
 		return NULL;
@@ -149,11 +149,11 @@ void* Malloc_Open(uint8_t MemType, uint16_t Size) {
 
 
 // 重新开辟指定大小内存
-void* Malloc_RstOpen(uint8_t MemType, void* Ptr, uint16_t Size) {
+void* Malloc_Reset(uint8_t MemType, void* Ptr, uint16_t Size) {
 	
 	void* StartAddr;
 	
-	StartAddr = Malloc_Open(MemType, Size);
+	StartAddr = Malloc_Apply(MemType, Size);
 	
 	if (StartAddr != NULL) {
 		Malloc_Copy(Ptr, StartAddr, Size);

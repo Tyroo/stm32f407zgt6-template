@@ -46,7 +46,7 @@ void TFTLCD_EventProcess(void)
 }
 
 
-static void _TFTLCD_CycleBaseOnFunc(UINT16 EventCnt, 
+static inline void _TFTLCD_CycleBaseOnFunc(UINT16 EventCnt, 
     CycleEventType* _Obj)
 {
     if (!_Obj->_EventInitCtn)

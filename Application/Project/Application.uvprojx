@@ -337,9 +337,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls>--C99</MiscControls>
-              <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
+              <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,USE_USB_OTG_FS</Define>
               <Undefine></Undefine>
-              <IncludePath>..\System;..\System\Library\slib\inc;..\System\Library\elib\inc;..\Users\Main\inc;..\Users\TFTLCD\inc;..\Users\CanFestival\inc;..\Users\CanFestival\drive;..\Users\CanFestival\stm32;..\Users\FATFS\inc</IncludePath>
+              <IncludePath>..\System;..\System\Library\slib\inc;..\System\Library\elib\inc;..\Users\Main\inc;..\Users\TFTLCD\inc;..\Users\CanFestival\inc;..\Users\CanFestival\drive;..\Users\CanFestival\stm32;..\Users\FATFS\inc;..\Users\USB\USB_Host\Class\MSC\inc;..\Users\USB\USB_OTG\inc;..\Users\USB\USB_APP\inc;..\Users\USB\USB_Host\Core\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -872,6 +872,108 @@
         </Group>
         <Group>
           <GroupName>FATFS</GroupName>
+          <Files>
+            <File>
+              <FileName>diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\FATFS\src\diskio.c</FilePath>
+            </File>
+            <File>
+              <FileName>ff.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\FATFS\src\ff.c</FilePath>
+            </File>
+            <File>
+              <FileName>ffsystem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\FATFS\src\ffsystem.c</FilePath>
+            </File>
+            <File>
+              <FileName>ffunicode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\FATFS\src\ffunicode.c</FilePath>
+            </File>
+            <File>
+              <FileName>disk_api.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\FATFS\src\disk_api.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>USB_OTG</GroupName>
+          <Files>
+            <File>
+              <FileName>usb_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\USB\USB_OTG\src\usb_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_hcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\USB\USB_OTG\src\usb_hcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_hcd_int.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\USB\USB_OTG\src\usb_hcd_int.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>USB_HOST</GroupName>
+          <Files>
+            <File>
+              <FileName>usbh_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\USB\USB_Host\Core\src\usbh_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_hcs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\USB\USB_Host\Core\src\usbh_hcs.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_ioreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\USB\USB_Host\Core\src\usbh_ioreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_stdreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\USB\USB_Host\Core\src\usbh_stdreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_msc_bot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\USB\USB_Host\Class\MSC\src\usbh_msc_bot.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_msc_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\USB\USB_Host\Class\MSC\src\usbh_msc_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_msc_scsi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\USB\USB_Host\Class\MSC\src\usbh_msc_scsi.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>USB_APP</GroupName>
+          <Files>
+            <File>
+              <FileName>usb_bsp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\USB\USB_APP\src\usb_bsp.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_usr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\USB\USB_APP\src\usbh_usr.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>

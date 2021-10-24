@@ -24,20 +24,20 @@
 
 
 #define MALLOC_MANAGE_DEFAULT { Malloc_Init,\
-																Malloc_Perused,\
-																{ Memory_Pond_Int, Memory_Pond_Ext, Memory_Pond_Ccm },\
-																{ Memory_Table_Int, Memory_Table_Ext, Memory_Table_Ccm },\
-																{ 0, 0, 0 }}
+								Malloc_Perused,\
+								{ Memory_Pond_Int, Memory_Pond_Ext, Memory_Pond_Ccm },\
+								{ Memory_Table_Int, Memory_Table_Ext, Memory_Table_Ccm },\
+								{ 0, 0, 0 }}
 
 
 // 内存管理结构体
 typedef struct {
 	
-	void (*Init)(uint8_t); 									//初始化方法
-	uint8_t (*Perused)(uint8_t); 						//内存使用率
+	void (*Init)(uint8_t); 						//初始化方法
+	uint8_t (*Perused)(uint8_t); 				//内存使用率
 	uint8_t* MallocPondArr[MEM_TYPE_SIZE];  	//内存池管理SRAMBANK个区域的内存
 	uint16_t* MallocTableArr[MEM_TYPE_SIZE];	//内存管理状态表
-	uint8_t MallocReadyArr[MEM_TYPE_SIZE]; 	//内存管理是否就绪
+	uint8_t MallocReadyArr[MEM_TYPE_SIZE]; 	    //内存管理是否就绪
 	
 } Malloc_Manage;
 
@@ -54,15 +54,15 @@ void Malloc_Copy(void* SrcAddr, void* DesAddr, uint16_t Len);
 
 void Malloc_Set(void* DesAddr, uint16_t Value, uint16_t Len);
 
-void* Malloc_Open(uint8_t MemType, uint16_t Size);
+void* Malloc_Apply(uint8_t MemType, uint16_t Size);
 
-void* Malloc_RstOpen(uint8_t MemType, void* Ptr, uint16_t Size);
+void* Malloc_Reset(uint8_t MemType, void* Ptr, uint16_t Size);
+
+static uint8_t _Malloc_Free(uint8_t MemType, uint32_t Offset);
+
+static void* _Malloc_Apply(uint8_t MemType, uint16_t Size);
 
 uint8_t Malloc_Perused(uint8_t MemType);
-
-uint8_t _Malloc_Free(uint8_t MemType, uint32_t Offset);
-
-void* _Malloc_Open(uint8_t MemType, uint16_t Size);
 
 
 #endif
