@@ -2,6 +2,7 @@
 #define __DISK_API_H__
 
 #include "ff.h"
+#include "usbh_usr.h"
 
 
 int RAM_disk_initialize(void);

@@ -33,13 +33,15 @@
 #include "usbh_msc_core.h"
 #include "usbh_msc_scsi.h"
 #include "usbh_msc_bot.h"
+#include "usb_hcd_int.h"
 
 static uint8_t AppState;
-extern USB_OTG_CORE_HANDLE USB_OTG_Core;
+
+
 
 void OTG_FS_IRQHandler(void)
 {
-//    USBH_OTG_ISR_Handler(&USB_OTG_Core);
+    USBH_OTG_ISR_Handler(&USB_OTG_Core);
 }
 
 /*  Points to the DEVICE_PROP structure of current device */

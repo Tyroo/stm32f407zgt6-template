@@ -219,7 +219,27 @@ DRESULT disk_ioctl (
 	case DEV_USB :
 
 		// Process of the command the USB drive
-
+		switch(cmd)
+		{
+			case CTRL_SYNC:
+				res = RES_OK;
+				break;
+			case GET_SECTOR_SIZE:
+				*(WORD*)buff = 512;
+				res = RES_OK;
+				break;
+			case GET_BLOCK_SIZE:
+				*(WORD*)buff = 512;
+				res = RES_OK;
+				break;
+			case GET_SECTOR_COUNT:
+				*(WORD*)buff = USBH_MSC_Param.MSCapacity;
+				res = RES_OK;
+				break;
+			default:
+				res = RES_PARERR;
+				break;
+		}
 		return res;
 	}
 

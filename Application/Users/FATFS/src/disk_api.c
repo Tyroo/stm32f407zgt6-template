@@ -20,7 +20,7 @@ int MMC_disk_status()
 // »ñÈ¡UÅÌµÄ×´Ì¬
 int USB_disk_status()
 {
-	return 0;
+	return HCD_IsDeviceConnected(&USB_OTG_Core);	// ·µ»ØUÅÌ×´Ì¬
 }
 
 
@@ -62,7 +62,28 @@ int MMC_disk_read(const BYTE *buff, LBA_t sector, UINT count)
 // ¶ÁUSBÉè±¸
 int USB_disk_read(const BYTE *buff, LBA_t sector, UINT count)
 {
-	return 0;
+	uint8_t Result;
+	uint8_t State;
+	
+	Result = USBH_MSC_FAIL;
+	State = USB_disk_status();
+	
+	if (State)
+	{
+		do
+		{
+			Result = USBH_MSC_Read10(&USB_OTG_Core, (uint8_t*)buff, sector, 512*count);
+			USBH_MSC_HandleBOTXfer(&USB_OTG_Core, &USB_Host);
+			if (!USB_disk_status())
+			{
+				Result = USBH_MSC_FAIL;	// ¶ÁÐ´´íÎó
+				break;
+			}
+		}
+		while(Result == USBH_MSC_BUSY);
+	}
+	
+	return Result;
 }
 
 
@@ -83,5 +104,26 @@ int MMC_disk_write(const BYTE *buff, LBA_t sector, UINT count)
 // Ð´USBÉè±¸
 int USB_disk_write(const BYTE *buff, LBA_t sector, UINT count)
 {
-	return 0;
+		uint8_t Result;
+	uint8_t State;
+	
+	Result = USBH_MSC_FAIL;
+	State = USB_disk_status();
+	
+	if (State)
+	{
+		do
+		{
+			Result = USBH_MSC_Write10(&USB_OTG_Core, (uint8_t*)buff, sector, 512*count);
+			USBH_MSC_HandleBOTXfer(&USB_OTG_Core, &USB_Host);
+			if (!USB_disk_status())
+			{
+				Result = USBH_MSC_FAIL;	// ¶ÁÐ´´íÎó
+				break;
+			}
+		}
+		while(Result == USBH_MSC_BUSY);
+	}
+	
+	return Result;
 }
