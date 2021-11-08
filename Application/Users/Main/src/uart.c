@@ -1,11 +1,35 @@
 /** USART收发数据模块（验证通过） **/
-#include <string.h>
+
 #include "uart.h"
-#include "nvic.h"
+
 
 
 // USART1接收的数据
 char UsartReceiveData[50];
+
+
+#if USE_PRINTF_FUNC
+#pragma import(__use_no_semihosting)             
+//标准库需要的支持函数                 
+struct __FILE 
+{ 
+	int handle; 
+}; 
+
+FILE __stdout;       
+//定义_sys_exit()以避免使用半主机模式    
+void _sys_exit(int x) 
+{ 
+	x = x; 
+} 
+//重定义fputc函数 
+int fputc(int ch, FILE *f)
+{ 	
+	while((USART1->SR&0X40)==0);//循环发送,直到发送完毕   
+	USART1->DR = (u8) ch;      
+	return ch;
+}
+#endif
 
 
 // 初始化UART
@@ -46,7 +70,7 @@ void Uart1_Init(u32 Baud) {
 	USART_Cmd(USART1, ENABLE); 																			// 使能串口
 	
 	/* NVIC配置 */
-	Nvic_Config(USART1_IRQn, 0, 0, 1);															// 抢占优先级为0，响应优先级为0，并使能
+	Nvic_Config(USART1_IRQn, 3, 3, 1);															// 抢占优先级为0，响应优先级为0，并使能
 	
 }
 
@@ -56,7 +80,7 @@ void Uart1_Send(char *Data) {
 	
 	// 当发送字符遇到\0时停止发送
 	while (*Data != '\0') {
-		while(!USART_GetFlagStatus(USART1, USART_FLAG_TXE));
+		while(USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
 		USART_SendData(USART1, *(Data++));		// 调用USART_SendData发送单个字符
 	}
 }

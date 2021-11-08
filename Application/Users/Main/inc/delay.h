@@ -29,7 +29,7 @@ void Delay_Init(void);
 *	参数：{ Us：要延时的微秒数 }
 *	返回值：void
 **/
-void Delay_Us(uint16_t Us);
+void Delay_Us(uint32_t Us);
 
 
 /**
@@ -38,6 +38,6 @@ void Delay_Us(uint16_t Us);
 *	参数：{ Ms：要延时的毫秒数 }
 *	返回值：void
 **/
-void Delay_Ms(uint16_t Ms);
+void Delay_Ms(uint32_t Ms);
 
 #endif

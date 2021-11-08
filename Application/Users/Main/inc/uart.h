@@ -6,6 +6,15 @@
 * @include
 **/
 #include "stm32f4xx_usart.h"
+#include <string.h>
+#include <stdio.h>
+#include "nvic.h"
+
+
+/**
+* @define
+**/
+#define USE_PRINTF_FUNC 1
 
 
 /**

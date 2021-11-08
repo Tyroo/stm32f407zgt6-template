@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    usb_bsp.h
+  * @file    usbd_conf.h
   * @author  MCD Application Team
-  * @version V2.2.1
+  * @version V1.2.1
   * @date    17-March-2018
-  * @brief   Specific api's relative to the used hardware platform
+  * @brief   USB Device configuration file
   ******************************************************************************
   * @attention
   *
@@ -20,26 +20,55 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __USB_BSP__H__
-#define __USB_BSP__H__
+#ifndef __USBD_CONF__H__
+#define __USBD_CONF__H__
 
 /* Includes ------------------------------------------------------------------*/
-#include "usb_core.h"
-#include "delay.h"
-#include "uart.h"
-#include "sys.h"
+#include "usb_conf.h"
 
-/** @addtogroup USB_OTG_DRIVER
+/** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
   * @{
   */
   
-/** @defgroup USB_BSP
-  * @brief This file is the 
+/** @defgroup USBD_CONF
+  * @brief This file is the device library configuration file
+  * @{
+  */ 
+
+/** @defgroup USBD_CONF_Exported_Defines
   * @{
   */ 
 
 
-/** @defgroup USB_BSP_Exported_Defines
+#define USBD_CFG_MAX_NUM           1
+#define USBD_ITF_MAX_NUM           1
+#define USB_MAX_STR_DESC_SIZ       64 
+
+#define USBD_SELF_POWERED               
+
+/* Class Layer Parameter */
+
+#define MSC_IN_EP                    0x81
+#define MSC_OUT_EP                   0x01
+#ifdef USE_USB_OTG_HS  
+#ifdef USE_ULPI_PHY
+#define MSC_MAX_PACKET               512
+#else
+#define MSC_MAX_PACKET               64
+#endif
+#else  /*USE_USB_OTG_FS*/
+#define MSC_MAX_PACKET                64
+#endif
+
+
+#define MSC_MEDIA_PACKET             4096
+
+/**
+  * @}
+  */ 
+
+
+/** @defgroup USB_CONF_Exported_TypesDefinitions
   * @{
   */ 
 /**
@@ -47,50 +76,28 @@
   */ 
 
 
-/** @defgroup USB_BSP_Exported_Types
+/** @defgroup USB_CONF_Exported_Macros
   * @{
   */ 
 /**
   * @}
   */ 
 
-
-/** @defgroup USB_BSP_Exported_Macros
+/** @defgroup USB_CONF_Exported_Variables
   * @{
   */ 
 /**
   * @}
   */ 
 
-/** @defgroup USB_BSP_Exported_Variables
+/** @defgroup USB_CONF_Exported_FunctionsPrototype
   * @{
   */ 
 /**
   * @}
   */ 
 
-/** @defgroup USB_BSP_Exported_FunctionsPrototype
-  * @{
-  */ 
-void BSP_Init(void);
-
-void USB_OTG_BSP_Init (USB_OTG_CORE_HANDLE *pdev);
-void USB_OTG_BSP_uDelay (const uint32_t usec);
-void USB_OTG_BSP_mDelay (const uint32_t msec);
-void USB_OTG_BSP_EnableInterrupt (USB_OTG_CORE_HANDLE *pdev);
-void USB_OTG_BSP_TimerIRQ (void);
-#ifdef USE_HOST_MODE
-void USB_OTG_BSP_ConfigVBUS(USB_OTG_CORE_HANDLE *pdev);
-void USB_OTG_BSP_DriveVBUS(USB_OTG_CORE_HANDLE *pdev,uint8_t state);
-void USB_OTG_BSP_Resume(USB_OTG_CORE_HANDLE *pdev) ;                                                                
-void USB_OTG_BSP_Suspend(USB_OTG_CORE_HANDLE *pdev);
-
-#endif /* USE_HOST_MODE */
-/**
-  * @}
-  */ 
-
-#endif /* __USB_BSP__H__ */
+#endif //__USBD_CONF__H__
 
 /**
   * @}
@@ -99,5 +106,6 @@ void USB_OTG_BSP_Suspend(USB_OTG_CORE_HANDLE *pdev);
 /**
   * @}
   */ 
+
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

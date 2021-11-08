@@ -2,41 +2,42 @@
   ******************************************************************************
   * @file    usbh_usr.c
   * @author  MCD Application Team
-  * @version V2.1.0
-  * @date    19-March-2012
+  * @version V2.2.1
+  * @date    17-March-2018
   * @brief   This file includes the usb host library user callbacks
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2015 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
-  * You may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at:
-  *
-  *        http://www.st.com/software_license_agreement_liberty_v2
-  *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * This software component is licensed by ST under Ultimate Liberty license
+  * SLA0044, the "License"; You may not use this file except in compliance with
+  * the License. You may obtain a copy of the License at:
+  *                      <http://www.st.com/SLA0044>
   *
   ******************************************************************************
   */
-
 /* Includes ------------------------------------------------------------------*/
-#include <string.h>
+
 #include "usbh_usr.h"
-//#include "lcd_log.h"
-#include "ff.h"       /* FATFS */
-#include "usbh_msc_core.h"
-#include "usbh_msc_scsi.h"
-#include "usbh_msc_bot.h"
-#include "usb_hcd_int.h"
 
-static uint8_t AppState;
 
+/* USB variable define */
+static uint8_t        AppState;
+USBH_HOST             USB_Host;
+USB_OTG_CORE_HANDLE   USB_OTG_Core;
+USB_ManageType		  USB_Manage;
+
+
+/* FatFs variable define */
+FATFS* Fs[3];
+FIL*   Fi;
+FRESULT F_Sate;
+UINT FatfsReadSize, FatfsWriteSize;
+BYTE* ReadTextBuff;
+char* WriteTextBuff;
+BYTE Work[FF_MAX_SS];
 
 
 void OTG_FS_IRQHandler(void)
@@ -47,7 +48,7 @@ void OTG_FS_IRQHandler(void)
 /*  Points to the DEVICE_PROP structure of current device */
 /*  The purpose of this register is to speed up the execution */
 
-USBH_Usr_cb_TypeDef USR_cb =
+USBH_Usr_cb_TypeDef USR_USBH_cb =
 {
   USBH_USR_Init,
   USBH_USR_DeInit,
@@ -85,6 +86,8 @@ USBH_Usr_cb_TypeDef USR_cb =
 void USBH_USR_Init(void)
 {
     // USBH初始化回调函数
+	USB_Manage = ((USB_ManageType){ 0, 0, 0 });
+	printf("USB设备初始化完成！\r\n");
 }
 
 /**
@@ -95,7 +98,7 @@ void USBH_USR_Init(void)
 */
 void USBH_USR_DeviceAttached(void)
 {
-  // U盘插入检测到后的回调函数
+	printf("检测到有USB设备插入！\r\n");
 }
 
 
@@ -107,6 +110,7 @@ void USBH_USR_DeviceAttached(void)
 void USBH_USR_UnrecoveredError (void)
 {
   // 输出USB错误信息
+	printf("USB出现了无法恢复的错误！\r\n");
 }
 
 
@@ -119,6 +123,7 @@ void USBH_USR_UnrecoveredError (void)
 void USBH_USR_DeviceDisconnected (void)
 {
   // USB断开连接回调函数
+	printf("USB设备断开了连接！\r\n");
 }
 /**
 * @brief  USBH_USR_ResetUSBDevice 
@@ -127,7 +132,7 @@ void USBH_USR_DeviceDisconnected (void)
 */
 void USBH_USR_ResetDevice(void)
 {
-  // 设备复位回调函数
+	printf("USB设备初始化！\r\n");
 }
 
 
@@ -140,6 +145,21 @@ void USBH_USR_ResetDevice(void)
 void USBH_USR_DeviceSpeedDetected(uint8_t DeviceSpeed)
 {
     // 检测接入的USB设备类型并输出（高速、全速、低速）
+	switch(DeviceSpeed)
+	{
+		case HPRT0_PRTSPD_HIGH_SPEED:
+			printf("当前设备为USB高速设备！\r\n");
+			break;
+		case HPRT0_PRTSPD_FULL_SPEED:
+			printf("当前设备为USB全速设备！\r\n");
+			break;
+		case HPRT0_PRTSPD_LOW_SPEED:
+			printf("当前设备为USB低速设备！\r\n");
+			break;
+		default:
+			printf("设备错误！\r\n");
+			break;
+	}
 }
 
 /**
@@ -150,12 +170,11 @@ void USBH_USR_DeviceSpeedDetected(uint8_t DeviceSpeed)
 */
 void USBH_USR_Device_DescAvailable(void *DeviceDesc)
 { 
-  USBH_DevDesc_TypeDef *hs;
-  hs = DeviceDesc;  
-  
+	USBH_DevDesc_TypeDef *hs;
+	hs = DeviceDesc;
 
-//  printf("VID : %04Xh\n" , (uint32_t)(*hs).idVendor); 
-//  printf("PID : %04Xh\n" , (uint32_t)(*hs).idProduct); 
+	printf("VID : %04Xh\r\n", (uint32_t)(*hs).idVendor); 	// 打印设备厂商ID
+	printf("PID : %04Xh\r\n", (uint32_t)(*hs).idProduct); 	// 打印产品ID
 }
 
 /**
@@ -166,7 +185,8 @@ void USBH_USR_Device_DescAvailable(void *DeviceDesc)
 */
 void USBH_USR_DeviceAddressAssigned(void)
 {
-  // 从机地址分配成功回调函数
+	// 从机地址分配成功回调函数
+	printf("USB设备地址分配成功！\r\n");
 }
 
 
@@ -181,6 +201,18 @@ void USBH_USR_Configuration_DescAvailable(USBH_CfgDesc_TypeDef * cfgDesc,
                                           USBH_EpDesc_TypeDef *epDesc)
 {
     // 配置描述符有效回调函数
+	USBH_InterfaceDesc_TypeDef* Id;
+	Id = itfDesc;
+	
+	if (Id->bInterfaceClass == 0x08)
+	{
+		printf("此USB设备为可移动存储器设备！\r\n");
+		USB_Manage.Type = 3;
+	}
+	else
+	{
+		printf("此USB设备为HID设备！\r\n");
+	}
 }
 
 /**
@@ -280,6 +312,36 @@ void USBH_USR_OverCurrentDetected (void)
 int USBH_USR_MSC_Application(void)
 {
     // U盘插入后的操作
+	uint8_t Result;
+	
+	Result = HCD_IsDeviceConnected(&USB_OTG_Core);
+	
+	switch(AppState)
+	{
+		case USH_USR_FS_INIT:
+			AppState = USH_USR_FS_WAIT_OPERATION;
+			break;
+		case USH_USR_FS_WAIT_OPERATION:
+			if (Result) 
+			{
+				USB_Manage.State = 1;
+			}
+			else
+			{
+				AppState = USH_USR_FS_INIT;
+			}
+			break;
+		case USH_USR_FS_OK_OPERATION:
+			printf("USB操作完成！");
+			Result = 0;
+		case USH_USR_FS_ERR_OPERATION:
+			printf("USB操作失败！");
+			Result = 1;
+		default:
+			Result = 1;
+			break;
+	}
+	
     return 0;
 }
 
@@ -297,8 +359,34 @@ void USBH_USR_DeInit(void)
 
 
 /**
-* @}
+* @brief  USBH_User_App
+* @param  None
+* @retval 0: Normal；1: Anomaly
 */ 
+int USBH_User_App(void)
+{
+	FatfsReadSize = 10;
+	
+	while(HCD_IsDeviceConnected(&USB_OTG_Core))//设备连接成功
+	{	
+		F_Sate = f_open(Fi, "2:123.txt", FA_READ | FA_OPEN_EXISTING);
+		F_Sate = f_read(Fi, ReadTextBuff, sizeof(ReadTextBuff), &FatfsReadSize);
+		
+		if (F_Sate == FR_OK)
+		{
+			Uart1_Send("成功读取到文件内容:");
+			Uart1_Send((char*)ReadTextBuff);
+			return 0;
+		}
+		else
+		{
+			return 1;
+		}
+		
+	}
+	return 1;
+}
+  
 
 /**
 * @}
@@ -313,4 +401,3 @@ void USBH_USR_DeInit(void)
 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-

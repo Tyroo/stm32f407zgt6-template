@@ -2,25 +2,19 @@
   ******************************************************************************
   * @file    usbh_hid_mouse.c 
   * @author  MCD Application Team
-  * @version V2.1.0
-  * @date    19-March-2012
+  * @version V2.2.1
+  * @date    17-March-2018
   * @brief   This file is the application layer for USB Host HID Mouse Handling.                  
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2015 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
-  * You may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at:
-  *
-  *        http://www.st.com/software_license_agreement_liberty_v2
-  *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * This software component is licensed by ST under Ultimate Liberty license
+  * SLA0044, the "License"; You may not use this file except in compliance with
+  * the License. You may obtain a copy of the License at:
+  *                      <http://www.st.com/SLA0044>
   *
   ******************************************************************************
   */ 
@@ -88,9 +82,7 @@ static void  MOUSE_Decode(uint8_t *data);
  #elif defined ( __ICCARM__ ) /*!< IAR Compiler */
   #pragma data_alignment=4
  #elif defined (__GNUC__) /*!< GNU Compiler */
- #pragma pack(4) 
- #elif defined  (__TASKING__) /*!< TASKING Compiler */                           
-  __align(4) 
+ #pragma pack(4)
  #endif /* __CC_ARM */
 #endif
  

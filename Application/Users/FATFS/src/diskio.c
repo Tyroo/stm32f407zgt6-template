@@ -10,8 +10,9 @@
 #include "diskio.h"		/* Declarations of disk functions */
 
 /* Definitions of physical drive number for each drive */
-#define DEV_RAM		0	/* Example: Map Ramdisk to physical drive 0 */
-#define DEV_MMC		1	/* Example: Map MMC/SD card to physical drive 1 */
+
+#define DEV_SD		0	/* Example: Map MMC/SD card to physical drive 0 */
+#define DEV_FLASH	1	/* Example: Map extern FLASH to physical drive 1 */
 #define DEV_USB		2	/* Example: Map USB MSD to physical drive 2 */
 
 
@@ -24,28 +25,28 @@ DSTATUS disk_status (
 )
 {
 	DSTATUS stat;
-	int result;
+	uint8_t result;
 
 	switch (pdrv) {
-	case DEV_RAM :
-		result = RAM_disk_status();
+	case DEV_SD :
+		result = SD_disk_status();
 
 		// translate the reslut code here
-
+		stat = result;
 		return stat;
 
-	case DEV_MMC :
-		result = MMC_disk_status();
+	case DEV_FLASH :
+		result = FLASH_disk_status();
 
 		// translate the reslut code here
-
+		stat = result;
 		return stat;
 
 	case DEV_USB :
-		result = USB_disk_status();
+		result = (1 - USB_disk_status());
 
 		// translate the reslut code here
-
+		stat = result;
 		return stat;
 	}
 	return STA_NOINIT;
@@ -62,28 +63,25 @@ DSTATUS disk_initialize (
 )
 {
 	DSTATUS stat;
-	int result;
+	uint8_t result;
 
 	switch (pdrv) {
-	case DEV_RAM :
-		result = RAM_disk_initialize();
-
+	case DEV_SD :
+		result = SD_disk_initialize();
+		stat = result;
 		// translate the reslut code here
-
 		return stat;
 
-	case DEV_MMC :
-		result = MMC_disk_initialize();
-
+	case DEV_FLASH :
+		result = FLASH_disk_initialize();
+		stat = result;
 		// translate the reslut code here
-
 		return stat;
 
 	case DEV_USB :
-		result = USB_disk_initialize();
-
+		result = (1 - USB_disk_initialize());
 		// translate the reslut code here
-
+		stat = result;
 		return stat;
 	}
 	return STA_NOINIT;
@@ -103,22 +101,22 @@ DRESULT disk_read (
 )
 {
 	DRESULT res;
-	int result;
+	uint8_t result;
 
 	switch (pdrv) {
-	case DEV_RAM :
+	case DEV_SD :
 		// translate the arguments here
 
-		result = RAM_disk_read(buff, sector, count);
+		result = SD_disk_read(buff, sector, count);
 
 		// translate the reslut code here
 
 		return res;
 
-	case DEV_MMC :
+	case DEV_FLASH :
 		// translate the arguments here
 
-		result = MMC_disk_read(buff, sector, count);
+		result = FLASH_disk_read(buff, sector, count);
 
 		// translate the reslut code here
 
@@ -128,7 +126,7 @@ DRESULT disk_read (
 		// translate the arguments here
 
 		result = USB_disk_read(buff, sector, count);
-
+		res = (DRESULT)result;
 		// translate the reslut code here
 
 		return res;
@@ -153,34 +151,28 @@ DRESULT disk_write (
 )
 {
 	DRESULT res;
-	int result;
+	uint8_t result;
 
 	switch (pdrv) {
-	case DEV_RAM :
+	case DEV_SD :
 		// translate the arguments here
-
-		result = RAM_disk_write(buff, sector, count);
-
+		result = SD_disk_write(buff, sector, count);
+		res = (DRESULT)result;
 		// translate the reslut code here
-
 		return res;
 
-	case DEV_MMC :
+	case DEV_FLASH :
 		// translate the arguments here
-
-		result = MMC_disk_write(buff, sector, count);
-
+		result = FLASH_disk_write(buff, sector, count);
+		res = (DRESULT)result;
 		// translate the reslut code here
-
 		return res;
 
 	case DEV_USB :
 		// translate the arguments here
-
 		result = USB_disk_write(buff, sector, count);
-
+		res = (DRESULT)result;
 		// translate the reslut code here
-
 		return res;
 	}
 
@@ -201,45 +193,21 @@ DRESULT disk_ioctl (
 )
 {
 	DRESULT res;
-	int result;
 
 	switch (pdrv) {
-	case DEV_RAM :
-
+	case DEV_SD :
 		// Process of the command for the RAM drive
-
+		res = (DRESULT)SD_disk_ioctl(pdrv, cmd, buff);
 		return res;
 
-	case DEV_MMC :
-
+	case DEV_FLASH :
 		// Process of the command for the MMC/SD card
-
+		res = (DRESULT)FLASH_disk_ioctl(pdrv, cmd, buff);
 		return res;
 
 	case DEV_USB :
-
 		// Process of the command the USB drive
-		switch(cmd)
-		{
-			case CTRL_SYNC:
-				res = RES_OK;
-				break;
-			case GET_SECTOR_SIZE:
-				*(WORD*)buff = 512;
-				res = RES_OK;
-				break;
-			case GET_BLOCK_SIZE:
-				*(WORD*)buff = 512;
-				res = RES_OK;
-				break;
-			case GET_SECTOR_COUNT:
-				*(WORD*)buff = USBH_MSC_Param.MSCapacity;
-				res = RES_OK;
-				break;
-			default:
-				res = RES_PARERR;
-				break;
-		}
+		res = (DRESULT)USB_disk_ioctl(pdrv, cmd, buff);
 		return res;
 	}
 

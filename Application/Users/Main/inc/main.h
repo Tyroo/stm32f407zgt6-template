@@ -15,5 +15,8 @@
 #include "can.h"
 #include "tftlcd.h"
 #include "TestSlave.h"
+#include "usbh_usr.h"
+#include "malloc.h"
+#include "ff.h"
 
 #endif

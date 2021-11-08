@@ -2,25 +2,19 @@
   ******************************************************************************
   * @file    usbh_usr.h
   * @author  MCD Application Team
-  * @version V2.1.0
-  * @date    19-March-2012
+  * @version V2.2.1
+  * @date    17-March-2018
   * @brief   Header file for usbh_usr.c
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; Copyright (c) 2015 STMicroelectronics.
+  * All rights reserved.</center></h2>
   *
-  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
-  * You may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at:
-  *
-  *        http://www.st.com/software_license_agreement_liberty_v2
-  *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * This software component is licensed by ST under Ultimate Liberty license
+  * SLA0044, the "License"; You may not use this file except in compliance with
+  * the License. You may obtain a copy of the License at:
+  *                      <http://www.st.com/SLA0044>
   *
   ******************************************************************************
   */ 
@@ -30,11 +24,13 @@
 #define __USH_USR_H__
 
 /* Includes ------------------------------------------------------------------*/
+#include <stdio.h>
 #include "ff.h"
 #include "usbh_core.h"
 #include "usb_conf.h"
-#include <stdio.h>
 #include "usbh_msc_core.h"
+#include "usb_hcd_int.h"
+#include "uart.h"
 
 /** @addtogroup USBH_USER
   * @{
@@ -54,13 +50,16 @@
   * @{
   */ 
 
-extern  USBH_Usr_cb_TypeDef USR_cb;
 
-USBH_HOST USB_Host;
-
-USB_OTG_CORE_HANDLE USB_OTG_Core;
+extern  USBH_Usr_cb_TypeDef USR_USBH_cb;
 
 
+typedef struct
+{
+	uint8_t Mode   :4;	// 0：USB HOST MSC模式(默认模式,接U盘)，1：USB HOST HID模式(驱动鼠标键盘等)，2：USB Device MSC模式(USB读卡器)
+	uint8_t State  :8;	// 0：断开状态，1：连接状态，3：出现错误
+	uint8_t Type   :4;	// 0: 无设备，1：SD卡，2：Flash设备，3：USB闪存设备
+} USB_ManageType;
 
 /**
   * @}
@@ -72,10 +71,10 @@ USB_OTG_CORE_HANDLE USB_OTG_Core;
   * @{
   */ 
 /* State Machine for the USBH_USR_ApplicationState */
-#define USH_USR_FS_INIT       0
-#define USH_USR_FS_READLIST   1
-#define USH_USR_FS_WRITEFILE  2
-#define USH_USR_FS_DRAW       3
+#define USH_USR_FS_INIT                   0	// 初始化
+#define USH_USR_FS_WAIT_OPERATION		  1	// 正在对USB设备进行操作
+#define USH_USR_FS_OK_OPERATION			  2 // 操作完成
+#define USH_USR_FS_ERR_OPERATION          3 // 操作失败
 /**
   * @}
   */ 
@@ -120,10 +119,12 @@ void USBH_USR_DeInit(void);
 void USBH_USR_DeviceNotSupported(void);
 void USBH_USR_UnrecoveredError(void);
 int USBH_USR_MSC_Application(void);
-
+void delay(__IO uint32_t nCount);
 /**
   * @}
   */ 
+
+int USBH_User_App(void);
 
 #endif /*__USH_USR_H__*/
 

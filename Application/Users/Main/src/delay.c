@@ -9,7 +9,7 @@ void Delay_Init() {
 
 
 // 实现微秒级延时
-void Delay_Us(uint16_t Us) {
+void Delay_Us(uint32_t Us) {
 	
 	uint32_t Temp;
 	uint32_t CountValue = Us * DELAY_ONE_US;	 // 计算出延时Us微秒需要计数的值
@@ -29,7 +29,7 @@ void Delay_Us(uint16_t Us) {
 
 
 // 实现毫秒级延时
-void Delay_Ms(uint16_t Ms) {
+void Delay_Ms(uint32_t Ms) {
 	
 	uint32_t Temp;
 	uint32_t CountValue = Ms * DELAY_ONE_MS;				 // 计算出延时Ms毫秒需要计数的值

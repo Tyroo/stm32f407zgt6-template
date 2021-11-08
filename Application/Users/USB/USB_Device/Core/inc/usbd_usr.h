@@ -30,7 +30,9 @@
 #define __USBD_USR_H__
 
 /* Includes ------------------------------------------------------------------*/
+#include <stdio.h>
 #include "usbd_core.h"
+#include "uart.h"
 
 
 /** @addtogroup USBD_USER
@@ -51,9 +53,9 @@
   * @{
   */ 
 
-extern  USBD_Usr_cb_TypeDef USR_cb;
-extern  USBD_Usr_cb_TypeDef USR_FS_cb;
-extern  USBD_Usr_cb_TypeDef USR_HS_cb;
+extern  USBD_Usr_cb_TypeDef USR_USBD_cb;
+extern  USBD_Usr_cb_TypeDef USR_USBD_FS_cb;
+extern  USBD_Usr_cb_TypeDef USR_USBD_HS_cb;
 
 
 
