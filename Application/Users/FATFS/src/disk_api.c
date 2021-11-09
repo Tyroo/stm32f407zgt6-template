@@ -117,8 +117,6 @@ uint8_t USB_disk_write(const BYTE *buff, LBA_t sector, UINT count)
 	Result = USBH_MSC_OK;
 	State = USB_disk_status();
 	
-	Uart1_Send((char*)buff);
-	
 	if ((State) && (USB_Manage.State == 1))
 	{
 		do

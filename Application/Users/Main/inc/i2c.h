@@ -20,14 +20,27 @@
 #define IIC_Mode_Rx() {GPIOB->MODER &= ~(3<<22);}
 // GPIOB引脚映射IIC线
 #define IIC_SCL     		PBout(10)	// IIC时钟线
-#define IIC_SDA_OUT     PBout(11)	// IIC数据输出线
+#define IIC_SDA_OUT     	PBout(11)	// IIC数据输出线
 #define IIC_SDA_IN			PBin(11)	// IIC数据读入线
-#define IIC_DATA_SIZE_MAX 32			// IIC接收数据最大长度（字节）
+#define IIC_DATA_SIZE_MAX 	32			// IIC接收数据最大长度（字节）
 
 
 /**
 *	@typedef
 **/
-typedef enum {	True = 1, False = 0 } bool;	// 类型重定义，BOOL类型
+typedef enum {	False, True } bool;	// 类型重定义，BOOL类型
+
+
+static void IIC_TxReply(uint8_t Res);
+static uint8_t IIC_RxReply(void);
+
+static void IIC_Stop(void);
+static void IIC_Start(void);
+
+void IIC_Send_Byte(uint8_t Data);
+uint8_t IIC_Read_Byte(uint8_t IsAck);
+
+bool IIC_Send_String(char *Str, uint8_t DeviceAddr, uint16_t RegisterAddr);
+bool IIC_Read_String(uint8_t DeviceAddr, uint16_t RegisterAddr, uint8_t RxLen);
 
 #endif
