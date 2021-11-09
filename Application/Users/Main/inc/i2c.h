@@ -30,6 +30,7 @@
 **/
 typedef enum {	False, True } bool;	// 类型重定义，BOOL类型
 
+void IIC_Init(void);
 
 static void IIC_TxReply(uint8_t Res);
 static uint8_t IIC_RxReply(void);
@@ -40,7 +41,7 @@ static void IIC_Start(void);
 void IIC_Send_Byte(uint8_t Data);
 uint8_t IIC_Read_Byte(uint8_t IsAck);
 
-bool IIC_Send_String(char *Str, uint8_t DeviceAddr, uint16_t RegisterAddr);
-bool IIC_Read_String(uint8_t DeviceAddr, uint16_t RegisterAddr, uint8_t RxLen);
+bool IIC_Send_Data(uint8_t *Data, uint8_t DeviceAddr, uint16_t RegisterAddr);
+bool IIC_Read_Data(uint8_t DeviceAddr, uint16_t RegisterAddr, uint8_t RxLen);
 
 #endif

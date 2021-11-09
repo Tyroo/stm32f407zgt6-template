@@ -5,7 +5,7 @@
 uint8_t RxData[IIC_DATA_SIZE_MAX];									// 定义一个全局变量用来存储接收的字符串
 
 
-void IIC_Init() 
+void IIC_Init(void) 
 {
 	/* 配置结构体定义 */
 	GPIO_InitTypeDef GPIO_InitStructure;						// 定义一个GPIO配置结构体
@@ -147,17 +147,16 @@ uint8_t IIC_Read_Byte(uint8_t IsAck)
 
 
 // 发送一个字符串给从设备
-bool IIC_Send_String(char *Str, uint8_t DeviceAddr, 
+bool IIC_Send_Data(uint8_t *Data, uint8_t DeviceAddr, 
 		uint16_t RegisterAddr) 
 {
-	
 	uint8_t Res;							// 应答标志位
 	
 	// 当接收的数据超出最大限制或者设备地址超过127时，发送失败
-	if (strlen(Str)>IIC_DATA_SIZE_MAX ||
+	if (strlen((char*)Data)>IIC_DATA_SIZE_MAX ||
 		DeviceAddr>127) return False;
 	
-	IIC_Start();													// 发送IIC起始信号
+	IIC_Start();							// 发送IIC起始信号
 	
 	IIC_Send_Byte((DeviceAddr<<1)&0xfe);	// 发送设备地址
 	Res = IIC_RxReply();					// 等待应答
@@ -169,8 +168,9 @@ bool IIC_Send_String(char *Str, uint8_t DeviceAddr,
 	Res = IIC_RxReply(); 					// 等待应答
 	
 	// 当遇到结束字符或者应答失效后停止发送
-	while(*Str != '\n' && Res == True) {
-		IIC_Send_Byte(*Str++);				// 发送一个字符
+	while(*Data != '\n' && Res == True) 
+	{
+		IIC_Send_Byte(*Data++);				// 发送一个字符
 		Res = IIC_RxReply(); 				// 等待应答
 	}
 
@@ -181,7 +181,7 @@ bool IIC_Send_String(char *Str, uint8_t DeviceAddr,
 
 
 // 接收一个字符串
-bool IIC_Read_String(uint8_t DeviceAddr, 
+bool IIC_Read_Data(uint8_t DeviceAddr, 
 		uint16_t RegisterAddr, uint8_t RxLen) 
 {
 	
@@ -199,8 +199,6 @@ bool IIC_Read_String(uint8_t DeviceAddr,
 		
 		IIC_Send_Byte((DeviceAddr<<1)|0x01); 	// 发送设备地址
 		Res = IIC_RxReply(); 					// 等待应答
-		
-		IIC_Start(); 							// 发送开始信号
 		
 		IIC_Send_Byte(RegisterAddr>>8); 		// 发送寄存器地址高位
 		Res = IIC_RxReply(); 					// 等待应答
