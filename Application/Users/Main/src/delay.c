@@ -4,7 +4,7 @@
 
 // 延时模块初始化函数
 void Delay_Init() {
-	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);	// 设置SysTick的时钟(9MHz)
+	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);	// 设置SysTick的时钟(21MHz)
 }
 
 

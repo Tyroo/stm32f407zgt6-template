@@ -18,6 +18,12 @@
 ////////////////////////////////////////////////////////////////////////////////// 
 
 
+/**
+*	@typedef
+**/
+typedef enum { False, True } bool; // 类型重定义一个bool类型
+
+
 //0,不支持ucos
 //1,支持ucos
 #define SYSTEM_SUPPORT_OS		0		//定义系统文件夹是否支持UCOS

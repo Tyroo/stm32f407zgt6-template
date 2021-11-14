@@ -478,6 +478,16 @@
               <FileType>5</FileType>
               <FilePath>..\Users\Main\inc\malloc.h</FilePath>
             </File>
+            <File>
+              <FileName>at24c02.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\Main\src\at24c02.c</FilePath>
+            </File>
+            <File>
+              <FileName>at24c02.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Users\Main\inc\at24c02.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

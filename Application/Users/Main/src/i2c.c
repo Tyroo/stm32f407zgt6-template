@@ -2,9 +2,6 @@
 #include "i2c.h"
 
 
-uint8_t RxData[IIC_DATA_SIZE_MAX];									// 定义一个全局变量用来存储接收的字符串
-
-
 void IIC_Init(void) 
 {
 	/* 配置结构体定义 */
@@ -17,51 +14,45 @@ void IIC_Init(void)
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;				// GPIO输出
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;				// 推挽输出
 	GPIO_InitStructure.GPIO_PuPd =  GPIO_PuPd_UP;				// 上拉模式
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11;	// 配置Pin10~11
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;			// 输出速度为50MHz
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8 | GPIO_Pin_9;		// 配置Pin8~9
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;			// 输出速度为100MHz
 	
 	/* 初始化GPIO */
 	GPIO_Init(GPIOB, &GPIO_InitStructure);						// 应用GPIOB配置
-	GPIO_SetBits(GPIOB, GPIO_Pin_10 | GPIO_Pin_11);				// 初始拉高SCK（Pin10）和SDA（Pin11）
+	GPIO_SetBits(GPIOB, GPIO_Pin_8 | GPIO_Pin_9);				// 初始拉高SCK（Pin8）和SDA（Pin9）
 }
 
 
 // 发送起始信号，SCK高电平下，SDA由高变低
-static void IIC_Start(void) 
+void IIC_Start(void) 
 {
-	
-	IIC_Mode_Tx();	// 设置I2C为发送模式
-	
-	IIC_SCL = 1; 
-	IIC_SDA_OUT = 1;	// 拉高SCL和SDA，准备发送起始信号
-	
+	IIC_Mode_Tx();     //sda线输出
+	IIC_SDA_OUT = 1;	  	  
+	IIC_SCL = 1;
 	Delay_Us(4);
-	IIC_SDA_OUT = 0;	// 在SCL高电平时，拉低SDA，发送起始信号
-	
+ 	IIC_SDA_OUT = 0;//START:when CLK is high,DATA change form high to low 
 	Delay_Us(4);
-	IIC_SCL = 0;		// 将SCL拉低，准备发送数据
-	
+	IIC_SCL = 0;//钳住I2C总线，准备发送或接收数据 
 }
 
-
+    
 // 发送结束信号，SCK高电平下，SDA由低变高
-static void IIC_Stop(void) 
+void IIC_Stop(void) 
 {
-	IIC_Mode_Tx();					// 设置I2C为发送模式
-	
-	IIC_SDA_OUT = 0;				// 拉高SCL，拉低SDA
-	Delay_Us(4);
-	
-	IIC_SCL = 1;
-	IIC_SDA_OUT = 1;	// 拉高SCL的同时拉高SDA，产生结束信号
-	
-	Delay_Us(4);
+	IIC_Mode_Tx();//sda线输出
+	IIC_SCL = 0;
+	IIC_SDA_OUT = 0;//STOP:when CLK is high DATA change form low to high
+ 	Delay_Us(4);
+	IIC_SCL = 1; 
+	IIC_SDA_OUT = 1;//发送I2C总线结束信号
+	Delay_Us(4);	
 }
 
 
 // 发送响应信号（应答、非应答），接收完数据后将SDA拉高
-inline static void IIC_TxReply(uint8_t Res)
+static void IIC_TxReply(uint8_t Res)
 { 
+	IIC_SCL = 0;
 	IIC_Mode_Tx();
 	
 	IIC_SDA_OUT = Res;	// 将SDA拉低则应答，否则不应答
@@ -75,48 +66,55 @@ inline static void IIC_TxReply(uint8_t Res)
 
 
 // 接收响应信号（应答、非应答），接收完数据后将SDA拉高
-inline static uint8_t IIC_RxReply(void)
+static bool IIC_RxReply(void)
 { 
-	uint8_t Res;
+	uint8_t ReplyTime;
 	
+	ReplyTime = 0;
+
 	IIC_Mode_Rx();
-	Delay_Us(2);
+	IIC_SDA_OUT = 1;
+	Delay_Us(1);	   
+	IIC_SCL=1;
+	Delay_Us(1);
+	while(IIC_SDA_IN)
+	{
+		ReplyTime++;
+		if(ReplyTime>250)
+		{
+			IIC_Stop();
+			return False;
+		}
+	}
 	
-	IIC_SCL = 1;
-	Res = IIC_SDA_IN;
-	
-	Delay_Us(2);
 	IIC_SCL = 0;
-	
-	return Res;
+
+	return True;	
+
 }
 
 
 // 发送8位数据
-void IIC_Send_Byte(uint8_t Data) 
+bool IIC_Send_Byte(uint8_t Data) 
 {
-	
-	int i;
+	uint8_t Bit;
 	
 	IIC_Mode_Tx();	// 将IIC设置为发送模式
 	
-	for(i=7;i>=0;i--) 
+	for(Bit=0;Bit<8;Bit++) 
 	{
-		if (Data&(1<<i))
-		{
-			IIC_SDA_OUT = 1;
-		}	
-		else
-		{
-			IIC_SDA_OUT = 0;
-		}
-		Delay_Us(2);
+		IIC_SDA_OUT = (Data&0x80)>>7;
+		Data<<=1;
+		Delay_Us(1);
 		
 		IIC_SCL = 1;
 		Delay_Us(2);
 		
 		IIC_SCL = 0;		// 拉低SCL电平，准备发送第一帧数据
+		Delay_Us(1);
+
 	}
+	return IIC_RxReply();
 }
 
 
@@ -130,89 +128,16 @@ uint8_t IIC_Read_Byte(uint8_t IsAck)
 	
 	for (RxIndex=0;RxIndex<8;RxIndex++) 
 	{
-		Delay_Us(2);
-		IIC_SCL = 1;
-		
-		RxData <<= 1;
-		if (IIC_SDA_IN) RxData |= 0x01;
-		
-		Delay_Us(2);
 		IIC_SCL = 0;
+		Delay_Us(2);
+		
+		IIC_SCL = 1;
+		RxData <<= 1;
+		if (IIC_SDA_IN) RxData++;
+		Delay_Us(1);
 	}
 	
 	IIC_TxReply(IsAck);
 	
 	return RxData;
-}
-
-
-// 发送一个字符串给从设备
-bool IIC_Send_Data(uint8_t *Data, uint8_t DeviceAddr, 
-		uint16_t RegisterAddr) 
-{
-	uint8_t Res;							// 应答标志位
-	
-	// 当接收的数据超出最大限制或者设备地址超过127时，发送失败
-	if (strlen((char*)Data)>IIC_DATA_SIZE_MAX ||
-		DeviceAddr>127) return False;
-	
-	IIC_Start();							// 发送IIC起始信号
-	
-	IIC_Send_Byte((DeviceAddr<<1)&0xfe);	// 发送设备地址
-	Res = IIC_RxReply();					// 等待应答
-	
-	IIC_Send_Byte(RegisterAddr>>8);			// 发送寄存器地址高位
-	Res = IIC_RxReply();					// 等待应答
-	
-	IIC_Send_Byte(RegisterAddr%256); 		// 发送寄存器低地址
-	Res = IIC_RxReply(); 					// 等待应答
-	
-	// 当遇到结束字符或者应答失效后停止发送
-	while(*Data != '\n' && Res == True) 
-	{
-		IIC_Send_Byte(*Data++);				// 发送一个字符
-		Res = IIC_RxReply(); 				// 等待应答
-	}
-
-	IIC_Stop();								// 发送IIC结束信号
-	
-	return (bool)Res;
-}
-
-
-// 接收一个字符串
-bool IIC_Read_Data(uint8_t DeviceAddr, 
-		uint16_t RegisterAddr, uint8_t RxLen) 
-{
-	
-	uint8_t DataIndex, Res;	// 接收数据索引，应答响应
-	
-	// 当接收的数据超出最大限制或者设备地址超过127时，退出接收
-	if (RxLen>IIC_DATA_SIZE_MAX || DeviceAddr > 127) 
-		return False;
-	
-	Res = 1, DataIndex = 0;
-	IIC_Start();								// 发送IIC起始信号
-	
-	while(DataIndex<RxLen && Res == True) 
-	{
-		
-		IIC_Send_Byte((DeviceAddr<<1)|0x01); 	// 发送设备地址
-		Res = IIC_RxReply(); 					// 等待应答
-		
-		IIC_Send_Byte(RegisterAddr>>8); 		// 发送寄存器地址高位
-		Res = IIC_RxReply(); 					// 等待应答
-		
-		IIC_Send_Byte((RegisterAddr++)%256); 	// 发送寄存器地址低位
-		Res = IIC_RxReply(); 					// 等待应答
-		
-		/* 接收数据存入数组, 接收最后一个字节后无需应答 */
-		RxData[DataIndex] = IIC_Read_Byte(1);
-		DataIndex++;
-	}
-	
-	IIC_Stop();									// 停止发送
-	RxData[DataIndex] = '\0';
-	
-	return (bool)Res;
 }

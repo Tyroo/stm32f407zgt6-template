@@ -10,7 +10,7 @@
 /**
 *	@define
 **/
-#define DELAY_ONE_US 21									// 延时1us计数值
+#define DELAY_ONE_US 21						// 延时1us计数值
 #define DELAY_ONE_MS (DELAY_ONE_US * 1000) 	// 延时1ms计数值
 
 

@@ -2,6 +2,10 @@
 
 
 uint16_t Fsmc_Rx_Buff[1] = {0x61};
+
+
+const uint8_t IIC_Tx_Buff[] = {"AABBCCDD ^0^"};
+
 uint8_t SendChar;
 
 uint8_t WordsArr[32] = {0x04,0x80,0x0E,0xA0,0x78,0x90,0x08,0x90,
@@ -26,12 +30,19 @@ extern BYTE Work[FF_MAX_SS];
 extern USBH_HOST              USB_Host;
 extern USB_OTG_CORE_HANDLE    USB_OTG_Core;
 extern USB_ManageType		  USB_Manage;
+	  
+#define SIZE sizeof(IIC_Tx_Buff)
+uint8_t IIC_Rx_Buff[SIZE];
 
 
 
 int main() {
 	
 	uint8_t KeyCode;					// 按钮状态定义
+	bool IIC_Flag;
+	uint16_t LastAddr = 255;
+	uint8_t  LastData = 0x55;
+	
 //	CanTxMsg CANTxMessage;
 
 //	uint8_t EleBoxIndex;
@@ -53,8 +64,8 @@ int main() {
 	Key_Init();					// 按键模块初始化
 	Led_Control(1);
 	Uart1_Init(115200);	// 初始化USAER1模块
-	my_mem_init(SRAMIN);
-//	FsmcSram_Init();
+//	my_mem_init(SRAMIN);
+	FsmcSram_Init();
 //	CAN1_Config();			// 初始化CAN1
 //	SPI1_Init();			// SPI1初始化
 //	
@@ -62,7 +73,7 @@ int main() {
 //	setState(&TestSlave_Data, Initialisation);
 	
 	TFTLCD_Init();	// 初始化LCDTFT模块
-	
+	IIC_Init();		// 初始化IIC模块
 	
 	Delay_Ms(100);
 	
@@ -95,38 +106,38 @@ int main() {
 //	CANTxMessage.StdId = 0x12;
 //	CANTxMessage.ExtId = 0x12;		// 扩展标识符为0
 //	CANTxMessage.RTR = 0;					// 数据帧
-	FatfsWriteSize = 0;
-	FatfsReadSize = 0;
-	Fs = (FATFS*)mymalloc(SRAMIN, sizeof(FATFS));
-	Fi = (FIL*)mymalloc(SRAMIN, sizeof(FIL));
-	ReadTextBuff = (BYTE*)mymalloc(SRAMIN, 512);
-	WriteTextBuff = "wrty2y55ytuu68766tytiiook\r\n";
-	
-	F_Sate = f_mount(Fs, "2:", 0);
-	
-	if (F_Sate == FR_OK)
-	{
-		printf("文件系统挂载成功！\r\n");
-	}
-	else
-	{
-		printf("文件系统挂载失败！\r\n");
-		printf("失败原因：%d\r\n", F_Sate);
-	}
-	
-	if (F_Sate == FR_NO_FILESYSTEM)
-	{
-		printf("正在格式化文件系统...\r\n");
-		F_Sate = f_mkfs("2:", 0, Work, sizeof(Work));
-		if (F_Sate == FR_OK)
-		{
-			F_Sate = f_mount(NULL, "2:", 1);
-			F_Sate = f_mount(Fs, "2:", 1);
-			printf("格式化文件系统完成...\r\n");
-		}
-	}
+//	FatfsWriteSize = 0;
+//	FatfsReadSize = 0;
+//	Fs = (FATFS*)mymalloc(SRAMIN, sizeof(FATFS));
+//	Fi = (FIL*)mymalloc(SRAMIN, sizeof(FIL));
+//	ReadTextBuff = (BYTE*)mymalloc(SRAMIN, 512);
+//	WriteTextBuff = "wrty2y55ytuu68766tytiiook\r\n";
+//	
+//	F_Sate = f_mount(Fs, "2:", 0);
+//	
+//	if (F_Sate == FR_OK)
+//	{
+//		printf("文件系统挂载成功！\r\n");
+//	}
+//	else
+//	{
+//		printf("文件系统挂载失败！\r\n");
+//		printf("失败原因：%d\r\n", F_Sate);
+//	}
+//	
+//	if (F_Sate == FR_NO_FILESYSTEM)
+//	{
+//		printf("正在格式化文件系统...\r\n");
+//		F_Sate = f_mkfs("2:", 0, Work, sizeof(Work));
+//		if (F_Sate == FR_OK)
+//		{
+//			F_Sate = f_mount(NULL, "2:", 1);
+//			F_Sate = f_mount(Fs, "2:", 1);
+//			printf("格式化文件系统完成...\r\n");
+//		}
+//	}
 
-	USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_USBH_cb);
+//	USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_USBH_cb);
 	
 	Led_Control(0);
 
@@ -143,7 +154,20 @@ int main() {
 //		Uart1_Send("aaaa");
 //	}
 	
-	
+	IIC_Flag = AT24C02_Rx_Data(IIC_Rx_Buff, LastAddr, 1);
+	if ((*IIC_Rx_Buff) != 0x55)
+	{
+		IIC_Flag = AT24C02_Tx_Data(&LastData, LastAddr, 1);
+		if (IIC_Flag)
+			Uart1_Send("AT24CXX初始化成功！");
+		else
+			Uart1_Send("AT24CXX初始化失败！");
+	}
+	else
+	{
+		Uart1_Send("AT24CXX已完成初始化！");
+	}
+
 
 	while(1) {
 		
@@ -151,31 +175,40 @@ int main() {
 		
 		if (KeyCode == 1) 
 		{
-			Uart1_Send("正在读取文件...\r\n");
-			Led_Control(1);
-			F_Sate = f_open(Fi, "2:/123.txt", FA_READ|FA_WRITE);
-
-
-			F_Sate = f_write(Fi, WriteTextBuff, 16, &FatfsWriteSize);
-			F_Sate = f_read(Fi, ReadTextBuff, 8, &FatfsReadSize);
-			
-			Delay_Ms(10);
-			
-			if (F_Sate == FR_OK)
+			Uart1_Send("正在向AT24CXX写入数据...\r\n"); 
+			IIC_Flag = AT24C02_Tx_Data((uint8_t*)IIC_Tx_Buff, 0, SIZE);
+			if (IIC_Flag == True)
 			{
-				Uart1_Send("操作文件成功\r\n");
-				Uart1_Send("文件内容：\r\n");
-				Uart1_Send((char*)ReadTextBuff);
-				F_Sate = f_mkdir("2:/NewDir");
-				if (!F_Sate) Uart1_Send("创建文件夹成功！\r\n");
-				
+				Uart1_Send("写入成功！\r\n"); 
 			}
 			else
 			{
-				Uart1_Send("读取文件失败\r\n");
-				printf("错误原因：%d", F_Sate);
+				Uart1_Send("写入失败！\r\n");
 			}
-			f_close(Fi);
+//			Led_Control(1);
+//			F_Sate = f_open(Fi, "2:/123.txt", FA_READ|FA_WRITE);
+
+
+//			F_Sate = f_write(Fi, WriteTextBuff, 16, &FatfsWriteSize);
+//			F_Sate = f_read(Fi, ReadTextBuff, 8, &FatfsReadSize);
+//			
+//			Delay_Ms(10);
+//			
+//			if (F_Sate == FR_OK)
+//			{
+//				Uart1_Send("操作文件成功\r\n");
+//				Uart1_Send("文件内容：\r\n");
+//				Uart1_Send((char*)ReadTextBuff);
+//				F_Sate = f_mkdir("2:/NewDir");
+//				if (!F_Sate) Uart1_Send("创建文件夹成功！\r\n");
+//				
+//			}
+//			else
+//			{
+//				Uart1_Send("读取文件失败\r\n");
+//				printf("错误原因：%d", F_Sate);
+//			}
+//			f_close(Fi);
 //            Color += 500;
 //            if(Color > 0xFFFFFF)
 //                Color = 0x0000FF;
@@ -187,11 +220,27 @@ int main() {
 //			SendChar = (u8)FsmcSram_Read(0);
 //			Uart1_Send((char*)&SendChar);
 			
-		} 
-		if (USB_Manage.State == 0)
-		{
-			USBH_Process(&USB_OTG_Core, &USB_Host);
 		}
+		else if (KeyCode == 2)
+		{
+			Uart1_Send("正在读取AT24CXX数据...\r\n");
+			IIC_Flag = AT24C02_Rx_Data(IIC_Rx_Buff, 0, SIZE);
+			if (IIC_Flag == True)
+			{
+//				IIC_Rx_Buff[6] = '\0';
+				Uart1_Send("读取成功:");
+				Uart1_Send((char*)IIC_Rx_Buff);
+				Uart1_Send("\r\n");
+			}
+			else
+			{
+				Uart1_Send("读取失败！\r\n");
+			}
+		}
+//		if (USB_Manage.State == 0)
+//		{
+//			USBH_Process(&USB_OTG_Core, &USB_Host);
+//		}
 //		else 
 //		{
 //			Led_Control(0);

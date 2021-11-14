@@ -7,13 +7,7 @@
 **/
 #include "stm32f4xx.h"
 #include "stm32f4xx_spi.h"
-
-
-/**
-*	@typedef
-**/
-typedef enum {	True = 1, False = 0 } bool; // 类型重定义一个bool类型
-
+#include "sys.h"
 
 /**
 *	@variable

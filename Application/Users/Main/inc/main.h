@@ -9,6 +9,7 @@
 #include "delay.h"
 #include "led.h"
 #include "key.h"
+#include "at24c02.h"
 #include "spi.h"
 #include "fsmc.h"
 #include "uart.h"
