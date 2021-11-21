@@ -4,8 +4,6 @@
 uint16_t Fsmc_Rx_Buff[1] = {0x61};
 
 
-const uint8_t IIC_Tx_Buff[] = {"AABBCCDD ^0^"};
-
 uint8_t SendChar;
 
 uint8_t WordsArr[32] = {0x04,0x80,0x0E,0xA0,0x78,0x90,0x08,0x90,
@@ -30,18 +28,12 @@ extern BYTE Work[FF_MAX_SS];
 extern USBH_HOST              USB_Host;
 extern USB_OTG_CORE_HANDLE    USB_OTG_Core;
 extern USB_ManageType		  USB_Manage;
-	  
-#define SIZE sizeof(IIC_Tx_Buff)
-uint8_t IIC_Rx_Buff[SIZE];
 
 
 
 int main() {
 	
 	uint8_t KeyCode;					// 按钮状态定义
-	bool IIC_Flag;
-	uint16_t LastAddr = 255;
-	uint8_t  LastData = 0x55;
 	
 //	CanTxMsg CANTxMessage;
 
@@ -175,16 +167,6 @@ int main() {
 		
 		if (KeyCode == 1) 
 		{
-			Uart1_Send("正在向AT24CXX写入数据...\r\n"); 
-			IIC_Flag = AT24C02_Tx_Data((uint8_t*)IIC_Tx_Buff, 0, SIZE);
-			if (IIC_Flag == True)
-			{
-				Uart1_Send("写入成功！\r\n"); 
-			}
-			else
-			{
-				Uart1_Send("写入失败！\r\n");
-			}
 //			Led_Control(1);
 //			F_Sate = f_open(Fi, "2:/123.txt", FA_READ|FA_WRITE);
 
@@ -218,24 +200,12 @@ int main() {
 //			FsmcSram_Write(Fsmc_Rx_Buff, 0, 1);
 //			Led_Control(1);
 //			SendChar = (u8)FsmcSram_Read(0);
-//			Uart1_Send((char*)&SendChar);
+//			Uart1_Send((char*)&SendChar)
 			
 		}
 		else if (KeyCode == 2)
 		{
-			Uart1_Send("正在读取AT24CXX数据...\r\n");
-			IIC_Flag = AT24C02_Rx_Data(IIC_Rx_Buff, 0, SIZE);
-			if (IIC_Flag == True)
-			{
-//				IIC_Rx_Buff[6] = '\0';
-				Uart1_Send("读取成功:");
-				Uart1_Send((char*)IIC_Rx_Buff);
-				Uart1_Send("\r\n");
-			}
-			else
-			{
-				Uart1_Send("读取失败！\r\n");
-			}
+
 		}
 //		if (USB_Manage.State == 0)
 //		{

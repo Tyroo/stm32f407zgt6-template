@@ -57,3 +57,4 @@ Application/Project/*
 Bootloader/Project/*
 !Application/Project/Application.uvprojx
 !Bootloader/Project/Bootloader.uvprojx
+Bootloader/System/OUS/venv
