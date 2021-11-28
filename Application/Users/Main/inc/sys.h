@@ -24,6 +24,15 @@
 typedef enum { False, True } bool; // 类型重定义一个bool类型
 
 
+
+
+/**
+*	@define
+**/
+#define PTU8(v)					((uint8_t*)(v))
+#define PTU16(v)				((uint16_t*)(v))
+#define PTU32(v)				((uint32_t*)(v))
+
 //0,不支持ucos
 //1,支持ucos
 #define SYSTEM_SUPPORT_OS		0		//定义系统文件夹是否支持UCOS

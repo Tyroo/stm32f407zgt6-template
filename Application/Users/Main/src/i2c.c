@@ -55,7 +55,7 @@ static void IIC_TxReply(uint8_t Res)
 	IIC_SCL = 0;
 	IIC_Mode_Tx();
 	
-	IIC_SDA_OUT = Res;	// 将SDA拉低则应答，否则不应答
+	IIC_SDA_OUT = (1 - Res);	// 将SDA拉低则应答，否则不应答
 	Delay_Us(2);
 	
 	IIC_SCL = 1;

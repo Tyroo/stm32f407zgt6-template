@@ -488,6 +488,16 @@
               <FileType>5</FileType>
               <FilePath>..\Users\Main\inc\at24c02.h</FilePath>
             </File>
+            <File>
+              <FileName>mpu6050.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\Main\src\mpu6050.c</FilePath>
+            </File>
+            <File>
+              <FileName>mpu6050.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Users\Main\inc\mpu6050.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

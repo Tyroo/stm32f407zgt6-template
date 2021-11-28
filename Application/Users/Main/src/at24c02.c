@@ -47,12 +47,12 @@ bool AT24C02_Rx_Data(uint8_t* Buff,
 	{
 		IIC_Start();						// 发送IIC起始信号
 		Res = IIC_Send_Byte(0xA0+(((Addr+Index)/256)<<1));// 发送寄存器地址高位
-		Res = IIC_Send_Byte((Addr+Index)%256); 		// 发送寄存器地址低位
+		Res = IIC_Send_Byte((Addr+Index)%256);// 发送寄存器地址低位
 		
 		/* 接收数据存入数组, 接收最后一个字节后无需应答 */
 		IIC_Start();						// 发送IIC起始信号
 		Res = IIC_Send_Byte(0xA1); 			// 发送读命令
-		*(Buff+Index) = IIC_Read_Byte(1);
+		*(Buff+Index) = IIC_Read_Byte(0);	// 读取数据，不发送应答信号
 		IIC_Stop();							// 停止发送
 		Index++;
 	}

@@ -145,20 +145,6 @@ int main() {
 ////		Uart1_Send(ReadTextBuff);
 //		Uart1_Send("aaaa");
 //	}
-	
-	IIC_Flag = AT24C02_Rx_Data(IIC_Rx_Buff, LastAddr, 1);
-	if ((*IIC_Rx_Buff) != 0x55)
-	{
-		IIC_Flag = AT24C02_Tx_Data(&LastData, LastAddr, 1);
-		if (IIC_Flag)
-			Uart1_Send("AT24CXX初始化成功！");
-		else
-			Uart1_Send("AT24CXX初始化失败！");
-	}
-	else
-	{
-		Uart1_Send("AT24CXX已完成初始化！");
-	}
 
 
 	while(1) {
