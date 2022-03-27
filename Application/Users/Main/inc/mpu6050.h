@@ -3,7 +3,7 @@
 
 #include "i2c.h"
 #include "delay.h"
-#include "sys.h"
+#include "system.h"
 
 
 /* MPU6050 device address */

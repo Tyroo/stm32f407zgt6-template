@@ -13,7 +13,7 @@
 **/
 void Led_Init(void);
 
-void Led_Control(u8 Status);
+void Led_Control(uint8_t Status);
 
 
 

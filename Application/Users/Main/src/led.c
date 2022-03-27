@@ -23,7 +23,7 @@ void Led_Init() {
 
 
 // ÉèÖÃLEDµÆ×´Ì¬
-void Led_Control(u8 Status) {
+void Led_Control(uint8_t Status) {
 	
 	if (Status&1)
 		GPIO_ResetBits(GPIOF, GPIO_Pin_10);	// ¿ªÆôLEDµÆ
