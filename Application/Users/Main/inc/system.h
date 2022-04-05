@@ -1,6 +1,8 @@
-#ifndef __SYS_H
-#define __SYS_H	 
-#include "stm32f4xx.h" 
+#ifndef __SYSTEM_H__
+#define __SYSTEM_H__
+
+#include "stm32f4xx_gpio.h"
+
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32F407开发板

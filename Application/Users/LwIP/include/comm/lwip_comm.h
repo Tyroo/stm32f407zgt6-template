@@ -17,6 +17,7 @@
 #include "netif/ethernet.h"
 
 #include "lan8720.h"
+#include "uart.h"
 
 #define LWIP_MAX_DHCP_TRIES		4   //DHCP服务器最大重试次数
 

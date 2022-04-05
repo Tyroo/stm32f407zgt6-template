@@ -27,7 +27,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4x7_eth.h"
+#include "stm32f4xx_eth.h"
 #include "stm32f4xx_rcc.h"
 #include <string.h>
 

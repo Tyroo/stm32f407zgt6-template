@@ -1,7 +1,11 @@
-#ifndef __LAN8720_H
-#define __LAN8720_H
+#ifndef __LAN8720_H__
+#define __LAN8720_H__
+
 #include "system.h"
-#include "stm32f4x7_eth.h"
+#include "delay.h"
+#include "malloc.h"
+#include "stm32f4xx_eth.h"
+
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32F407开发板
@@ -36,5 +40,6 @@ u8 ETH_Tx_Packet(u16 FrameLength);
 u32 ETH_GetCurrentTxBuffer(void);
 u8 ETH_Mem_Malloc(void);
 void ETH_Mem_Free(void);
+
 #endif 
 

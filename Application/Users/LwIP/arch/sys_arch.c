@@ -46,11 +46,6 @@ extern uint32_t lwip_localtime;		//lwip本地时间计数器,单位:ms
  * implementations, so let's avoid this in core code as long as we can).
  */
 
-uint32_t sys_win_rand(void)
-{
-  return 0;
-}
-
 
 uint32_t sys_now(void)
 {

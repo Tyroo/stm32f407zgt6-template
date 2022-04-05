@@ -27,15 +27,15 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F4x7_ETH_H
-#define __STM32F4x7_ETH_H
+#ifndef __STM32F4xx_ETH_H__
+#define __STM32F4xx_ETH_H__
 
 #ifdef __cplusplus
  extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4x7_eth_conf.h"
+#include "stm32f4xx_eth_conf.h"
 
 /** @addtogroup STM32F4x7_ETH_Driver
   * @{

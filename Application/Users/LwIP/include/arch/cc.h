@@ -32,30 +32,11 @@
 #ifndef LWIP_ARCH_CC_H
 #define LWIP_ARCH_CC_H
 
-/* see https://sourceforge.net/p/predef/wiki/OperatingSystems/ */
-#if defined __ANDROID__
-#define LWIP_UNIX_ANDROID
-#elif defined __linux__
-#define LWIP_UNIX_LINUX
-#elif defined __APPLE__
-#define LWIP_UNIX_MACH
-#elif defined __OpenBSD__
-#define LWIP_UNIX_OPENBSD
-#elif defined __CYGWIN__
-#define LWIP_UNIX_CYGWIN
-#elif defined __GNU__
-#define LWIP_UNIX_HURD
-#endif
+#include <stdlib.h>
 
 #define LWIP_TIMEVAL_PRIVATE 0
 
 #define LWIP_ERRNO_INCLUDE <errno.h>
-
-#if defined(LWIP_UNIX_LINUX) || defined(LWIP_UNIX_HURD)
-#define LWIP_ERRNO_STDINCLUDE	1
-#endif
-
-//#define LWIP_RAND() ((uint32_t)rand())
 
 #define LWIP_NOASSERT
 

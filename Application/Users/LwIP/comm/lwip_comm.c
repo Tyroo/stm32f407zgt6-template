@@ -189,8 +189,8 @@ void lwip_dhcp_process_handle(void)
 		lwipdev.dhcpstatus=2; //DHCP 成功
 		printf("网卡 en 的 MAC 地址为:................%d.%d.%d.%d.%d.%d\r\n",\
 		lwipdev.mac[0],lwipdev.mac[1],\
-			lwipdev.mac[2],lwipdev.mac[3],\
-			lwipdev.mac[4],lwipdev.mac[5]);
+		lwipdev.mac[2],lwipdev.mac[3],\
+		lwipdev.mac[4],lwipdev.mac[5]);
 		//解析出通过 DHCP 获取到的 IP 地址
 		lwipdev.ip[3]=(uint8_t)(ip>>24); 
 		lwipdev.ip[2]=(uint8_t)(ip>>16);

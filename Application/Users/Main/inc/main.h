@@ -19,5 +19,6 @@
 #include "usbh_usr.h"
 #include "malloc.h"
 #include "ff.h"
+#include "lwip_app.h"
 
 #endif
