@@ -20,5 +20,6 @@
 #include "malloc.h"
 #include "ff.h"
 #include "lwip_app.h"
+#include "timer.h"
 
 #endif

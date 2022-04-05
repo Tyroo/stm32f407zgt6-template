@@ -39,7 +39,7 @@ void Timer3_Init(uint16_t arr, uint16_t psc)
 	
 	NVIC_InitStructure.NVIC_IRQChannel=TIM3_IRQn; //定时器3中断
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=0x01; //抢占优先级1
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x03; //子优先级3
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority=0x01; //子优先级3
 	NVIC_InitStructure.NVIC_IRQChannelCmd=ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 	
@@ -48,9 +48,9 @@ void Timer3_Init(uint16_t arr, uint16_t psc)
 //定时器3中断服务函数
 void TIM3_IRQHandler(void)
 {
-	if(TIM_GetITStatus(TIM3,TIM_IT_Update) == SET) //溢出中断
+	if(TIM_GetITStatus(TIM3, TIM_IT_Update) == SET) //溢出中断
 	{
-		lwip_localtime +=10; //加10
+		lwip_localtime += 10; //加10
 	}
 	TIM_ClearITPendingBit(TIM3,TIM_IT_Update);  //清除中断标志位
 }
