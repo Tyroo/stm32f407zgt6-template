@@ -20,11 +20,11 @@ extern BYTE* ReadTextBuff;
 extern char* WriteTextBuff;
 extern BYTE Work[FF_MAX_SS];
 
-//int USBH_USR_Application()
-//{
-//	/* USB用户应用程序 */
-//	return 0;
-//}
+int USBH_USR_Application()
+{
+	/* USB用户应用程序 */
+	return 0;
+}
 extern USBH_HOST              USB_Host;
 extern USB_OTG_CORE_HANDLE    USB_OTG_Core;
 extern USB_ManageType		  USB_Manage;
@@ -37,14 +37,10 @@ int main() {
 	
 //	CanTxMsg CANTxMessage;
 
-//	uint8_t EleBoxIndex;
+	uint8_t EleBoxIndex;
 	
-//	TFTLCD_Ele_ObjType EleObj;
-//	TFTLCD_Ele_PropType EleProp;
-	
-//	Ele_Box_PropType BoxProp;
-	Ele_Box_ObjType  BoxObj;
 	Ele_Box_PropType BoxProp;
+	Ele_Box_ObjType  BoxObj;
 	
 	BoxProp = (Ele_Box_PropType){20, 200, 0xFF0000, 1, { 10, 10, 0, 0xFFFF00 }};
 	
@@ -54,30 +50,39 @@ int main() {
 	Delay_Init();				// 初始化延时模块
 	Led_Init();					// 初始化LED模块
 	Key_Init();					// 按键模块初始化
-	Led_Control(1);
 	Uart1_Init(115200);	// 初始化USAER1模块
-//	my_mem_init(SRAMIN);
 	FsmcSram_Init();
+	
 //	CAN1_Config();			// 初始化CAN1
 //	SPI1_Init();			// SPI1初始化
 //	
 //	setNodeId(&TestSlave_Data, 1);
 //	setState(&TestSlave_Data, Initialisation);
 	
-	TFTLCD_Init();	// 初始化LCDTFT模块
-	IIC_Init();		// 初始化IIC模块
+	
+//	IIC_Init();		// 初始化IIC模块
 	
 	Delay_Ms(100);
 	
-//	TFTLCD_Word(50, 50, WordsArr, WordFont);
+	Timer3_Init(999, 839);
 	
-//	EleObj = CreateEleObj(ELE_BOX_OBJ, &EleProp);
+	my_mem_init(SRAMIN);	//初始化内部内存池
+	my_mem_init(SRAMEX);	//初始化外部内存池
+	my_mem_init(SRAMCCM);	//初始化CCM内存池
 	
-//	BoxProp = EleProp.Ele_BoxProp;
-//	BoxObj = EleObj.Ele_Box_Obj;
+	TFTLCD_Init();	// 初始化LCDTFT模块
+	
+
+	
+	if(lwip_comm_init()) //lwip 初始化
+	{
+		Led_Control(1);
+	}
+
+	
     TFTLCD_SetWindow(10, 11, 10, 11);
-//	BoxObj.SetBg(0xFF0000, 80, 80, 1, &BoxObj);
-//    BoxObj.SetBd(0xFF0000, 5, 10, 0, &BoxObj);
+	BoxObj.SetBg(0xFF0000, 80, 80, 1, &BoxObj);
+    BoxObj.SetBd(0xFF0000, 5, 10, 0, &BoxObj);
     BoxProp.Ele_Box_Color = 0x0000FF;
     BoxObj.SetBg(0xFFFF00, 80, 80, 1, &BoxObj);
 	BoxObj.Display(40, 40, &BoxObj);
@@ -88,8 +93,6 @@ int main() {
 //		EleBox.Ele_BoxProp.Ele_Box_Height -= 35;
 //		DrawBox(EleBoxIndex*40, 20, EleBox);
 //	}
-	
-	
 	
 //	CANTxMessage.DLC = 2;					// 数据长度
 //	CANTxMessage.Data[0] = 0x01;	// 数据低位
@@ -153,7 +156,7 @@ int main() {
 		
 		if (KeyCode == 1) 
 		{
-//			Led_Control(1);
+			Led_Control(1);
 //			F_Sate = f_open(Fi, "2:/123.txt", FA_READ|FA_WRITE);
 
 
@@ -191,7 +194,7 @@ int main() {
 		}
 		else if (KeyCode == 2)
 		{
-
+			Led_Control(0);
 		}
 //		if (USB_Manage.State == 0)
 //		{
@@ -201,6 +204,6 @@ int main() {
 //		{
 //			Led_Control(0);
 //		}
-		
+		LWIP_Appliction();
 	}
 }

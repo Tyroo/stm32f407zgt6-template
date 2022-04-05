@@ -6,8 +6,7 @@
 * @include
 **/
 #include "stm32f4xx_usart.h"
-#include <string.h>
-#include <stdio.h>
+#include "stdio.h"
 #include "nvic.h"
 
 
@@ -30,7 +29,7 @@ extern char UsartReceiveData[50];
 * 参数：{ Baud: UART的波特率 }
 * 返回值：void
 **/
-void Uart1_Init(u32 Baud);
+void Uart1_Init(uint32_t Baud);
 
 
 /**

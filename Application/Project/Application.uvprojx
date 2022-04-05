@@ -16,7 +16,7 @@
         <TargetCommonOption>
           <Device>STM32F407ZGTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F4xx_DFP.2.16.0</PackID>
+          <PackID>Keil.STM32F4xx_DFP.2.15.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x00020000) IRAM2(0x10000000,0x00010000) IROM(0x08000000,0x00100000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -339,7 +339,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,USE_USB_OTG_FS</Define>
               <Undefine></Undefine>
-              <IncludePath>..\System;..\System\Library\slib\inc;..\System\Library\elib\inc;..\Users\Main\inc;..\Users\TFTLCD\inc;..\Users\CanFestival\inc;..\Users\CanFestival\drive;..\Users\CanFestival\stm32;..\Users\FATFS\inc;..\Users\USB\USB_Host\Class\MSC\inc;..\Users\USB\USB_OTG\inc;..\Users\USB\USB_APP\inc;..\Users\USB\USB_Host\Core\inc;..\Users\USB\USB_Device\Class\msc\inc;..\Users\USB\USB_Device\Core\inc;..\Users\EtherNet\STM32F4x7_ETH_Driver\inc;..\Users\EtherNet\LWIP\include;..\Users\EtherNet\LWIP\include\netif;..\Users\EtherNet\LWIP\include\compat;..\Users\EtherNet\LWIP\include\lwip;..\Users\EtherNet\LWIP\include\arch;..\Users\EtherNet\LWIP\include\lwip\priv;..\Users\EtherNet\LWIP\include\lwip\prot;..\Users\EtherNet\LWIP\apps;..\Users\EtherNet\LWIP\include\comm</IncludePath>
+              <IncludePath>..\System;..\System\Library\slib\inc;..\System\Library\elib\inc;..\Users\Main\inc;..\Users\TFTLCD\inc;..\Users\CanFestival\inc;..\Users\CanFestival\drive;..\Users\CanFestival\stm32;..\Users\FATFS\inc;..\Users\USB\USB_Host\Class\MSC\inc;..\Users\USB\USB_OTG\inc;..\Users\USB\USB_APP\inc;..\Users\USB\USB_Host\Core\inc;..\Users\USB\USB_Device\Class\msc\inc;..\Users\USB\USB_Device\Core\inc;..\Users\EtherNet\LWIP\include;..\Users\EtherNet\LWIP\include\netif;..\Users\EtherNet\LWIP\include\compat;..\Users\EtherNet\LWIP\include\lwip;..\Users\EtherNet\LWIP\include\arch;..\Users\EtherNet\LWIP\include\lwip\priv;..\Users\EtherNet\LWIP\include\lwip\prot;..\Users\EtherNet\LWIP\apps;..\Users\EtherNet\LWIP\include\comm</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -738,6 +738,11 @@
               <FileType>1</FileType>
               <FilePath>..\System\Library\slib\src\stm32f4xx_wwdg.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f4xx_eth.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\System\Library\slib\src\stm32f4xx_eth.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1017,16 +1022,6 @@
               <FileName>usbd_usr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Users\USB\USB_APP\src\usbd_usr.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>ETHER</GroupName>
-          <Files>
-            <File>
-              <FileName>stm32f4x7_eth.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Users\EtherNet\STM32F4x7_ETH_Driver\src\stm32f4x7_eth.c</FilePath>
             </File>
           </Files>
         </Group>

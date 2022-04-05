@@ -81,11 +81,11 @@ void TFTLCD_Init(void) {
 	FSMC_WriteTiming.FSMC_DataLatency = 0x00;
 	FSMC_WriteTiming.FSMC_AccessMode = FSMC_AccessMode_A; //模式 A 
 	// FSMC配置
-	FSMC_InitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM4;										// 设置FSMC管理的外部SRAM的地址（Bank1的块4）
+	FSMC_InitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM4;						// 设置FSMC管理的外部SRAM的地址（Bank1的块4）
 	FSMC_InitStructure.FSMC_AsynchronousWait = FSMC_AsynchronousWait_Disable;
 	FSMC_InitStructure.FSMC_BurstAccessMode = FSMC_BurstAccessMode_Disable;
-	FSMC_InitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable; // 关闭数据地址复用
-	FSMC_InitStructure.FSMC_MemoryType = FSMC_MemoryType_SRAM;						// 内存类型为SRAM
+	FSMC_InitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable;	// 关闭数据地址复用
+	FSMC_InitStructure.FSMC_MemoryType = FSMC_MemoryType_SRAM;				// 内存类型为SRAM
 	FSMC_InitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b; 	// 存储器数据宽度为8bit 
 	FSMC_InitStructure.FSMC_WaitSignalPolarity = FSMC_WaitSignalPolarity_Low;
 	FSMC_InitStructure.FSMC_AsynchronousWait = FSMC_AsynchronousWait_Disable;
@@ -93,24 +93,24 @@ void TFTLCD_Init(void) {
 	FSMC_InitStructure.FSMC_WaitSignalActive = FSMC_WaitSignalActive_BeforeWaitState; 
 	FSMC_InitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;	// 存储器写使能
 	FSMC_InitStructure.FSMC_WaitSignal = FSMC_WaitSignal_Disable; 
-	FSMC_InitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Enable; 			// 读写使用不相同的时序
+	FSMC_InitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Enable; 		// 读写使用不相同的时序
 	FSMC_InitStructure.FSMC_WriteBurst = FSMC_WriteBurst_Disable;
-	FSMC_InitStructure.FSMC_ReadWriteTimingStruct = &FSMC_ReadWriteTiming;// 读写时序不相同
-	FSMC_InitStructure.FSMC_WriteTimingStruct = &FSMC_WriteTiming; 				// 读写时序不相同
+	FSMC_InitStructure.FSMC_ReadWriteTimingStruct = &FSMC_ReadWriteTiming;	// 读写时序不相同
+	FSMC_InitStructure.FSMC_WriteTimingStruct = &FSMC_WriteTiming;			// 读写时序不相同
 	
 	/* 使能/失能 */
-	FSMC_NORSRAMInit(&FSMC_InitStructure); 				// 初始化FSMC配置
-	FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM4, ENABLE); // 使能BANK1区域4
+	FSMC_NORSRAMInit(&FSMC_InitStructure);									// 初始化FSMC配置
+	FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM4, ENABLE);							// 使能BANK1区域4
 	
 	/* TFTLCD设备初始化 */
-	TFTLCD_Conf.TFTLCD_Dir = 0; 		// 竖屏模式
+	TFTLCD_Conf.TFTLCD_Dir = 0;		// 竖屏模式
 	TFTLCD_Conf.TFTLCD_Height = 320;// 屏幕高度320
 	TFTLCD_Conf.TFTLCD_Width = 240; // 屏幕宽度240
-	TFTLCD_Conf.TFTLCD_Cmd = (TFTLCD_CMD){0xD3,0x36,0x2A,0x2B,0x2C,0x2E};// IC指令
+	TFTLCD_Conf.TFTLCD_Cmd = (TFTLCD_CMD){0xD3,0x36,0x2A,0x2B,0x2C,0x2E};	// IC指令
 
-	TFTLCD_ReadDeviceId();																// 获取TFTLCD IC ID
+	TFTLCD_ReadDeviceId();								// 获取TFTLCD IC ID
 	ILI9341_Init(&TFTLCD.RWCD_REG, &TFTLCD.RWCD_RAM);	// ILI9341初始化
-	TFTLCD_SetScanDir(TFTLCD_Conf.TFTLCD_Dir);						// 设置屏幕方向
+	TFTLCD_SetScanDir(TFTLCD_Conf.TFTLCD_Dir);			// 设置屏幕方向
 	TFTLCD_SetWindow(0, TFTLCD_Conf.TFTLCD_Width-1, 0, TFTLCD_Conf.TFTLCD_Height-1);	// 在屏幕上开窗
 	
 	TFTLCD_Clear(0xFFFFFF);	
@@ -188,7 +188,9 @@ void TFTLCD_Clear(uint32_t Color) {
 	TFTLCD_SetCursor(0, 0);
 	
 	TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_ColorCode;
-	for(PointIndex=0;PointIndex<PointSum;PointIndex++) {
+	
+	for(PointIndex=0;PointIndex<PointSum;PointIndex++) 
+	{
 		TFTLCD.RWCD_RAM = Color16;	
 	}
 	
