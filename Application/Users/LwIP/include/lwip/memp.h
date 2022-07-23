@@ -136,10 +136,7 @@ struct memp_malloc_helper
    u16_t size;
 #endif /* MEMP_OVERFLOW_CHECK || (LWIP_STATS && MEM_STATS) */
 };
-
 #endif /* MEM_USE_POOLS */
-
-uint32_t memp_get_memorysize(void);
 
 void  memp_init(void);
 

@@ -4,6 +4,7 @@
 #include "system.h"
 #include "delay.h"
 #include "malloc.h"
+#include "user_app/inc/lwip_app_comm.h"
 #include "stm32f4xx_eth.h"
 
 //////////////////////////////////////////////////////////////////////////////////	 

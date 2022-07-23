@@ -45,6 +45,10 @@ void TFTLCD_Clear(uint32_t Color);
 
 void TFTLCD_DrawPoint(uint16_t XPos, uint16_t YPos, uint32_t Color);
 
+void TFTLCD_DrawBlock(uint16_t StartXPos, uint16_t StartYPos, 
+	uint16_t EndXPos, uint16_t EndYPos, 
+	uint32_t *ColorBuff);
+
 
 
 #endif

@@ -205,17 +205,17 @@ __align(32) uint8_t mem1base[MEM1_MAX_SIZE];													//内部SRAM内存池
 __align(32) uint8_t mem2base[MEM2_MAX_SIZE] __attribute__((at(0X68000000)));					//外部SRAM内存池
 __align(32) uint8_t mem3base[MEM3_MAX_SIZE] __attribute__((at(0X10000000)));					//内部CCM内存池
 //内存管理表
-uint16_t mem1mapbase[MEM1_ALLOC_TABLE_SIZE];													//内部SRAM内存池MAP
+uint16_t mem1mapbase[MEM1_ALLOC_TABLE_SIZE];												//内部SRAM内存池MAP
 uint16_t mem2mapbase[MEM2_ALLOC_TABLE_SIZE] __attribute__((at(0X68000000+MEM2_MAX_SIZE)));	//外部SRAM内存池MAP
 uint16_t mem3mapbase[MEM3_ALLOC_TABLE_SIZE] __attribute__((at(0X10000000+MEM3_MAX_SIZE)));	//内部CCM内存池MAP
 //内存管理参数	   
-const uint32_t memtblsize[SRAMBANK]={MEM1_ALLOC_TABLE_SIZE,MEM2_ALLOC_TABLE_SIZE,MEM3_ALLOC_TABLE_SIZE};	//内存表大小
+const uint32_t memtblsize[SRAMBANK]={MEM1_ALLOC_TABLE_SIZE,MEM2_ALLOC_TABLE_SIZE,MEM3_ALLOC_TABLE_SIZE};//内存表大小
 const uint32_t memblksize[SRAMBANK]={MEM1_BLOCK_SIZE,MEM2_BLOCK_SIZE,MEM3_BLOCK_SIZE};					//内存分块大小
 const uint32_t memsize[SRAMBANK]={MEM1_MAX_SIZE,MEM2_MAX_SIZE,MEM3_MAX_SIZE};							//内存总大小
 
 
 //内存管理控制器
-struct _m_mallco_dev mallco_dev=
+struct _m_mallco_dev mallco_dev =
 {
 	my_mem_init,						//内存初始化
 	my_mem_perused,						//内存使用率

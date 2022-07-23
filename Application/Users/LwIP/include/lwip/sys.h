@@ -432,10 +432,8 @@ void sys_init(void);
 /**
  * Ticks/jiffies since power up.
  */
-uint32_t sys_jiffies(void);
+u32_t sys_jiffies(void);
 #endif
-
-uint32_t sys_win_rand(void);
 
 /**
  * @ingroup sys_time

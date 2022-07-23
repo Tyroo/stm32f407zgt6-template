@@ -10,12 +10,17 @@
 #include "system.h"
 
 /**
+*	@defined
+**/
+#define SPI3_RTX_BUFF_SIZE    (8)
+
+/**
 *	@variable
 **/
 extern char Spi1_ReceiveData[50];
 
-extern uint8_t Spi3_DmaWriteData[8];
-extern uint8_t Spi3_DmaReadData[8];
+extern uint8_t Spi3_DmaWriteData[SPI3_RTX_BUFF_SIZE];
+extern uint8_t Spi3_DmaReadData[SPI3_RTX_BUFF_SIZE];
 
 
 /**

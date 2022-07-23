@@ -175,6 +175,30 @@ void TFTLCD_DrawPoint(uint16_t XPos, uint16_t YPos, uint32_t Color) {
 }
 
 
+//在指定区域内填充指定颜色块			 
+//(sx,sy),(ex,ey):填充矩形对角坐标,区域大小为:(ex-sx+1)*(ey-sy+1)   
+//color:要填充的颜色
+void TFTLCD_DrawBlock(uint16_t StartXPos, uint16_t StartYPos, 
+	uint16_t EndXPos, uint16_t EndYPos, 
+	uint32_t *ColorBuff)
+{  
+	static uint16_t height, width;
+	static uint16_t i, j;
+	
+	width = EndXPos - StartXPos + 1; 			//得到填充的宽度
+	height = EndYPos - StartYPos + 1;			//高度
+	
+ 	for(i=0;i<height;i++)
+	{
+ 		TFTLCD_SetCursor(StartXPos, StartYPos+i);  //设置光标位置 
+		TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_ColorCode;
+		
+		for(j=0;j<width;j++)
+			TFTLCD.RWCD_RAM = ColorBuff[i*width+j];//写入数据 
+	}		  
+} 
+
+
 // 以指定颜色清屏
 void TFTLCD_Clear(uint32_t Color) {
 	

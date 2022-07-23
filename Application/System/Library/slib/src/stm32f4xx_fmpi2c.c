@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f4xx_fmpi2c.c
   * @author  MCD Application Team
-  * @version V1.8.0
-  * @date    04-November-2016
+  * @version V1.8.1
+  * @date    27-January-2022
   * @brief   This file provides firmware functions to manage the following 
   *          functionalities of the Inter-Integrated circuit Fast Mode Plus (FMPI2C):
   *           + Initialization and Configuration
@@ -58,19 +58,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2016 STMicroelectronics</center></h2>
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
   *
-  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
-  * You may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at:
-  *
-  *        http://www.st.com/software_license_agreement_liberty_v2
-  *
-  * Unless required by applicable law or agreed to in writing, software 
-  * distributed under the License is distributed on an "AS IS" BASIS, 
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -125,7 +118,7 @@
          back to their reset value.
          
     [..] Before enabling Stop mode using FMPI2C_StopModeCmd() FMPI2C Clock source must be set to
-         HSI and Digital filters must be disabled.
+         HSI and Digital filters must be disabled. This feature is not available for STM32F410xx devices.
          
     [..] Before enabling Own Address 2 via FMPI2C_DualAddressCmd() function, OA2 and mask should be
          configured using FMPI2C_OwnAddress2Config() function.
@@ -1551,4 +1544,3 @@ void FMPI2C_ClearITPendingBit(FMPI2C_TypeDef* FMPI2Cx, uint32_t FMPI2C_IT)
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

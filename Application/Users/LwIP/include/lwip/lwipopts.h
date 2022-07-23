@@ -1,34 +1,32 @@
-/*
- * Copyright (c) 2001-2003 Swedish Institute of Computer Science.
- * All rights reserved. 
- * 
- * Redistribution and use in source and binary forms, with or without modification, 
- * are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission. 
- *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED 
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT 
- * SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT 
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING 
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY 
- * OF SUCH DAMAGE.
- *
- * This file is part of the lwIP TCP/IP stack.
- * 
- * Author: Adam Dunkels <adam@sics.se>
- *
- */
+/**
+  ******************************************************************************
+  * @file    lwipopts.h
+  * @author  MCD Application Team
+  * @version V1.1.0
+  * @date    31-July-2013
+  * @brief   lwIP Options Configuration.
+  *          This file is based on Utilities\lwip_v1.4.1\src\include\lwip\opt.h 
+  *          and contains the lwIP configuration for the STM32F4x7 demonstration.
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
+  *
+  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  * You may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at:
+  *
+  *        http://www.st.com/software_license_agreement_liberty_v2
+  *
+  * Unless required by applicable law or agreed to in writing, software 
+  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *
+  ******************************************************************************
+  */
+
 #ifndef LWIP_LWIPOPTS_H
 #define LWIP_LWIPOPTS_H
 
@@ -37,23 +35,23 @@
 #else /* LWIP_OPTTEST_FILE */
 
 #define LWIP_IPV4                  1
-#define LWIP_IPV6                  0	// zjl.20220314��1->0
+#define LWIP_IPV6                  0	// zjl.20220314，1->0
 
-#define NO_SYS                     1	// zjl.20220314��0->0
+#define NO_SYS                     1	// zjl.20220314，0->0
 #define LWIP_SOCKET                (NO_SYS==0)
 #define LWIP_NETCONN               (NO_SYS==0)
 #define LWIP_NETIF_API             (NO_SYS==0)
 
-#define LWIP_IGMP                  LWIP_IPV4
+#define LWIP_IGMP                  0	// zjl.20220314，LWIP_IPV4->0
 #define LWIP_ICMP                  LWIP_IPV4
 
-#define LWIP_SNMP                  LWIP_UDP
+#define LWIP_SNMP                  0		// zjl.20220314，LWIP_UDP->0
 #define MIB2_STATS                 LWIP_SNMP
 #ifdef LWIP_HAVE_MBEDTLS
 #define LWIP_SNMP_V3               (LWIP_SNMP)
 #endif
 
-#define LWIP_DNS                   LWIP_UDP
+#define LWIP_DNS                   0 // zjl.20220314，LWIP_UDP->0
 #define LWIP_MDNS_RESPONDER        LWIP_UDP
 
 #define LWIP_NUM_NETIF_CLIENT_DATA (LWIP_MDNS_RESPONDER)
@@ -68,7 +66,9 @@
 #define LWIP_SO_RCVTIMEO           1
 #define LWIP_SO_RCVBUF             1
 
-#define LWIP_TCPIP_CORE_LOCKING    1
+#define LWIP_COMPAT_MUTEX          1	// zjl.20220722
+
+#define LWIP_TCPIP_CORE_LOCKING    0	// zjl.20220722 1->0
 
 #define LWIP_NETIF_LINK_CALLBACK        1
 #define LWIP_NETIF_STATUS_CALLBACK      1
@@ -129,7 +129,7 @@ a lot of data that needs to be copied, this should be set high. */
 #define MEMP_NUM_RAW_PCB        3
 /* MEMP_NUM_UDP_PCB: the number of UDP protocol control blocks. One
    per active UDP "connection". */
-#define MEMP_NUM_UDP_PCB        4
+#define MEMP_NUM_UDP_PCB        6
 /* MEMP_NUM_TCP_PCB: the number of simulatenously active TCP
    connections. */
 #define MEMP_NUM_TCP_PCB        5
@@ -148,20 +148,20 @@ a lot of data that needs to be copied, this should be set high. */
 /* MEMP_NUM_NETBUF: the number of struct netbufs. */
 #define MEMP_NUM_NETBUF         2
 /* MEMP_NUM_NETCONN: the number of struct netconns. */
-#define MEMP_NUM_NETCONN        10
+#define MEMP_NUM_NETCONN        4	// zjl.20220722 10->4
 /* MEMP_NUM_TCPIP_MSG_*: the number of struct tcpip_msg, which is used
    for sequential API communication and incoming packets. Used in
    src/api/tcpip.c. */
-#define MEMP_NUM_TCPIP_MSG_API   16
-#define MEMP_NUM_TCPIP_MSG_INPKT 16
+#define MEMP_NUM_TCPIP_MSG_API   8	// zjl.20220722 16->8
+#define MEMP_NUM_TCPIP_MSG_INPKT 8	// zjl.20220722 16->8
 
 
 /* ---------- Pbuf options ---------- */
 /* PBUF_POOL_SIZE: the number of buffers in the pbuf pool. */
-#define PBUF_POOL_SIZE          20	// zjl.20220314��120->10
+#define PBUF_POOL_SIZE          20	// zjl.20220314，120->10
 
 /* PBUF_POOL_BUFSIZE: the size of each pbuf in the pbuf pool. */
-#define PBUF_POOL_BUFSIZE       512	// zjl.20220314��256->512
+#define PBUF_POOL_BUFSIZE       512	// zjl.20220314，256->512
 
 /** SYS_LIGHTWEIGHT_PROT
  * define SYS_LIGHTWEIGHT_PROT in lwipopts.h if you want inter-task protection
@@ -187,7 +187,7 @@ a lot of data that needs to be copied, this should be set high. */
 #define TCP_QUEUE_OOSEQ         1
 
 /* TCP Maximum segment size. */
-#define TCP_MSS                 1460	// zjl.20220314��1024->1460
+#define TCP_MSS                 1460	// zjl.20220314，1024->1460
 
 /* TCP sender buffer space (bytes). */
 #define TCP_SND_BUF             (4*TCP_MSS)
@@ -226,7 +226,7 @@ a lot of data that needs to be copied, this should be set high. */
 /* IP reassembly and segmentation.These are orthogonal even
  * if they both deal with IP fragments */
 #define IP_REASSEMBLY           1
-#define IP_REASS_MAX_PBUFS      (10 * ((1500 + PBUF_POOL_BUFSIZE - 1) / PBUF_POOL_BUFSIZE))
+//#define IP_REASS_MAX_PBUFS      (10 * ((1500 + PBUF_POOL_BUFSIZE - 1) / PBUF_POOL_BUFSIZE))	// ZJL.20220722  
 #define MEMP_NUM_REASSDATA      IP_REASS_MAX_PBUFS
 #define IP_FRAG                 1
 #define IPV6_FRAG_COPYHEADER    1
@@ -324,6 +324,45 @@ void sys_lock_tcpip_core(void);
 void sys_unlock_tcpip_core(void);
 #define UNLOCK_TCPIP_CORE()        sys_unlock_tcpip_core()
 #endif
+#endif
+
+#define LWIP_NETIF_HOSTNAME               1	// 给网卡取名字
+
+//STM32F4x7允许通过硬件识别和计算IP,UDP和ICMP的帧校验和
+
+#define CHECKSUM_BY_HARDWARE //定义CHECKSUM_BY_HARDWARE,使用硬件帧校验
+
+
+#ifdef CHECKSUM_BY_HARDWARE
+  //CHECKSUM_GEN_IP==0: 硬件生成IP数据包的帧校验和
+  #define CHECKSUM_GEN_IP                 0
+  //CHECKSUM_GEN_UDP==0: 硬件生成UDP数据包的帧校验和
+  #define CHECKSUM_GEN_UDP                0
+  //CHECKSUM_GEN_TCP==0: 硬件生成TCP数据包的帧校验和
+  #define CHECKSUM_GEN_TCP                0 
+  //CHECKSUM_CHECK_IP==0: 硬件检查输入的IP数据包帧校验和
+  #define CHECKSUM_CHECK_IP               0
+  //CHECKSUM_CHECK_UDP==0: 硬件检查输入的UDP数据包帧校验和
+  #define CHECKSUM_CHECK_UDP              0
+  //CHECKSUM_CHECK_TCP==0: 硬件检查输入的TCP数据包帧校验和
+  #define CHECKSUM_CHECK_TCP              0
+  //CHECKSUM_CHECK_ICMP==0: 硬件检查输入的ICMP数据包帧校验和
+  #define CHECKSUM_GEN_ICMP               0
+#else
+  /* CHECKSUM_GEN_IP==1: Generate checksums in software for outgoing IP packets.*/
+  #define CHECKSUM_GEN_IP                 1
+  /* CHECKSUM_GEN_UDP==1: Generate checksums in software for outgoing UDP packets.*/
+  #define CHECKSUM_GEN_UDP                1
+  /* CHECKSUM_GEN_TCP==1: Generate checksums in software for outgoing TCP packets.*/
+  #define CHECKSUM_GEN_TCP                1
+  /* CHECKSUM_CHECK_IP==1: Check checksums in software for incoming IP packets.*/
+  #define CHECKSUM_CHECK_IP               1
+  /* CHECKSUM_CHECK_UDP==1: Check checksums in software for incoming UDP packets.*/
+  #define CHECKSUM_CHECK_UDP              1
+  /* CHECKSUM_CHECK_TCP==1: Check checksums in software for incoming TCP packets.*/
+  #define CHECKSUM_CHECK_TCP              1
+  /* CHECKSUM_CHECK_TCP==1: Check checksums in software for incoming TCP packets.*/
+  #define CHECKSUM_CHECK_ICMP              1
 #endif
 
 #endif /* LWIP_LWIPOPTS_H */

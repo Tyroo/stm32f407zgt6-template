@@ -35,9 +35,10 @@
 #include <lwip/arch.h>
 #include <lwip/stats.h>
 #include <lwip/debug.h>
-#include <lwip/lwip_sys.h>
+#include <lwip/sys.h>
 #include <lwip/tcpip.h>
-#include "comm/lwip_comm.h"
+
+#include "user_app/inc/lwip_app_comm.h"
 
 extern uint32_t lwip_localtime;		//lwip本地时间计数器,单位:ms
 

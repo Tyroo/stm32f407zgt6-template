@@ -81,7 +81,7 @@
 
 #include "netif/bridgeif.h"
 #include "lwip/netif.h"
-#include "lwip/lwip_sys.h"
+#include "lwip/sys.h"
 #include "lwip/etharp.h"
 #include "lwip/ethip6.h"
 #include "lwip/snmp.h"

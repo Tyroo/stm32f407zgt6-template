@@ -42,10 +42,10 @@
  * search-and-replace for the word "ethernetif" to replace it with
  * something that better describes your network interface.
  */
+#include "user_app/inc/lwip_app_comm.h"
 
 #include "netif/ethernetif.h"
-#include "comm/lwip_comm.h" 
-#include "netif/etharp.h" 
+#include "netif/etharp.h"
 
 #include "lan8720.h"
 #include "string.h"
@@ -61,12 +61,12 @@ static err_t low_level_init(struct netif *netif)
 #endif 
 	netif->hwaddr_len = ETHARP_HWADDR_LEN; //设置MAC地址长度,为6个字节
 	//初始化MAC地址,设置什么地址由用户自己设置,但是不能与网络中其他设备MAC地址重复
-	netif->hwaddr[0] = lwipdev.mac[0]; 
-	netif->hwaddr[1] = lwipdev.mac[1]; 
-	netif->hwaddr[2] = lwipdev.mac[2];
-	netif->hwaddr[3] = lwipdev.mac[3];
-	netif->hwaddr[4] = lwipdev.mac[4];
-	netif->hwaddr[5] = lwipdev.mac[5];
+	netif->hwaddr[0] = stcLwipObject.mac[0]; 
+	netif->hwaddr[1] = stcLwipObject.mac[1]; 
+	netif->hwaddr[2] = stcLwipObject.mac[2];
+	netif->hwaddr[3] = stcLwipObject.mac[3];
+	netif->hwaddr[4] = stcLwipObject.mac[4];
+	netif->hwaddr[5] = stcLwipObject.mac[5];
 	netif->mtu = 1500; //最大允许传输单元,允许该网卡广播和ARP功能
 
 	netif->flags = NETIF_FLAG_BROADCAST|NETIF_FLAG_ETHARP | NETIF_FLAG_LINK_UP;
@@ -159,7 +159,7 @@ err_t ethernetif_input(struct netif *netif)
 err_t ethernetif_init(struct netif *netif)
 {
 #if LWIP_NETIF_HOSTNAME			//LWIP_NETIF_HOSTNAME 
-	netif->hostname="lwip";  	//初始化名称
+	netif->hostname="STM32F407-Explorer Borad";  	//初始化名称
 #endif 
 	netif->name[0]=IFNAME0; 	//初始化变量netif的name字段
 	netif->name[1]=IFNAME1; 	//在文件外定义这里不用关心具体值

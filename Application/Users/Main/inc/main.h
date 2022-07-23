@@ -17,9 +17,9 @@
 #include "tftlcd.h"
 #include "TestSlave.h"
 #include "usbh_usr.h"
-#include "malloc.h"
+//#include "malloc.h"
 #include "ff.h"
-#include "lwip_app.h"
+#include "user_app/inc/lwip_app_comm.h"
 #include "timer.h"
 
 #endif

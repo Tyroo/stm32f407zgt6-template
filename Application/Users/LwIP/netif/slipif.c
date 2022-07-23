@@ -66,7 +66,7 @@
 #include "lwip/pbuf.h"
 #include "lwip/stats.h"
 #include "lwip/snmp.h"
-#include "lwip/lwip_sys.h"
+#include "lwip/sys.h"
 #include "lwip/sio.h"
 
 #define SLIP_END     0xC0 /* 0300: start and end of every packet */

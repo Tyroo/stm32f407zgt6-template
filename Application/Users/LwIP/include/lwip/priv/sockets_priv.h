@@ -43,7 +43,7 @@
 
 #include "lwip/err.h"
 #include "lwip/sockets.h"
-#include "lwip/lwip_sys.h"
+#include "lwip/sys.h"
 
 #ifdef __cplusplus
 extern "C" {

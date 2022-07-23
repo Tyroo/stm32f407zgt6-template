@@ -51,6 +51,7 @@ void TIM3_IRQHandler(void)
 	if(TIM_GetITStatus(TIM3, TIM_IT_Update) == SET) //溢出中断
 	{
 		lwip_localtime += 10; //加10
+		TIM_ClearITPendingBit(TIM3,TIM_IT_Update);  //清除中断标志位
 	}
-	TIM_ClearITPendingBit(TIM3,TIM_IT_Update);  //清除中断标志位
+	
 }

@@ -2,7 +2,7 @@
 #define __TIMERS_H__
 
 
-#include "comm/lwip_comm.h"
+#include "user_app/inc/lwip_app_comm.h"
 
 void Timer3_Init(uint16_t arr, uint16_t psc);
 

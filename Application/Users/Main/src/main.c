@@ -32,63 +32,24 @@ extern USB_ManageType		  USB_Manage;
 
 
 int main() {
-	
-	uint8_t KeyCode;					// 按钮状态定义
-	
-//	CanTxMsg CANTxMessage;
 
-	uint8_t EleBoxIndex;
-	
-	Ele_Box_PropType BoxProp;
-	Ele_Box_ObjType  BoxObj;
-	
-	BoxProp = (Ele_Box_PropType){20, 200, 0xFF0000, 1, { 10, 10, 0, 0xFFFF00 }};
-	
-	CreateBoxObject(&BoxObj, BoxProp);
-	
 	Nvic_Init(2);				// 中断分组，中断分组2
-	Delay_Init();				// 初始化延时模块
 	Led_Init();					// 初始化LED模块
-	Key_Init();					// 按键模块初始化
+	Delay_Init();				// 初始化延时模块
 	Uart1_Init(115200);	// 初始化USAER1模块
-	FsmcSram_Init();
-	
-//	CAN1_Config();			// 初始化CAN1
-//	SPI1_Init();			// SPI1初始化
-//	
-//	setNodeId(&TestSlave_Data, 1);
-//	setState(&TestSlave_Data, Initialisation);
-	
-	
-//	IIC_Init();		// 初始化IIC模块
-	
-	Delay_Ms(100);
-	
 	Timer3_Init(999, 839);
-	
+	FsmcSram_Init();
 	my_mem_init(SRAMIN);	//初始化内部内存池
-	my_mem_init(SRAMEX);	//初始化外部内存池
-	my_mem_init(SRAMCCM);	//初始化CCM内存池
+
+	LAN8720_Init();
 	
 	TFTLCD_Init();	// 初始化LCDTFT模块
 	
-
-	
-	if(lwip_comm_init()) //lwip 初始化
-	{
-		Led_Control(1);
-	}
-
-	
-    TFTLCD_SetWindow(10, 11, 10, 11);
-	BoxObj.SetBg(0xFF0000, 80, 80, 1, &BoxObj);
-    BoxObj.SetBd(0xFF0000, 5, 10, 0, &BoxObj);
-    BoxProp.Ele_Box_Color = 0x0000FF;
-    BoxObj.SetBg(0xFFFF00, 80, 80, 1, &BoxObj);
-	BoxObj.Display(40, 40, &BoxObj);
+	// LWIP初始化
+	lwip_app_init();
+	// LWIP UDP通信初始化
+	stcLwipObject.udpstatus = lwip_app_udp_init();
     
-    
-	
 //	for(EleBoxIndex=0;EleBoxIndex<6;EleBoxIndex++) {
 //		EleBox.Ele_BoxProp.Ele_Box_Height -= 35;
 //		DrawBox(EleBoxIndex*40, 20, EleBox);
@@ -152,50 +113,6 @@ int main() {
 
 	while(1) {
 		
-		KeyCode = Key_Scan(0);	// 按键扫描
-		
-		if (KeyCode == 1) 
-		{
-			Led_Control(1);
-//			F_Sate = f_open(Fi, "2:/123.txt", FA_READ|FA_WRITE);
-
-
-//			F_Sate = f_write(Fi, WriteTextBuff, 16, &FatfsWriteSize);
-//			F_Sate = f_read(Fi, ReadTextBuff, 8, &FatfsReadSize);
-//			
-//			Delay_Ms(10);
-//			
-//			if (F_Sate == FR_OK)
-//			{
-//				Uart1_Send("操作文件成功\r\n");
-//				Uart1_Send("文件内容：\r\n");
-//				Uart1_Send((char*)ReadTextBuff);
-//				F_Sate = f_mkdir("2:/NewDir");
-//				if (!F_Sate) Uart1_Send("创建文件夹成功！\r\n");
-//				
-//			}
-//			else
-//			{
-//				Uart1_Send("读取文件失败\r\n");
-//				printf("错误原因：%d", F_Sate);
-//			}
-//			f_close(Fi);
-//            Color += 500;
-//            if(Color > 0xFFFFFF)
-//                Color = 0x0000FF;
-//            BoxObj.SetBg(Color, 80, 80, 1, &BoxObj);
-//            BoxObj.Display(40, 20, &BoxObj);
-//			CAN1_Send_Msg(&CANTxMessage);
-//			FsmcSram_Write(Fsmc_Rx_Buff, 0, 1);
-//			Led_Control(1);
-//			SendChar = (u8)FsmcSram_Read(0);
-//			Uart1_Send((char*)&SendChar)
-			
-		}
-		else if (KeyCode == 2)
-		{
-			Led_Control(0);
-		}
 //		if (USB_Manage.State == 0)
 //		{
 //			USBH_Process(&USB_OTG_Core, &USB_Host);
@@ -204,6 +121,6 @@ int main() {
 //		{
 //			Led_Control(0);
 //		}
-		LWIP_Appliction();
+		lwip_app_udp_client();
 	}
 }

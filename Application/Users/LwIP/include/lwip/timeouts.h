@@ -41,7 +41,7 @@
 #include "lwip/opt.h"
 #include "lwip/err.h"
 #if !NO_SYS
-#include "lwip/lwip_sys.h"
+#include "lwip/sys.h"
 #endif
 
 #ifdef __cplusplus

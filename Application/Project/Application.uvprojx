@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,USE_USB_OTG_FS</Define>
               <Undefine></Undefine>
-              <IncludePath>..\System;..\System\Library\slib\inc;..\System\Library\elib\inc;..\Users\Main\inc;..\Users\TFTLCD\inc;..\Users\CanFestival\inc;..\Users\CanFestival\drive;..\Users\CanFestival\stm32;..\Users\FATFS\inc;..\Users\USB\USB_Host\Class\MSC\inc;..\Users\USB\USB_OTG\inc;..\Users\USB\USB_APP\inc;..\Users\USB\USB_Host\Core\inc;..\Users\USB\USB_Device\Class\msc\inc;..\Users\USB\USB_Device\Core\inc;..\Users\LwIP\include;..\Users\LwIP\include\netif;..\Users\LwIP\include\compat;..\Users\LwIP\include\lwip;..\Users\LwIP\include\arch;..\Users\LwIP\include\lwip\priv;..\Users\LwIP\include\lwip\prot;..\Users\LwIP\apps;..\Users\LwIP\include\comm</IncludePath>
+              <IncludePath>..\System;..\System\Library\slib\inc;..\System\Library\elib\inc;..\Users\Main\inc;..\Users\TFTLCD\inc;..\Users\CanFestival\inc;..\Users\CanFestival\drive;..\Users\CanFestival\stm32;..\Users\FATFS\inc;..\Users\USB\USB_Host\Class\MSC\inc;..\Users\USB\USB_OTG\inc;..\Users\USB\USB_APP\inc;..\Users\USB\USB_Host\Core\inc;..\Users\USB\USB_Device\Class\msc\inc;..\Users\USB\USB_Device\Core\inc;..\Users\LwIP\include;..\Users\LwIP\include\netif;..\Users\LwIP\include\compat;..\Users\LwIP\include\lwip;..\Users\LwIP\include\arch;..\Users\LwIP\include\lwip\priv;..\Users\LwIP\include\lwip\prot;..\Users\LwIP\apps;..\Users\LwIP</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -464,16 +464,6 @@
               <FilePath>..\Users\Main\inc\can.h</FilePath>
             </File>
             <File>
-              <FileName>malloc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Users\Main\src\malloc.c</FilePath>
-            </File>
-            <File>
-              <FileName>malloc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Users\Main\inc\malloc.h</FilePath>
-            </File>
-            <File>
               <FileName>at24c02.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Users\Main\src\at24c02.c</FilePath>
@@ -517,6 +507,11 @@
               <FileName>dma.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Users\Main\inc\dma.h</FilePath>
+            </File>
+            <File>
+              <FileName>malloc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\Main\src\malloc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -774,14 +769,14 @@
           <GroupName>CORE</GroupName>
           <Files>
             <File>
-              <FileName>startup_stm32f40_41xxx.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\System\Core\startup_stm32f40_41xxx.s</FilePath>
-            </File>
-            <File>
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\System\system_stm32f4xx.c</FilePath>
+            </File>
+            <File>
+              <FileName>startup_stm32f40_41xxx.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\System\Core\startup_stm32f40_41xxx.s</FilePath>
             </File>
           </Files>
         </Group>
@@ -1069,11 +1064,6 @@
               <FilePath>..\Users\LwIP\core\ip.c</FilePath>
             </File>
             <File>
-              <FileName>lwip_sys.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Users\LwIP\core\lwip_sys.c</FilePath>
-            </File>
-            <File>
               <FileName>mem.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Users\LwIP\core\mem.c</FilePath>
@@ -1254,14 +1244,14 @@
           <GroupName>LWIP_APP</GroupName>
           <Files>
             <File>
-              <FileName>lwip_app.c</FileName>
+              <FileName>lwip_app_comm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Users\LwIP\comm\lwip_app.c</FilePath>
+              <FilePath>..\Users\LwIP\user_app\src\lwip_app_comm.c</FilePath>
             </File>
             <File>
-              <FileName>lwip_comm.c</FileName>
+              <FileName>lwip_app_udp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Users\LwIP\comm\lwip_comm.c</FilePath>
+              <FilePath>..\Users\LwIP\user_app\src\lwip_app_udp.c</FilePath>
             </File>
           </Files>
         </Group>

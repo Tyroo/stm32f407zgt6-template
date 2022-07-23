@@ -45,7 +45,7 @@
 
 #include "lwip/arch.h"
 #include "lwip/netbuf.h"
-#include "lwip/lwip_sys.h"
+#include "lwip/sys.h"
 #include "lwip/ip_addr.h"
 #include "lwip/err.h"
 

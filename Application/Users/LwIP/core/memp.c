@@ -8,7 +8,7 @@
  * @defgroup mempool Memory pools
  * @ingroup infrastructure
  * Custom memory pools
-
+ 
  */
 
 /*
@@ -46,7 +46,7 @@
 #include "lwip/opt.h"
 
 #include "lwip/memp.h"
-#include "lwip/lwip_sys.h"
+#include "lwip/sys.h"
 #include "lwip/stats.h"
 
 #include <string.h>
@@ -214,20 +214,6 @@ memp_init_pool(const struct memp_desc *desc)
 #endif /* MEMP_STATS && (defined(LWIP_DEBUG) || LWIP_STATS_DISPLAY) */
 }
 
-// Get memp_memory array size
-uint8_t* memp_memory;
-
-uint32_t memp_get_memorysize(void)
-{
-	u32_t length=0;
-	length = (	MEM_ALIGNMENT-1 //全局型数组 为所有POOL分配的内存空间
-				//MEMP_SIZE表示需要在每个POOL头部预留的空间  MEMP_SIZE = 0
-				#define LWIP_MEMPOOL(name,num,size,desc) + ((num)*(MEMP_SIZE+MEMP_ALIGN_SIZE(size)))
-				#include "lwip/priv/memp_std.h"
-	);
-	return length;
-}
-
 /**
  * Initializes lwIP built-in pools.
  * Related functions: memp_malloc, memp_free
@@ -386,7 +372,7 @@ do_memp_free_pool(const struct memp_desc *desc, void *mem)
 #if MEMP_OVERFLOW_CHECK == 1
   memp_overflow_check_element(memp, desc);
 #endif /* MEMP_OVERFLOW_CHECK */
-
+	
 #if MEMP_STATS
   desc->stats->used--;
 #endif

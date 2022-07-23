@@ -1,6 +1,9 @@
 #include "dma.h"
 
 
+uint8_t DMA_CH0_1_Busy = 0;
+
+
 void DMA1_CH0_1_Init(void)
 {
 	/* Config struct define */
@@ -11,7 +14,7 @@ void DMA1_CH0_1_Init(void)
 	DMA_DeInit(DMA1_Stream1);
   
 	/* Configure DMA Initialization Structure */
-	DMA_InitStructure.DMA_BufferSize = 8;
+	DMA_InitStructure.DMA_BufferSize = SPI3_RTX_BUFF_SIZE;
 	DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;
 	DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_1QuarterFull;
 	DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;
@@ -41,22 +44,24 @@ void DMA1_CH0_1_Init(void)
 	DMA_ITConfig(DMA1_Stream1, DMA_IT_TC, ENABLE);
 	
 	/* NVIC config */
-	Nvic_Config(DMA1_Stream0_IRQn, 0, 2, ENABLE);
-	Nvic_Config(DMA1_Stream1_IRQn, 0, 2, ENABLE);
+	Nvic_Config(DMA1_Stream0_IRQn, 2, 2, ENABLE);
+	Nvic_Config(DMA1_Stream1_IRQn, 2, 2, ENABLE);
 }
 
 
 void DMA1_CH0_1_Start(void)
 {
-	/* NSS Pin control */
-	// pass
-	
-	// 清空SPI3手法缓冲区
-	SPI3->DR;
-	/* Enable DMA SPI TX Stream */
-	DMA_Cmd(DMA1_Stream0,ENABLE);
-	/* Enable DMA SPI RX Stream */
-	DMA_Cmd(DMA1_Stream1,ENABLE);
+	if (DMA_CH0_1_Busy == 0)
+	{
+		DMA_CH0_1_Busy = 1;
+		
+		// 清空SPI3收发缓冲区
+		SPI3->DR;
+		/* Enable DMA SPI TX Stream */
+		DMA_Cmd(DMA1_Stream0,ENABLE);
+		/* Enable DMA SPI RX Stream */
+		DMA_Cmd(DMA1_Stream1,ENABLE);
+	}
 }
 
 
@@ -76,6 +81,8 @@ void DMA1_CH0_1_Reset(void)
 	
 	DMA_ClearFlag(DMA1_Stream0, DMA_FLAG_TCIF0);
 	DMA_ClearFlag(DMA1_Stream1, DMA_FLAG_TCIF1);
+	
+	DMA_CH0_1_Busy = 0;
 }
 
 

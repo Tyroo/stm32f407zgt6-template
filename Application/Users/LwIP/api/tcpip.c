@@ -41,7 +41,7 @@
 #if !NO_SYS /* don't build if not configured for use in lwipopts.h */
 
 #include "lwip/priv/tcpip_priv.h"
-#include "lwip/lwip_sys.h"
+#include "lwip/sys.h"
 #include "lwip/memp.h"
 #include "lwip/mem.h"
 #include "lwip/init.h"
@@ -217,7 +217,7 @@ tcpip_thread_poll_one(void)
   int ret = 0;
   struct tcpip_msg *msg;
 
-  if (sys_arch_mbox_tryfetch(&tcpip_mbox, (void **)&msg) != SYS_ARCH_TIMEOUT) {
+  if (sys_arch_mbox_tryfetch(&tcpip_mbox, (void **)&msg) != SYS_MBOX_EMPTY) {
     LOCK_TCPIP_CORE();
     if (msg != NULL) {
       tcpip_thread_handle_msg(msg);

@@ -82,6 +82,7 @@ u8 LAN8720_Init(void)
 	LAN8720_RST = 1;				 	//复位结束 
 	ETHERNET_NVICConfiguration();	//设置中断优先级
 	rval = ETH_MACDMA_Config();		//配置MAC及DMA
+	rval = ETH_Mem_Malloc();		// 为ETH启用自定义内存管理，并申请内存
 	return !rval;					//ETH的规则为:0,失败;1,成功;所以要取反一下 
 }
 
@@ -171,7 +172,7 @@ void ETH_IRQHandler(void)
 {
 	while(ETH_GetRxPktSize(DMARxDescToGet) != 0) 	//检测是否收到数据包
 	{ 
-		lwip_pkt_handle();		
+		ethernetif_input(&lwip_netif);		
 	}
 	ETH_DMAClearITPendingBit(ETH_DMA_IT_R); 	//清除DMA中断标志位
 	ETH_DMAClearITPendingBit(ETH_DMA_IT_NIS);	//清除DMA接收中断标志位
@@ -179,7 +180,7 @@ void ETH_IRQHandler(void)
 //接收一个网卡数据包
 //返回值:网络数据包帧结构体
 FrameTypeDef ETH_Rx_Packet(void)
-{ 
+{
 	u32 framelength = 0;
 	FrameTypeDef frame = {0,0};   
 	//检查当前描述符,是否属于ETHERNET DMA(设置的时候)/CPU(复位的时候)
@@ -231,7 +232,7 @@ u8 ETH_Tx_Packet(u16 FrameLength)
 //得到当前描述符的Tx buffer地址
 //返回值:Tx buffer地址
 u32 ETH_GetCurrentTxBuffer(void)
-{  
+{
   return DMATxDescToSet->Buffer1Addr;//返回Tx buffer地址  
 }
 

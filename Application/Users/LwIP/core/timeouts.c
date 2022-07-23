@@ -58,7 +58,7 @@
 #include "lwip/ip6_frag.h"
 #include "lwip/mld6.h"
 #include "lwip/dhcp6.h"
-#include "lwip/lwip_sys.h"
+#include "lwip/sys.h"
 #include "lwip/pbuf.h"
 
 #if LWIP_DEBUG_TIMERNAMES
