@@ -5,13 +5,14 @@ LwipObjectTypeDef stcLwipObject;
 struct netif lwip_netif;		//定义一个全局的网络接口
 struct dhcp* dhcp;				//定义一个DHCP全局指针
 
-uint32_t TCPTimer = 0;			//TCP查询计时器
-uint32_t ARPTimer = 0;			//ARP查询计时器
-uint32_t lwip_localtime;		//lwip本地时间计数器,单位:ms
+
+uint32_t lwip_sys_timer;	
+uint32_t TCPTimer = 0;
+uint32_t ARPTimer = 0;
 
 #if LWIP_DHCP
 uint32_t DHCPfineTimer = 0;		//DHCP精细处理计时器
-uint32_t DHCPcoarseTimer = 0;	//DHCP粗糙处理计时器
+uint32_t DHCPCoarseTimer = 0;	//DHCP粗糙处理计时器
 #endif
 
 
@@ -76,6 +77,17 @@ void lwip_app_init(void)
 }
 
 
+// UDP设置远端IP地址
+void lwip_app_remote_ip_set(uint8_t Ip0, uint8_t Ip1, 
+							uint8_t Ip2, uint8_t Ip3)
+{
+	stcLwipObject.remoteip[0] = Ip0;
+	stcLwipObject.remoteip[1] = Ip1;
+	stcLwipObject.remoteip[2] = Ip2;
+	stcLwipObject.remoteip[3] = Ip3;
+}
+
+
 void lwip_app_default_ip_set(LwipObjectTypeDef *pObject)
 {
 	uint32_t sn0;
@@ -118,36 +130,44 @@ void lwip_app_default_ip_set(LwipObjectTypeDef *pObject)
 
 void lwip_periodic_handle(void)
 {
+	static uint32_t numTimeDelta = 0;
+	
 #if LWIP_TCP
+	
+	numTimeDelta = (lwip_sys_timer - TCPTimer + 0xFFFFFFFF) % 0xFFFFFFFF;
 	//每250ms调用一次tcp_tmr()函数
-	if (lwip_localtime - TCPTimer >= TCP_TMR_INTERVAL)
+	if (numTimeDelta >= TCP_TMR_INTERVAL)
 	{
-		TCPTimer =  lwip_localtime;
+		TCPTimer = lwip_sys_timer;
 		tcp_tmr();
 	}
 	
 #endif
 	
+	numTimeDelta = (lwip_sys_timer - ARPTimer + 0xFFFFFFFF) % 0xFFFFFFFF;
 	//ARP每5s周期性调用一次
-	if ((lwip_localtime - ARPTimer) >= ARP_TMR_INTERVAL)
+	if (numTimeDelta >= ARP_TMR_INTERVAL)
 	{
-		ARPTimer = lwip_localtime;
+		ARPTimer = lwip_sys_timer;
 		etharp_tmr();
 	}
 
 #if LWIP_DHCP
+
+	numTimeDelta = (lwip_sys_timer - DHCPfineTimer + 0xFFFFFFFF) % 0xFFFFFFFF;
 	//每500ms调用一次dhcp_fine_tmr()
-	if (lwip_localtime - DHCPfineTimer >= DHCP_FINE_TIMER_MSECS)
+	if (numTimeDelta >= DHCP_FINE_TIMER_MSECS)
 	{
-		DHCPfineTimer =  lwip_localtime;
+		DHCPfineTimer = lwip_sys_timer;
 		dhcp_fine_tmr();
 		lwip_dhcp_process_handle();  //DHCP处理
 	}
 
+	numTimeDelta = (lwip_sys_timer - DHCPCoarseTimer + 0xFFFFFFFF) % 0xFFFFFFFF;
 	//每60s执行一次DHCP粗糙处理
-	if (lwip_localtime - DHCPcoarseTimer >= DHCP_COARSE_TIMER_MSECS)
+	if (numTimeDelta >= DHCP_COARSE_TIMER_MSECS)
 	{
-		DHCPcoarseTimer =  lwip_localtime;
+		DHCPCoarseTimer = lwip_sys_timer;
 		dhcp_coarse_tmr();
 	}  
 

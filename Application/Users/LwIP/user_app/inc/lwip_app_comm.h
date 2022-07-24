@@ -2,6 +2,7 @@
 #define __LWIP_APP_COMM_H__
 
 #include <stdint.h>
+#include <string.h>
 
 #include "malloc.h"
 #include "lwip/memp.h"
@@ -12,6 +13,7 @@
 #include "lwip/priv/tcp_priv.h"
 #include "lwip/etharp.h"
 #include "lwip/netif.h"
+#include "lwip/timeouts.h"
 
 #include "lwipopts.h"
 #include "ethernetif.h"
@@ -23,6 +25,7 @@
 #include "uart.h"
 
 #include "user_app/inc/lwip_app_udp.h"
+#include "user_app/inc/lwip_app_tcp.h"
 
 
 
@@ -52,6 +55,9 @@ extern LwipObjectTypeDef stcLwipObject;
 
 
 void lwip_app_init(void);
+
+void lwip_app_remote_ip_set(uint8_t Ip0, uint8_t Ip1, 
+							uint8_t Ip2, uint8_t Ip3);
 
 void lwip_app_default_ip_set(LwipObjectTypeDef *lwipx);
 

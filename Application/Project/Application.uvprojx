@@ -1253,6 +1253,11 @@
               <FileType>1</FileType>
               <FilePath>..\Users\LwIP\user_app\src\lwip_app_udp.c</FilePath>
             </File>
+            <File>
+              <FileName>lwip_app_tcp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\LwIP\user_app\src\lwip_app_tcp.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

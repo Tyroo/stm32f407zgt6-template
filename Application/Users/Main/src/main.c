@@ -48,7 +48,9 @@ int main() {
 	// LWIP初始化
 	lwip_app_init();
 	// LWIP UDP通信初始化
-	stcLwipObject.udpstatus = lwip_app_udp_init();
+//	stcLwipObject.udpstatus = lwip_app_udp_init();
+	// LWIP TCP通信初始化
+	lwip_app_tcp_client_init();
     
 //	for(EleBoxIndex=0;EleBoxIndex<6;EleBoxIndex++) {
 //		EleBox.Ele_BoxProp.Ele_Box_Height -= 35;
@@ -121,6 +123,9 @@ int main() {
 //		{
 //			Led_Control(0);
 //		}
-		lwip_app_udp_client();
+//		lwip_app_udp_client();
+//		lwip_periodic_handle();
+		//lwip_app_loop();
+		sys_check_timeouts();
 	}
 }

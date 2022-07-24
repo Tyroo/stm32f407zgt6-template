@@ -26,9 +26,6 @@ err_t lwip_app_udp_init(void);
 
 void lwip_app_udp_client(void);
 
-void lwip_app_udp_remoteip_set(uint8_t Ip0, uint8_t Ip1, 
-							   uint8_t Ip2, uint8_t Ip3);
-
 void lwip_app_udp_recv_data(void *arg, struct udp_pcb *pcb, struct pbuf *p,
 							const ip_addr_t *addr, u16_t port);
 

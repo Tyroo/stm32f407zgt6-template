@@ -166,16 +166,22 @@ u8 ETH_MACDMA_Config(void)
 	return rval;
 }
 
-extern void lwip_pkt_handle(void);		//在lwip_comm.c里面定义
+
 //以太网DMA接收中断服务函数
 void ETH_IRQHandler(void)
 {
-	while(ETH_GetRxPktSize(DMARxDescToGet) != 0) 	//检测是否收到数据包
+//	if (ETH_GetDMAITStatus(ETH_DMA_IT_R) == SET) 	//检测是否收到数据包
+//	{
+//		ethernetif_input(&lwip_netif);	
+//		ETH_DMAClearITPendingBit(ETH_DMA_IT_R);
+//		ETH_DMAClearITPendingBit(ETH_DMA_IT_NIS);
+//	}
+	while(ETH_GetRxPktSize(DMARxDescToGet)!=0) 	//检测是否收到数据包
 	{ 
 		ethernetif_input(&lwip_netif);		
 	}
-	ETH_DMAClearITPendingBit(ETH_DMA_IT_R); 	//清除DMA中断标志位
-	ETH_DMAClearITPendingBit(ETH_DMA_IT_NIS);	//清除DMA接收中断标志位
+	ETH_DMAClearITPendingBit(ETH_DMA_IT_R);
+	ETH_DMAClearITPendingBit(ETH_DMA_IT_NIS);
 }  
 //接收一个网卡数据包
 //返回值:网络数据包帧结构体

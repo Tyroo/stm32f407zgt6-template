@@ -142,10 +142,14 @@ err_t ethernetif_input(struct netif *netif)
 {
 	err_t err;
 	struct pbuf *p;
-	p=low_level_input(netif);   //调用low_level_input函数接收数据
-	if(p==NULL) return ERR_MEM;
-	err=netif->input(p, netif); //调用netif结构体中的input字段(一个函数)来处理数据包
-	if(err!=ERR_OK)
+	
+	p = low_level_input(netif);   //调用low_level_input函数接收数据
+	
+	if(p == NULL) return ERR_MEM;
+	
+	err = netif->input(p, netif); //调用netif结构体中的input字段(一个函数)来处理数据包
+	
+	if(err != ERR_OK)
 	{
 		pbuf_free(p);
 		p = NULL;

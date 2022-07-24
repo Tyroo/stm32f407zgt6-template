@@ -61,7 +61,7 @@ extern "C" {
 #endif
 
 /** 1 seconds period */
-#define ARP_TMR_INTERVAL 1000
+#define ARP_TMR_INTERVAL 5000
 
 #if ARP_QUEUEING
 /** struct for queueing outgoing packets for unknown address

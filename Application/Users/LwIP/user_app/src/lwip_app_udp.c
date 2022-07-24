@@ -1,24 +1,23 @@
 #include "user_app/inc/lwip_app_comm.h"
-#include <string.h>
+
 
 
 const char *udp_app_send_buff = "hello world!\r\n";	//UDP接收数据缓冲区
 uint8_t udp_app_recv_buff[UDP_APP_RX_BUFF_SIZE];	//UDP接收数据缓冲区
 
 struct udp_pcb *pstcLwipUdpPcb;
-ip_addr_t stcRemoteIpAddr;
-ip_addr_t stcLocalIpAddr;
 
 
 // UDP通信初始化
 err_t lwip_app_udp_init(void)
 {
 	err_t UdpState = ERR_OK;
-
+	ip_addr_t stcRemoteIpAddr;
+	ip_addr_t stcLocalIpAddr;
 	uint16_t numUdpPort = 8089;
 
-	// 设置IP地址
-	lwip_app_udp_remoteip_set(192,168,0,101);
+	// 设置远端IP地址
+	lwip_app_remote_ip_set(192,168,0,101);
 	
 	// IP转换
 	IP4_ADDR(
@@ -81,17 +80,6 @@ void lwip_app_udp_client(void)
 	{
 		lwip_app_udp_conn_close(pstcLwipUdpPcb);
 	}
-}
-
-
-// UDP设置远端IP地址
-void lwip_app_udp_remoteip_set(uint8_t Ip0, uint8_t Ip1, 
-							   uint8_t Ip2, uint8_t Ip3)
-{
-	stcLwipObject.remoteip[0] = Ip0;
-	stcLwipObject.remoteip[1] = Ip1;
-	stcLwipObject.remoteip[2] = Ip2;
-	stcLwipObject.remoteip[3] = Ip3;
 }
 
 

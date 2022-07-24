@@ -40,7 +40,7 @@
 
 #include "user_app/inc/lwip_app_comm.h"
 
-extern uint32_t lwip_localtime;		//lwip本地时间计数器,单位:ms
+extern uint32_t lwip_sys_timer;		//lwip本地时间计数器,单位:ms
 
 /** Set this to 1 to enable assertion checks that SYS_ARCH_PROTECT() is only
  * called once in a call stack (calling it nested might cause trouble in some
@@ -50,5 +50,5 @@ extern uint32_t lwip_localtime;		//lwip本地时间计数器,单位:ms
 
 uint32_t sys_now(void)
 {
-  return lwip_localtime;
+  return lwip_sys_timer;
 }

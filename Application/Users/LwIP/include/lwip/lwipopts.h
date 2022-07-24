@@ -138,7 +138,7 @@ a lot of data that needs to be copied, this should be set high. */
 #define MEMP_NUM_TCP_PCB_LISTEN 8
 /* MEMP_NUM_TCP_SEG: the number of simultaneously queued TCP
    segments. */
-#define MEMP_NUM_TCP_SEG        16
+#define MEMP_NUM_TCP_SEG        150	// zjl.20220725 16->150
 /* MEMP_NUM_SYS_TIMEOUT: the number of simulateously active
    timeouts. */
 #define MEMP_NUM_SYS_TIMEOUT    10
@@ -190,11 +190,11 @@ a lot of data that needs to be copied, this should be set high. */
 #define TCP_MSS                 1460	// zjl.20220314，1024->1460
 
 /* TCP sender buffer space (bytes). */
-#define TCP_SND_BUF             (4*TCP_MSS)
+#define TCP_SND_BUF             (10*TCP_MSS)	// zjl.20220725 (4*TCP_MSS)->(10*TCP_MSS)
 
 /* TCP sender buffer space (pbufs). This must be at least = 2 *
    TCP_SND_BUF/TCP_MSS for things to work. */
-#define TCP_SND_QUEUELEN       (4 * TCP_SND_BUF/TCP_MSS)
+#define TCP_SND_QUEUELEN       (8 * TCP_SND_BUF/TCP_MSS)	// zjl.20220725 (4 * TCP_SND_BUF/TCP_MSS)->(8 * TCP_SND_BUF/TCP_MSS)
 
 /* TCP writable space (bytes). This must be less than or equal
    to TCP_SND_BUF. It is the amount of space which must be
@@ -361,8 +361,8 @@ void sys_unlock_tcpip_core(void);
   #define CHECKSUM_CHECK_UDP              1
   /* CHECKSUM_CHECK_TCP==1: Check checksums in software for incoming TCP packets.*/
   #define CHECKSUM_CHECK_TCP              1
-  /* CHECKSUM_CHECK_TCP==1: Check checksums in software for incoming TCP packets.*/
-  #define CHECKSUM_CHECK_ICMP              1
+  /* CHECKSUM_CHECK_ICMP==1: Check checksums in software for incoming ICMP packets.*/
+  #define CHECKSUM_CHECK_ICMP             1
 #endif
 
 #endif /* LWIP_LWIPOPTS_H */

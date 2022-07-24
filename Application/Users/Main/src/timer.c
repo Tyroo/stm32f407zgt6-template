@@ -13,7 +13,7 @@
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 	 
 
-extern uint32_t lwip_localtime;	//lwip本地时间计数器,单位:ms
+extern uint32_t lwip_sys_timer;	//lwip本地时间计数器,单位:ms
 //通用定时器3中断初始化
 //arr：自动重装值。
 //psc：时钟预分频数
@@ -50,8 +50,8 @@ void TIM3_IRQHandler(void)
 {
 	if(TIM_GetITStatus(TIM3, TIM_IT_Update) == SET) //溢出中断
 	{
-		lwip_localtime += 10; //加10
-		TIM_ClearITPendingBit(TIM3,TIM_IT_Update);  //清除中断标志位
+		lwip_sys_timer += 10; // 加10
+		
+		TIM_ClearITPendingBit(TIM3, TIM_IT_Update);  //清除中断标志位
 	}
-	
 }
