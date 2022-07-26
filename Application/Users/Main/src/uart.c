@@ -77,7 +77,7 @@ void Uart1_Init(uint32_t Baud) {
 	USART_Cmd(USART1, ENABLE);										// 使能串口
 	
 	/* NVIC配置 */
-	Nvic_Config(USART1_IRQn, 3, 3, 1);								// 抢占优先级为0，响应优先级为0，并使能
+	Nvic_Config(USART1_IRQn, 1, 1, 1);								// 抢占优先级为0，响应优先级为0，并使能
 	
 }
 

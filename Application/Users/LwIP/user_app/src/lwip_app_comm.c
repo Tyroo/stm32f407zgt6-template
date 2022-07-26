@@ -97,7 +97,7 @@ void lwip_app_default_ip_set(LwipObjectTypeDef *pObject)
 	pObject->remoteip[0] = 192;	
 	pObject->remoteip[1] = 168;
 	pObject->remoteip[2] = 0;
-	pObject->remoteip[3] = 100;
+	pObject->remoteip[3] = 101;
 	
 	// MAC地址设置(高三字节固定为:2.0.0,低三字节用STM32唯一ID)
 	// 高三字节(IEEE称之为组织唯一ID,OUI)地址固定为:2.0.0
@@ -112,7 +112,7 @@ void lwip_app_default_ip_set(LwipObjectTypeDef *pObject)
 	pObject->ip[0] = 192;	
 	pObject->ip[1] = 168;
 	pObject->ip[2] = 0;
-	pObject->ip[3] = 99;
+	pObject->ip[3] = 122;
 	
 	// 默认子网掩码:255.255.255.0
 	pObject->netmask[0] = 255;	

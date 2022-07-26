@@ -305,7 +305,21 @@ ip_reass_enqueue_new_datagram(struct ip_hdr *fraghdr, int clen)
   reassdatagrams = ipr;
   /* copy the ip header for later tests and input */
   /* @todo: no ip options supported? */
-  SMEMCPY(&(ipr->iphdr), fraghdr, IP_HLEN);
+  /* zjl.20220726 */
+//  SMEMCPY(&(ipr->iphdr), fraghdr, IP_HLEN);
+  
+  ipr->iphdr.dest.addr = fraghdr->dest.addr;
+  ipr->iphdr.src.addr = fraghdr->src.addr;
+  ipr->iphdr._chksum = fraghdr->_chksum;
+  ipr->iphdr._id = fraghdr->_id;
+  ipr->iphdr._len = fraghdr->_len;
+  ipr->iphdr._offset = fraghdr->_offset;
+  ipr->iphdr._proto = fraghdr->_proto;
+  ipr->iphdr._tos = fraghdr->_tos;
+  ipr->iphdr._ttl = fraghdr->_ttl;
+  ipr->iphdr._v_hl = fraghdr->_v_hl;
+  /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+  
   return ipr;
 }
 
@@ -577,7 +591,21 @@ ip4_reass(struct pbuf *p)
        * -> copy fraghdr into ipr->iphdr since we want to have the header
        * of the first fragment (for ICMP time exceeded and later, for copying
        * all options, if supported)*/
-      SMEMCPY(&ipr->iphdr, fraghdr, IP_HLEN);
+			
+      /* zjl.20220726 */
+//      SMEMCPY(&ipr->iphdr, fraghdr, IP_HLEN);
+			
+      ipr->iphdr.dest.addr = fraghdr->dest.addr;
+      ipr->iphdr.src.addr = fraghdr->src.addr;
+      ipr->iphdr._chksum = fraghdr->_chksum;
+      ipr->iphdr._id = fraghdr->_id;
+      ipr->iphdr._len = fraghdr->_len;
+      ipr->iphdr._offset = fraghdr->_offset;
+      ipr->iphdr._proto = fraghdr->_proto;
+      ipr->iphdr._tos = fraghdr->_tos;
+      ipr->iphdr._ttl = fraghdr->_ttl;
+	  ipr->iphdr._v_hl = fraghdr->_v_hl;
+	  /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
     }
   }
 
@@ -625,7 +653,21 @@ ip4_reass(struct pbuf *p)
 
     /* copy the original ip header back to the first pbuf */
     fraghdr = (struct ip_hdr *)(ipr->p->payload);
-    SMEMCPY(fraghdr, &ipr->iphdr, IP_HLEN);
+	/* zjl.20220726 */
+//    SMEMCPY(fraghdr, &ipr->iphdr, IP_HLEN);	// 防止此处产生非内存对齐访问
+	
+	fraghdr->dest.addr = ipr->iphdr.dest.addr;
+	fraghdr->src.addr = ipr->iphdr.src.addr;
+	fraghdr->_chksum = ipr->iphdr._chksum;
+	fraghdr->_id = ipr->iphdr._id;
+	fraghdr->_len = ipr->iphdr._len;
+	fraghdr->_offset = ipr->iphdr._offset;
+	fraghdr->_proto = ipr->iphdr._proto;
+	fraghdr->_tos = ipr->iphdr._tos;
+	fraghdr->_ttl = ipr->iphdr._ttl;
+	fraghdr->_v_hl = ipr->iphdr._v_hl;
+	/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+	  
     IPH_LEN_SET(fraghdr, lwip_htons(datagram_len));
     IPH_OFFSET_SET(fraghdr, 0);
     IPH_CHKSUM_SET(fraghdr, 0);
