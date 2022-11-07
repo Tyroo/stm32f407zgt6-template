@@ -33,24 +33,28 @@ extern USB_ManageType		  USB_Manage;
 
 int main() {
 
-	Nvic_Init(2);				// 中断分组，中断分组2
-	Led_Init();					// 初始化LED模块
-	Delay_Init();				// 初始化延时模块
+	Nvic_Init(2);		// 中断分组，中断分组2
+	Led_Init();			// 初始化LED模块
+	Delay_Init();		// 初始化延时模块
 	Uart1_Init(115200);	// 初始化USAER1模块
-	Timer3_Init(999, 839);
-	FsmcSram_Init();
-	my_mem_init(SRAMIN);	//初始化内部内存池
+//	Timer3_Init(999, 839);
+//	FsmcSram_Init();
+//	my_mem_init(SRAMIN);//初始化内部内存池
 
-	LAN8720_Init();
+	DMA1_C0S0_5_Init();
+	SPI3_Init();
+
+
+//	LAN8720_Init();
 	
-	TFTLCD_Init();	// 初始化LCDTFT模块
+//	TFTLCD_Init();		// 初始化LCDTFT模块
 	
 	// LWIP初始化
-	lwip_app_init();
+//	lwip_app_init();
 	// LWIP UDP通信初始化
 //	stcLwipObject.udpstatus = lwip_app_udp_init();
 	// LWIP TCP通信初始化
-	lwip_app_tcp_client_init();
+//	lwip_app_tcp_client_init();
     
 //	for(EleBoxIndex=0;EleBoxIndex<6;EleBoxIndex++) {
 //		EleBox.Ele_BoxProp.Ele_Box_Height -= 35;
@@ -126,6 +130,7 @@ int main() {
 //		lwip_app_udp_client();
 //		lwip_periodic_handle();
 		//lwip_app_loop();
-		sys_check_timeouts();
+//		sys_check_timeouts();
+		DMA1_C0S0_5_Start();
 	}
 }

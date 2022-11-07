@@ -1,6 +1,9 @@
 #include "tftlcd_event.h"
 
 
+UINT16 EventCycleCnt = 0;
+
+
 /* Static cycle and once event queue */
 static CycleEventType* CycleEventQueue[CYCLE_EVENT_QUEUE_NUM];
 static OnceEventType*  OnceEventQueue[ONCE_EVENT_QUEUE_NUM];
@@ -8,11 +11,16 @@ static OnceEventType*  OnceEventQueue[ONCE_EVENT_QUEUE_NUM];
 
 void TFTLCD_EventProcess(void)
 {
-	static UINT16 EventCycleCnt = 1;
-	static UINT8  EventIndex;
-    static CycleEventType* pCycleEventObj;
-    static OnceEventType*  pOnceEventObj;
+	EventCycleCnt %= EVENT_CYCLE_CNT_VALUE;
+    EventCycleCnt++;
+}
 
+
+static void _TFTLCD_OnceEventScheduler(void)
+{
+	static UINT8 EventIndex = 0;
+	static OnceEventType*  pOnceEventObj;
+	
 	for(EventIndex = 0;
 		EventIndex<ONCE_EVENT_QUEUE_NUM;
 		EventIndex++)
@@ -27,7 +35,14 @@ void TFTLCD_EventProcess(void)
 			pOnceEventObj->OnCbFunc();
 		}
 	}
+}
 
+
+static void _TFTLCD_CycleEventScheduler(void)
+{
+	static UINT8 EventIndex = 0;
+	static CycleEventType* pCycleEventObj;
+	
 	for(EventIndex = 0;
 		EventIndex<CYCLE_EVENT_QUEUE_NUM;
 		EventIndex++)
@@ -40,21 +55,15 @@ void TFTLCD_EventProcess(void)
             _TFTLCD_CycleBaseOnFunc(EventCycleCnt, pCycleEventObj);
 		}
 	}
-
-	EventCycleCnt %= EVENT_CYCLE_CNT_VALUE;
-    EventCycleCnt++;
 }
 
 
 inline static void _TFTLCD_CycleBaseOnFunc(UINT16 EventCnt, 
     CycleEventType* _Obj)
 {
-    if (!_Obj->_EventInitCtn)
-        _Obj->_EventInitCtn = EventCnt;
+    _Obj->_EventCompCnt = EventCnt - _Obj->_EventInitCnt;
     
-	if ((((EVENT_CYCLE_CNT_VALUE + EventCnt - _Obj->_EventInitCtn)% 
-        EVENT_CYCLE_CNT_VALUE)% 
-        _Obj->EventPeriodCnt) == 0)
+	if (_Obj->_EventCompCnt >= _Obj->EventPeriodCnt)
     {
         _Obj->OnFunc(_Obj);
     }
@@ -67,17 +76,17 @@ bool TFTLCD_CycleEventRegister(void(*OnFunc)(void* EventObj),
 	UINT8 EventNumber;
 
 	EventNumber = _TFTLCD_GetCycleEQNumber();
-	if (!EventNumber) return False;
+	if (!EventNumber) return false;
 
 	pEventObj->EventStatus = EVENT_STATE_INACTIVE;
 	pEventObj->OnFunc = OnFunc;
 	pEventObj->EventNumber = EventNumber;
-    pEventObj->_EventInitCtn = 0;
+    pEventObj->_EventInitCnt = EventCycleCnt;
     pEventObj->EventPeriodCnt = PeriodCnt;
 
 	(*(CycleEventQueue + EventNumber - 1)) = pEventObj;
 
-	return True;
+	return true;
 }
 
 
@@ -87,7 +96,7 @@ bool TFTLCD_OnceEventRegister(void(*OnFunc)(void* EventObj),
 	UINT8 EventNumber;
 
 	EventNumber = _TFTLCD_GetOnceEQNumber();
-	if (!EventNumber) return False;
+	if (!EventNumber) return false;
 
 	((OnceEventType*)(pEventObj))->EventStatus = EVENT_STATE_INACTIVE;
 	((OnceEventType*)(pEventObj))->OnFunc = OnFunc;
@@ -96,7 +105,7 @@ bool TFTLCD_OnceEventRegister(void(*OnFunc)(void* EventObj),
 
 	(*(OnceEventQueue + EventNumber - 1)) = ((OnceEventType*)(pEventObj));
 
-	return True;
+	return true;
 }
 
 

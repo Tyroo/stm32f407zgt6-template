@@ -10,13 +10,13 @@ bool AT24C02_Tx_Data(uint8_t* Data,
 	
 	// 当接收的数据超出最大限制或者设备地址超过127时，发送失败
 	if (sizeof(Data)>IIC_DATA_SIZE_MAX) 
-		return False;
+		return false;
 	
-	Res = True, Index = 0;
+	Res = true, Index = 0;
 	
 	// 当遇到结束字符或者应答失效后停止发送
 
-	while((Index < TxLen) && (Res == True)) 
+	while((Index < TxLen) && (Res == true)) 
 	{	
 		IIC_Start();						// 发送IIC开始信号
 		Res = IIC_Send_Byte(0xA0+(((Addr+Index)/256)<<1));// 发送寄存器高地址
@@ -39,11 +39,11 @@ bool AT24C02_Rx_Data(uint8_t* Buff,
 	
 	// 当接收的数据超出最大限制或者设备地址超过127时，退出接收
 	if (RxLen>IIC_DATA_SIZE_MAX) 
-		return False;
+		return false;
 	
-	Res = True, Index = 0;
+	Res = true, Index = 0;
 	
-	while((Index < RxLen) && (Res == True)) 
+	while((Index < RxLen) && (Res == true)) 
 	{
 		IIC_Start();						// 发送IIC起始信号
 		Res = IIC_Send_Byte(0xA0+(((Addr+Index)/256)<<1));// 发送寄存器地址高位

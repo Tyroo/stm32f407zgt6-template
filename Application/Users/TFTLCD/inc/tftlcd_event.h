@@ -49,7 +49,8 @@ typedef struct {
 
 	UINT8 EventNumber;
 	UINT8 EventStatus;
-    UINT16 _EventInitCtn;   // Don't change
+    UINT16 _EventInitCnt;   // Don't change
+	UINT16 _EventCompCnt;
     UINT16 EventPeriodCnt;  // Set range: [0,65534]
     
 	void(*OnFunc)(void* pEvenObj);

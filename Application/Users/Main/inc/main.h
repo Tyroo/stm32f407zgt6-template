@@ -12,7 +12,7 @@
 #include "at24c02.h"
 #include "spi.h"
 #include "fsmc.h"
-#include "uart.h"
+#include "usart.h"
 #include "can.h"
 #include "tftlcd.h"
 #include "TestSlave.h"

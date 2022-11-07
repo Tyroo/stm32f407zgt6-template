@@ -1,21 +1,29 @@
 #include "mpu6050.h"
 
 
+
 // 初始化MPU6050
 bool MPU6050_Init(void)
 {
 	bool Res;
+	uint8_t RxDev;
 	
 	/* 复位MPU6050 */
-	Res = MPU6050_Tx_Data(PTU8(MPU6050_RESET_CMD), MPU6050_PWR_MGMT1_REG, 1);
+	Res = MPU6050_Tx_Data(MPU6050_DEV_ADDR, MPU6050_PWR_MGMT1_REG, 1, PTU8(MPU6050_RESET_CMD));
 	Delay_Ms(100);
-	Res = MPU6050_Tx_Data(PTU8(MPU6050_RESET_CMD), MPU6050_PWR_MGMT1_REG, 1);
+	Res = MPU6050_Tx_Data(MPU6050_DEV_ADDR, MPU6050_PWR_MGMT1_REG, 1, PTU8(MPU6050_RESET_CMD));
 	
 	/* 设置角速度传感器和加速度传感器的满量程范围 */
-	// pass
+	MPU6050_SetGyroFsr(3);					// 陀螺仪传感器,±2000dps
+	MPU6050_SetAccelFsr(0);					// 加速度传感器,±2g
+	MPU6050_SetRate(50);					// 设置采样率50Hz
 	
 	/* 设置其他参数 */
-	//pass
+	MPU6050_Rx_Data(MPU6050_DEV_ADDR, MPU6050_DEVICE_ID_REG, 1, &RxDev);
+
+	Res = (bool)(RxDev == MPU6050_DEV_ADDR);
+	
+	mpu_dmp_init();	// MPU6050 DMP初始化
 	
 	return Res;
 }
@@ -28,7 +36,7 @@ bool MPU6050_Init(void)
 bool MPU6050_SetGyroFsr(uint8_t Fsr)
 {
 	//设置陀螺仪满量程范围 
-	return MPU6050_Tx_Data(PTU8(Fsr<<3), MPU6050_GYRO_CFG_REG, 1); 
+	return MPU6050_Tx_Data(MPU6050_DEV_ADDR, MPU6050_GYRO_CFG_REG, 1, PTU8(Fsr<<3)); 
 }
 
 
@@ -39,7 +47,7 @@ bool MPU6050_SetGyroFsr(uint8_t Fsr)
 bool MPU6050_SetAccelFsr(uint8_t Fsr)
 {
 	//设置加速度传感器满量程范围  
-	return MPU6050_Tx_Data(PTU8(Fsr<<3), MPU6050_ACCEL_CFG_REG, 1);
+	return MPU6050_Tx_Data(MPU6050_DEV_ADDR, MPU6050_ACCEL_CFG_REG, 1, PTU8(Fsr<<3));
 }
 
 
@@ -58,7 +66,7 @@ bool MPU6050_SetLPF(uint16_t Lpf)
 	else if (Lpf>=10) Data = 5;
 	else              Data = 6;
 	
-	return MPU6050_Tx_Data(&Data, MPU6050_CFG_REG, 1);//设置数字低通滤波器  
+	return MPU6050_Tx_Data(MPU6050_DEV_ADDR, MPU6050_CFG_REG, 1, &Data);//设置数字低通滤波器  
 }
 
 
@@ -75,7 +83,7 @@ bool MPU6050_SetRate(uint16_t Rate)
 	if (Rate<4) Rate = 4;
 	
 	Data = 1000/Rate - 1;
-	Res = MPU6050_Tx_Data(&Data, MPU6050_SAMPLE_RATE_REG, 1);	//设置数字低通滤波器
+	Res = MPU6050_Tx_Data(MPU6050_DEV_ADDR, MPU6050_SAMPLE_RATE_REG, 1, &Data);	//设置数字低通滤波器
  	Res = MPU6050_SetLPF(Rate/2);	//自动设置LPF为采样率的一半
 	
 	return Res;
@@ -92,9 +100,9 @@ short MPU6050_GetTemperature(void)
 	
     uint8_t RxBuff[2]; 
 	
-	Res = MPU6050_Rx_Data(RxBuff, MPU6050_TEMP_OUTH_REG, 2); 
+	Res = MPU6050_Rx_Data(MPU6050_DEV_ADDR, MPU6050_TEMP_OUTH_REG, 2, RxBuff); 
 	
-	if (Res == False) return 0;
+	if (Res == false) return 0;
 	
     Raw = ((uint16_t)RxBuff[0]<<8) | RxBuff[1];  
     Temp = (36.53 + ((double)Raw)/340);	// 根据公式计算温度
@@ -111,9 +119,9 @@ uint8_t MPU6050_GetGyroscope(short *Gx,short *Gy,short *Gz)
 {
     uint8_t RxBuff[6], Res;  
 	
-	Res = MPU6050_Rx_Data(RxBuff, MPU6050_GYRO_XOUTH_REG, 6);
+	Res = MPU6050_Rx_Data(MPU6050_DEV_ADDR, MPU6050_GYRO_XOUTH_REG, 6, RxBuff);
 	
-	if(Res == True)
+	if(Res == true)
 	{
 		*Gx=((uint16_t)RxBuff[0]<<8)|RxBuff[1];  
 		*Gy=((uint16_t)RxBuff[2]<<8)|RxBuff[3];  
@@ -132,9 +140,9 @@ uint8_t MPU6050_GetAccelerometer(short *Ax,short *Ay,short *Az)
 {
     uint8_t RxBuff[6], Res;  
 	
-	Res = MPU6050_Rx_Data(RxBuff, MPU6050_ACCEL_XOUTH_REG, 6);
+	Res = MPU6050_Rx_Data(MPU6050_DEV_ADDR, MPU6050_ACCEL_XOUTH_REG, 6, RxBuff);
 	
-	if(Res == True)
+	if(Res == true)
 	{
 		*Ax=((uint16_t)RxBuff[0]<<8)|RxBuff[1];  
 		*Ay=((uint16_t)RxBuff[2]<<8)|RxBuff[3];  
@@ -146,64 +154,64 @@ uint8_t MPU6050_GetAccelerometer(short *Ax,short *Ay,short *Az)
 
 
 // 发送数据给MPU6050
-bool MPU6050_Tx_Data(uint8_t* Data,
-		uint16_t Addr, uint8_t TxLen) 
+bool MPU6050_Tx_Data(uint8_t DevAddr, uint16_t RegAddr, 
+		uint8_t TxLen, uint8_t* Buff) 
 {
 	bool 	Res;	// 应答响应
 	uint8_t Index;	// 接收数据索引
 
-	Res = True, Index = 0;
+	Res = true, Index = 0;
 	
 	IIC_Start();					// 发送IIC起始信号
-	Res = IIC_Send_Byte((MPU6050_DEV_ADDR<<1) | MPU6050_WRITE_CMD);// 发送寄存器地址高位
-	Res = IIC_Send_Byte(Addr); 		// 发送寄存器地址
+	Res = IIC_Send_Byte((DevAddr<<1) | MPU6050_WRITE_CMD);// 发送寄存器地址高位
+	Res = IIC_Send_Byte(RegAddr); 		// 发送寄存器地址
 	
 //	/* 接收数据存入数组, 接收最后一个字节后无需应答 */
 //	IIC_Start();					// 发送IIC起始信号
-	Res = IIC_Send_Byte((MPU6050_DEV_ADDR<<1) | MPU6050_READ_CMD); // 发送读命令
+	Res = IIC_Send_Byte((DevAddr<<1) | MPU6050_READ_CMD); // 发送读命令
 	
 	if (!Res) 
 	{ 
 		IIC_Stop();
-		return False;
+		return false;
 	}
 	
-	while((Index < TxLen) && (Res == True)) 
+	while((Index < TxLen) && (Res == true)) 
 	{
-		Res = IIC_Send_Byte(*(Data+Index));	// 读取以一个字节						
+		Res = IIC_Send_Byte(*(Buff+Index));	// 读取以一个字节						
 		Index++;
 	}
 	
 	IIC_Stop();					// 停止发送
 	
-	return (bool)Res;
+	return Res;
 }
 
 
 // 接收来自MPU6050的数据
-bool MPU6050_Rx_Data(uint8_t* Buff, 
-		uint16_t Addr, uint8_t RxLen) 
+bool MPU6050_Rx_Data(uint8_t DevAddr, uint16_t RegAddr, 
+		uint8_t RxLen, uint8_t* Buff) 
 {
 	bool 	Res;	// 应答响应
 	uint8_t Index;	// 接收数据索引
 
-	Res = True, Index = 0;
+	Res = true, Index = 0;
 	
 	IIC_Start();					// 发送IIC起始信号
-	Res = IIC_Send_Byte((MPU6050_DEV_ADDR<<1) | MPU6050_WRITE_CMD);// 发送寄存器地址高位
-	Res = IIC_Send_Byte(Addr); 		// 发送寄存器地址
+	Res = IIC_Send_Byte((DevAddr<<1) | MPU6050_WRITE_CMD);// 发送寄存器地址高位
+	Res = IIC_Send_Byte(RegAddr); 		// 发送寄存器地址
 	
 //	/* 接收数据存入数组, 接收最后一个字节后无需应答 */
 //	IIC_Start();						// 发送IIC起始信号
-	Res = IIC_Send_Byte((MPU6050_DEV_ADDR<<1) | MPU6050_READ_CMD); // 发送读命令
+	Res = IIC_Send_Byte((DevAddr<<1) | MPU6050_READ_CMD); // 发送读命令
 	
 	if (!Res) 
 	{ 
 		IIC_Stop();
-		return False;
+		return false;
 	}
 	
-	while((Index < RxLen) && (Res == True)) 
+	while((Index < RxLen) && (Res == true)) 
 	{
 		if (Index != 1)
 			*(Buff+Index) = IIC_Read_Byte(1);	// 发送应答信号

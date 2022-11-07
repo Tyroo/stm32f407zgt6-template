@@ -1,6 +1,6 @@
 /** USART收发数据模块（验证通过） **/
 
-#include "uart.h"
+#include "usart.h"
 
 // USART1接收的数据
 char UsartReceiveData[50];

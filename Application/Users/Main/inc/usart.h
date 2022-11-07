@@ -1,5 +1,5 @@
-#ifndef __UART_H__
-#define __UART_H__
+#ifndef __USART_H__
+#define __USART_H__
 
 
 /**

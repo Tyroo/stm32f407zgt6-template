@@ -8,11 +8,12 @@
 #include "stm32f4xx.h"
 #include "stm32f4xx_spi.h"
 #include "system.h"
+#include "dma.h"
 
 /**
 *	@defined
 **/
-#define SPI3_RTX_BUFF_SIZE    (8)
+#define SPI3_RTX_BUFF_SIZE    (16)
 
 /**
 *	@variable

@@ -30,7 +30,7 @@
 #include "usb_conf.h"
 #include "usbh_msc_core.h"
 #include "usb_hcd_int.h"
-#include "uart.h"
+#include "usart.h"
 
 /** @addtogroup USBH_USER
   * @{

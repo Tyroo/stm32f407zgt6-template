@@ -26,7 +26,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "usb_core.h"
 #include "delay.h"
-#include "uart.h"
+#include "usart.h"
 #include "system.h"
 
 /** @addtogroup USB_OTG_DRIVER

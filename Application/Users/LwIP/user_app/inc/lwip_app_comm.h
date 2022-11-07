@@ -22,7 +22,7 @@
 #include "netif/ethernet.h"
 
 #include "lan8720.h"
-#include "uart.h"
+#include "usart.h"
 
 #include "user_app/inc/lwip_app_udp.h"
 #include "user_app/inc/lwip_app_tcp.h"

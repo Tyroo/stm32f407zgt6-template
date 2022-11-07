@@ -32,7 +32,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
 #include "usbd_core.h"
-#include "uart.h"
+#include "usart.h"
 
 
 /** @addtogroup USBD_USER

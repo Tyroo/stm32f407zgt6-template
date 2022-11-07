@@ -4,6 +4,8 @@
 #include "i2c.h"
 #include "delay.h"
 #include "system.h"
+#include "inv_mpu.h"
+
 
 
 /* MPU6050 device address */
@@ -103,11 +105,11 @@ uint8_t MPU6050_GetGyroscope(short *Gx,short *Gy,short *Gz);
 
 uint8_t MPU6050_GetAccelerometer(short *Ax,short *Ay,short *Az);
 
-bool MPU6050_Tx_Data(uint8_t* Data,
-		uint16_t Addr, uint8_t TxLen);
+bool MPU6050_Tx_Data(uint8_t DevAddr, uint16_t RegAddr, 
+		uint8_t TxLen, uint8_t* Buff);
 
-bool MPU6050_Rx_Data(uint8_t* Buff, 
-		uint16_t Addr, uint8_t RxLen);
+bool MPU6050_Rx_Data(uint8_t DevAddr, uint16_t RegAddr, 
+		uint8_t RxLen, uint8_t* Buff);
 
 
 #endif

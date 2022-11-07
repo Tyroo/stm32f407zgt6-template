@@ -6,10 +6,11 @@
 #include "nvic.h"
 
 
-void DMA1_CH1_2_Init(void);
+extern uint8_t DMA_C0S0_5_StartProcess;
 
-void DMA1_CH1_2_Start(void);
 
-void DMA1_CH1_2_Reset(void);
+void DMA1_C0S0_5_Init(void);
+
+void DMA1_C0S0_5_Start(void);
 
 #endif

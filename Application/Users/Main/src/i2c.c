@@ -83,13 +83,13 @@ static bool IIC_RxReply(void)
 		if(ReplyTime>250)
 		{
 			IIC_Stop();
-			return False;
+			return false;
 		}
 	}
 	
 	IIC_SCL = 0;
 
-	return True;	
+	return true;	
 
 }
 

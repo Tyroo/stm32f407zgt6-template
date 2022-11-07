@@ -42,19 +42,19 @@ void CAN1_Config(void) {
 	CAN_InitStructure.CAN_SJW = CAN_SJW_1tq;			// 重新同步跳跃宽度为1个Tq
 	CAN_InitStructure.CAN_BS1 = CAN_BS1_6tq;			// 时间段1占用8个Tq
 	CAN_InitStructure.CAN_BS2 = CAN_BS2_5tq;			// 时间段1占用8个Tq
-	CAN_Init(CAN1, &CAN_InitStructure);						// 初始化CAN1配置
+	CAN_Init(CAN1, &CAN_InitStructure);					// 初始化CAN1配置
 	
 	// CAN滤波器配置
-	CAN_FilterInitStruct.CAN_FilterMode = 0;						// 掩码模式
-	CAN_FilterInitStruct.CAN_FilterIdHigh = 0x0000;			// 期望值高位
-	CAN_FilterInitStruct.CAN_FilterIdLow = 0x0000;			// 期望值低位
+	CAN_FilterInitStruct.CAN_FilterMode = 0;			// 掩码模式
+	CAN_FilterInitStruct.CAN_FilterIdHigh = 0x0000;		// 期望值高位
+	CAN_FilterInitStruct.CAN_FilterIdLow = 0x0000;		// 期望值低位
 	CAN_FilterInitStruct.CAN_FilterMaskIdHigh = 0x0000;	// 期望值高位
 	CAN_FilterInitStruct.CAN_FilterMaskIdLow = 0x0000;	// 期望值低位
 	CAN_FilterInitStruct.CAN_FilterFIFOAssignment = CAN_Filter_FIFO0;	// 关联FIFO
-	CAN_FilterInitStruct.CAN_FilterNumber = 0;												// 选择过滤器0
-	CAN_FilterInitStruct.CAN_FilterScale = CAN_FilterScale_32bit;			// 32位模式
-	CAN_FilterInitStruct.CAN_FilterActivation = ENABLE;								// 激活过滤器0
-	CAN_FilterInit(&CAN_FilterInitStruct);														// 初始化CAN过滤器
+	CAN_FilterInitStruct.CAN_FilterNumber = 0;							// 选择过滤器0
+	CAN_FilterInitStruct.CAN_FilterScale = CAN_FilterScale_32bit;		// 32位模式
+	CAN_FilterInitStruct.CAN_FilterActivation = ENABLE;					// 激活过滤器0
+	CAN_FilterInit(&CAN_FilterInitStruct);								// 初始化CAN过滤器
 	
 	/* 中断配置 */
 	CAN_ITConfig(CAN1, CAN_IT_FMP0, ENABLE);				// 开启CAN1接收挂号中断
