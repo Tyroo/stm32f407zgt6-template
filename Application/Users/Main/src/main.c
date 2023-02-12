@@ -27,17 +27,17 @@ int USBH_USR_Application()
 }
 extern USBH_HOST              USB_Host;
 extern USB_OTG_CORE_HANDLE    USB_OTG_Core;
-extern USB_ManageType		  USB_Manage;
 
 
 
 int main() {
 
 	Nvic_Init(2);		// 中断分组，中断分组2
+	Key_Init();			// 按键初始化
 	Led_Init();			// 初始化LED模块
 	Delay_Init();		// 初始化延时模块
 	Uart1_Init(115200);	// 初始化USAER1模块
-//	Timer3_Init(999, 839);
+	Timer3_Init(99, 839);
 //	FsmcSram_Init();
 //	my_mem_init(SRAMIN);//初始化内部内存池
 
@@ -101,7 +101,10 @@ int main() {
 
 //	USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_USBH_cb);
 	
-	Led_Control(0);
+//	Led_Control(0);
+
+	GPIO_SetBits(GPIOF, GPIO_Pin_10);	// 关闭LED1
+	GPIO_SetBits(GPIOF, GPIO_Pin_9);	// 关闭LED0
 
 //	FatfsResult = f_open(&File, "2:123.txt", FA_OPEN_EXISTING|FA_READ);
 //	FatfsResult = f_read(&File, ReadTextBuff, f_size(&File), &FatfsReadSize);
@@ -116,6 +119,8 @@ int main() {
 //		Uart1_Send("aaaa");
 //	}
 
+	Keyboard_Init();
+	Task_Init();
 
 	while(1) {
 		
@@ -131,6 +136,9 @@ int main() {
 //		lwip_periodic_handle();
 		//lwip_app_loop();
 //		sys_check_timeouts();
-		DMA1_C0S0_5_Start();
+		//DMA1_C0S0_5_Start();
+		Event_Process();
+		Task_Scheduler();
+		
 	}
 }

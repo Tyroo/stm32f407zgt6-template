@@ -10,7 +10,7 @@
       <TargetName>Application</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060750::V5.06 update 6 (build 750)::.\ARMCC</pCCUsed>
+      <pCCUsed>5060960::V5.06 update 7 (build 960)::.\ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -186,7 +186,6 @@
             <RvdsVP>2</RvdsVP>
             <RvdsMve>0</RvdsMve>
             <RvdsCdeCp>0</RvdsCdeCp>
-            <nBranchProt>0</nBranchProt>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -340,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,USE_USB_OTG_FS</Define>
               <Undefine></Undefine>
-              <IncludePath>..\System;..\System\Library\slib\inc;..\Users\Main\inc;..\Users\TFTLCD\inc;..\Users\CanFestival\inc;..\Users\CanFestival\drive;..\Users\CanFestival\stm32;..\Users\FATFS\inc;..\Users\USB\USB_Host\Class\MSC\inc;..\Users\USB\USB_OTG\inc;..\Users\USB\USB_APP\inc;..\Users\USB\USB_Host\Core\inc;..\Users\USB\USB_Device\Class\msc\inc;..\Users\USB\USB_Device\Core\inc;..\Users\LwIP\include;..\Users\LwIP\include\netif;..\Users\LwIP\include\compat;..\Users\LwIP\include\lwip;..\Users\LwIP\include\arch;..\Users\LwIP\include\lwip\priv;..\Users\LwIP\include\lwip\prot;..\Users\LwIP\apps;..\Users\LwIP;..\System\Library\elib\TFTLCD\inc;..\System\Library\elib\eMPL\inc</IncludePath>
+              <IncludePath>..\System;..\System\Library\slib\inc;..\Users\Main\inc;..\Users\TFTLCD\inc;..\Users\CanFestival\inc;..\Users\CanFestival\drive;..\Users\CanFestival\stm32;..\Users\FATFS\inc;..\Users\USB\USB_Host\Class\MSC\inc;..\Users\USB\USB_OTG\inc;..\Users\USB\USB_APP\inc;..\Users\USB\USB_Host\Core\inc;..\Users\USB\USB_Device\Class\msc\inc;..\Users\USB\USB_Device\Core\inc;..\Users\LwIP\include;..\Users\LwIP\include\netif;..\Users\LwIP\include\compat;..\Users\LwIP\include\lwip;..\Users\LwIP\include\arch;..\Users\LwIP\include\lwip\priv;..\Users\LwIP\include\lwip\prot;..\Users\LwIP\apps;..\Users\LwIP;..\System\Library\elib\TFTLCD\inc;..\System\Library\elib\eMPL\inc;..\System\Library\elib\PID\inc;..\System\Library\elib\Event\inc;..\System\Library\elib\Task\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -508,6 +507,11 @@
               <FileName>usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Users\Main\src\usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>keyboard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\Main\src\keyboard.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -759,6 +763,26 @@
               <FileType>1</FileType>
               <FilePath>..\System\Library\elib\eMPL\src\inv_mpu_dmp_motion_driver.c</FilePath>
             </File>
+            <File>
+              <FileName>pid.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\System\Library\elib\PID\inc\pid.h</FilePath>
+            </File>
+            <File>
+              <FileName>pid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\System\Library\elib\PID\src\pid.c</FilePath>
+            </File>
+            <File>
+              <FileName>event.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\System\Library\elib\Event\src\event.c</FilePath>
+            </File>
+            <File>
+              <FileName>task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\System\Library\elib\Task\src\task.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -945,54 +969,54 @@
               <FilePath>..\Users\USB\USB_OTG\src\usb_core.c</FilePath>
             </File>
             <File>
-              <FileName>usb_hcd.c</FileName>
+              <FileName>usb_dcd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Users\USB\USB_OTG\src\usb_hcd.c</FilePath>
+              <FilePath>..\Users\USB\USB_OTG\src\usb_dcd.c</FilePath>
             </File>
             <File>
-              <FileName>usb_hcd_int.c</FileName>
+              <FileName>usb_dcd_int.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Users\USB\USB_OTG\src\usb_hcd_int.c</FilePath>
+              <FilePath>..\Users\USB\USB_OTG\src\usb_dcd_int.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>USB_HOST</GroupName>
+          <GroupName>USB_DEVICE</GroupName>
           <Files>
             <File>
-              <FileName>usbh_core.c</FileName>
+              <FileName>usbd_core.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Users\USB\USB_Host\Core\src\usbh_core.c</FilePath>
+              <FilePath>..\Users\USB\USB_Device\Core\src\usbd_core.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_hcs.c</FileName>
+              <FileName>usbd_ioreq.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Users\USB\USB_Host\Core\src\usbh_hcs.c</FilePath>
+              <FilePath>..\Users\USB\USB_Device\Core\src\usbd_ioreq.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_ioreq.c</FileName>
+              <FileName>usbd_req.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Users\USB\USB_Host\Core\src\usbh_ioreq.c</FilePath>
+              <FilePath>..\Users\USB\USB_Device\Core\src\usbd_req.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_stdreq.c</FileName>
+              <FileName>usbd_msc_scsi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Users\USB\USB_Host\Core\src\usbh_stdreq.c</FilePath>
+              <FilePath>..\Users\USB\USB_Device\Class\msc\src\usbd_msc_scsi.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_msc_bot.c</FileName>
+              <FileName>usbd_msc_data.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Users\USB\USB_Host\Class\MSC\src\usbh_msc_bot.c</FilePath>
+              <FilePath>..\Users\USB\USB_Device\Class\msc\src\usbd_msc_data.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_msc_core.c</FileName>
+              <FileName>usbd_msc_core.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Users\USB\USB_Host\Class\MSC\src\usbh_msc_core.c</FilePath>
+              <FilePath>..\Users\USB\USB_Device\Class\msc\src\usbd_msc_core.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_msc_scsi.c</FileName>
+              <FileName>usbd_msc_bot.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Users\USB\USB_Host\Class\MSC\src\usbh_msc_scsi.c</FilePath>
+              <FilePath>..\Users\USB\USB_Device\Class\msc\src\usbd_msc_bot.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1005,14 +1029,19 @@
               <FilePath>..\Users\USB\USB_APP\src\usb_bsp.c</FilePath>
             </File>
             <File>
-              <FileName>usbh_usr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Users\USB\USB_APP\src\usbh_usr.c</FilePath>
-            </File>
-            <File>
               <FileName>usbd_usr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Users\USB\USB_APP\src\usbd_usr.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_storage_msd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\USB\USB_APP\src\usbd_storage_msd.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_desc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\USB\USB_APP\src\usbd_desc.c</FilePath>
             </File>
           </Files>
         </Group>

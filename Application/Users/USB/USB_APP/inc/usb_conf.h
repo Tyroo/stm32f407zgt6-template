@@ -131,19 +131,9 @@
 // #define USB_OTG_INTERNAL_VBUS_ENABLED
 #endif
 
-/****************** USB OTG FS CONFIGURATION **********************************/
-#ifdef USB_OTG_FS_CORE
- #define RX_FIFO_FS_SIZE                          128
- #define TXH_NP_FS_FIFOSIZ                         96
- #define TXH_P_FS_FIFOSIZ                          96
-
-// #define USB_OTG_FS_LOW_PWR_MGMT_SUPPORT
-// #define USB_OTG_FS_SOF_OUTPUT_ENABLED
-#endif
-
 /****************** USB OTG MODE CONFIGURATION ********************************/
-#define USE_HOST_MODE
-//#define USE_DEVICE_MODE
+//#define USE_HOST_MODE
+#define USE_DEVICE_MODE
 //#define USE_OTG_MODE
 
 #ifndef USB_OTG_FS_CORE
@@ -168,6 +158,25 @@
      #error  "USE_ULPI_PHY or USE_EMBEDDED_PHY should be defined"
   #endif
  #endif
+#endif
+
+/****************** USB OTG FS CONFIGURATION **********************************/
+#ifdef USB_OTG_FS_CORE
+	#define RX_FIFO_FS_SIZE                          128
+ 
+	#ifdef USE_DEVICE_MODE
+		#define TX0_FIFO_FS_SIZE                         64
+		#define TX1_FIFO_FS_SIZE                         128
+		#define TX2_FIFO_FS_SIZE                         0
+		#define TX3_FIFO_FS_SIZE                         0
+	#endif
+	 
+	#ifdef USE_HOST_MODE
+		#define TXH_NP_FS_FIFOSIZ                         96
+		#define TXH_P_FS_FIFOSIZ                          96
+	#endif
+// #define USB_OTG_FS_LOW_PWR_MGMT_SUPPORT
+// #define USB_OTG_FS_SOF_OUTPUT_ENABLED
 #endif
 
 /****************** C Compilers dependant keywords ****************************/

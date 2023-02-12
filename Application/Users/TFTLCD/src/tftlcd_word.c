@@ -36,7 +36,7 @@ void TFTLCD_Word(uint16_t XPix, uint16_t YPix, void* _Obj)
 void TFTLCD_Words(uint16_t XPix, uint16_t YPix, 
     uint16_t Width, uint16_t Height, void* _Obj) 
 {
-    TFTLCD_Words_ObjType* WordsObj;
+    TFTLCD_Words_ObjType * WordsObj;
     WordsObj = (TFTLCD_Words_ObjType*)_Obj;
 
 	Width = Width/8;

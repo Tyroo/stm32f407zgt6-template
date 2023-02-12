@@ -16,9 +16,19 @@
 #define WKUP_PRES 4
 
 
+typedef enum
+{
+	enNoPress,
+	enOncePress,
+	enDoublePress,
+	enLongPress,
+} enKeyPress;
+
+
 void Key_Init(void); //IO 初始化
 u8 Key_Scan(u8); 		 //按键扫描函数
 u8 Key0_Scan(void);
+enKeyPress ThreeStageKeyScan(void);	// 三状态按钮扫描
 
 
 #endif

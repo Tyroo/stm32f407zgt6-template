@@ -5,18 +5,7 @@
 //按键初始化函数
 void Key_Init(void)
 {
-	GPIO_InitTypeDef GPIO_InitStructure;
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA|RCC_AHB1Periph_GPIOE, 
-	ENABLE);//使能 GPIOA,GPIOE 时钟
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2|GPIO_Pin_3|GPIO_Pin_4;
-	//KEY0 KEY1 KEY2 对应引脚
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//普通输入模式
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100M
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
-	GPIO_Init(GPIOE, &GPIO_InitStructure);//初始化 GPIOE2,3,4
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;//WK_UP 对应引脚 PA0
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN ;//下拉
-	GPIO_Init(GPIOA, &GPIO_InitStructure);//初始化 GPIOA0
+
 } 
 
 
@@ -60,4 +49,81 @@ u8 Key0_Scan() {
 		KeyUp = 1;
 	}
 	return KeyCode;
+}
+
+
+// 三状态按钮扫描
+u8 PressCount = 0;
+u32 PointPressCount = 0;
+u32 LongPressCount = 0;
+
+extern uint32_t lwip_sys_timer;	//lwip本地时间计数器,单位:ms
+
+enKeyPress ThreeStageKeyScan(void)
+{
+	enKeyPress enRet = enNoPress;
+	
+	static u8 u8KeyState = 3;
+	
+	static u8 u8KeyOld = 1;
+	static u8 u8KeyNew = 1;
+	static u32 u32LongPressDealyCnt = 0;
+	static u32 u32OncePressDealyCnt = 0;
+	
+	static s8 s8KeyPressCnt = 0;
+
+	static u16 u16OldTimeCnt = 0;
+	static u16 u16TimerCntMs = 0;
+	static u8 u8KeyStateLock = 0;
+
+	
+	/* 按键消抖 */
+	if((KEY0 != u8KeyOld) && (u8KeyStateLock == 0))
+	{
+		u16OldTimeCnt = lwip_sys_timer;
+		u8KeyStateLock = 1;
+	}
+	else if (u8KeyStateLock == 1)
+	{
+		u16TimerCntMs = lwip_sys_timer - u16OldTimeCnt;
+		if (u16TimerCntMs > 9)
+		{
+			u8KeyStateLock = 0;
+			u8KeyNew = KEY0;
+		}
+	}
+	
+	/* 按键状态获取 */
+	u8KeyState = u8KeyOld + (u8KeyNew<<1);
+	u8KeyOld = u8KeyNew;
+	
+	/* 按键动作处理 */
+	// 当按钮被松开时
+	if(u8KeyState == 2)
+	{
+		u32LongPressDealyCnt = 0;
+		s8KeyPressCnt++;
+	}
+	// 当按钮一直处于按下状态时
+	else if(u8KeyState == 0)
+	{
+		u32LongPressDealyCnt++;
+		if (u32LongPressDealyCnt > 1700000)
+		{
+			s8KeyPressCnt = -1;
+			enRet = enLongPress;
+		}
+	}
+	// 按钮被松开一次后
+	else if(s8KeyPressCnt > 0)
+	{
+		u32OncePressDealyCnt++;
+		if (u32OncePressDealyCnt > 350000)
+		{
+			enRet = (s8KeyPressCnt == 1) ? enOncePress : enDoublePress;
+			u32OncePressDealyCnt = s8KeyPressCnt = 0;
+		}
+	}
+	
+	return enRet;
 }

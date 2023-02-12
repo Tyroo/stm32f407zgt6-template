@@ -97,7 +97,7 @@ __ALIGN_BEGIN uint32_t  USBD_cfg_status __ALIGN_END  = 0;
     #pragma data_alignment=4   
   #endif
 #endif /* USB_OTG_HS_INTERNAL_DMA_ENABLED */
-__ALIGN_BEGIN uint8_t USBD_StrDesc[USB_MAX_STR_DESC_SIZ] __ALIGN_END ;
+//__ALIGN_BEGIN uint8_t USBD_StrDesc[USB_MAX_STR_DESC_SIZ] __ALIGN_END ;
 /**
   * @}
   */ 

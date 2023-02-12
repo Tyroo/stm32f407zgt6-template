@@ -223,7 +223,7 @@ bool SPI1_Send(char* SendData) {
 // SPI1通信<中断函数>
 void SPI1_IRQHandler() {
 	
-	u8 RxData;							// 定义一个接收每个字节的变量
+	u8 RxData;				// 定义一个接收每个字节的变量
 	static u8 RxIndex = 0;	// 接受数组的索引
 	// SPI接收缓冲区非空标志
 	FlagStatus ReadFlag = SPI_I2S_GetITStatus(SPI1, SPI_I2S_IT_RXNE);
