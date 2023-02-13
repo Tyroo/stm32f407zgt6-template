@@ -28,7 +28,8 @@ int USBH_USR_Application()
 extern USBH_HOST              USB_Host;
 extern USB_OTG_CORE_HANDLE    USB_OTG_Core;
 
-
+u8 u8I2C_TxData[5] = {0x88,0x89,0x90,0x91,0x92};
+u8 u8I2C_RxData[5];
 
 int main() {
 
@@ -36,6 +37,9 @@ int main() {
 	Key_Init();			// 按键初始化
 	Led_Init();			// 初始化LED模块
 	Delay_Init();		// 初始化延时模块
+	
+	#if 0
+	
 	Uart1_Init(115200);	// 初始化USAER1模块
 	Timer3_Init(99, 839);
 //	FsmcSram_Init();
@@ -43,7 +47,7 @@ int main() {
 
 	DMA1_C0S0_5_Init();
 	SPI3_Init();
-
+	#endif
 
 //	LAN8720_Init();
 	
@@ -121,6 +125,11 @@ int main() {
 
 	Keyboard_Init();
 	Task_Init();
+	
+	IIC_Init();
+	
+	AT24C02_TxData(u8I2C_TxData, 0, 5);
+	AT24C02_RxData(u8I2C_RxData, 0, 5);
 
 	while(1) {
 		

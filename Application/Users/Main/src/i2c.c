@@ -29,9 +29,9 @@ void IIC_Start(void)
 	IIC_Mode_Tx();     //sda线输出
 	IIC_SDA_OUT = 1;	  	  
 	IIC_SCL = 1;
-	Delay_Us(4);
- 	IIC_SDA_OUT = 0;//START:when CLK is high,DATA change form high to low 
-	Delay_Us(4);
+	Delay_Us(2);
+ 	IIC_SDA_OUT = 0;
+	Delay_Us(2);
 	IIC_SCL = 0;//钳住I2C总线，准备发送或接收数据 
 }
 
@@ -39,13 +39,13 @@ void IIC_Start(void)
 // 发送结束信号，SCK高电平下，SDA由低变高
 void IIC_Stop(void) 
 {
-	IIC_Mode_Tx();//sda线输出
+	IIC_Mode_Tx();	// SDA线输出
 	IIC_SCL = 0;
-	IIC_SDA_OUT = 0;//STOP:when CLK is high DATA change form low to high
- 	Delay_Us(4);
+	IIC_SDA_OUT = 0;
+ 	Delay_Us(2);
 	IIC_SCL = 1; 
 	IIC_SDA_OUT = 1;//发送I2C总线结束信号
-	Delay_Us(4);	
+	Delay_Us(2);	
 }
 
 
@@ -73,10 +73,9 @@ static bool IIC_RxReply(void)
 	ReplyTime = 0;
 
 	IIC_Mode_Rx();
-	IIC_SDA_OUT = 1;
 	Delay_Us(1);	   
 	IIC_SCL=1;
-	Delay_Us(1);
+	
 	while(IIC_SDA_IN)
 	{
 		ReplyTime++;
@@ -86,11 +85,10 @@ static bool IIC_RxReply(void)
 			return false;
 		}
 	}
-	
+
 	IIC_SCL = 0;
-
+	
 	return true;	
-
 }
 
 
@@ -110,8 +108,7 @@ bool IIC_Send_Byte(uint8_t Data)
 		IIC_SCL = 1;
 		Delay_Us(2);
 		
-		IIC_SCL = 0;		// 拉低SCL电平，准备发送第一帧数据
-		Delay_Us(1);
+		IIC_SCL = 0;// 拉低SCL电平，准备发送第一帧数据
 
 	}
 	return IIC_RxReply();
@@ -121,7 +118,6 @@ bool IIC_Send_Byte(uint8_t Data)
 // 接收8位数据
 uint8_t IIC_Read_Byte(uint8_t IsAck) 
 {
-	
 	uint8_t RxData, RxIndex;
 	
 	IIC_Mode_Rx();
