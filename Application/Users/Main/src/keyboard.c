@@ -56,7 +56,7 @@ void Keyboard_Init(void)
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN ;//下拉
 	GPIO_Init(GPIOA, &GPIO_InitStructure);//初始化 GPIOA0
 	
-	/* 键盘对象初始化 */
+	/* 按键处理模块初始化 */
 	if (pstcButtonTable[0] == NULL)
 		for( ; ; );
 	
@@ -89,7 +89,7 @@ void Keyboard_AddButton(stcButtonObject_t *pstcButton, pButtonState_t pButtonSta
 			pstcFirstButton->pstcButtonObjectPrev = pstcButton;
 		}
 		pstcButton->GetKeyState = pButtonStateFunc;
-		Keyboard_SetBtnDecideTime(pstcButton, 2000, 50);
+		Keyboard_SetBtnDecideTime(pstcButton, 2000, 800);
 	}
 }
 
@@ -102,78 +102,77 @@ void Keyboard_SetBtnDecideTime(stcButtonObject_t *pstcButton,
 }
 
 
-static void Keyboard_Debounce(stcButtonObject_t *pstcBtnObject)
+static void Keyboard_Debounce(void)
 {
 	uint8_t u8CurrBtnState = 0;
 	
-	u8CurrBtnState = pstcBtnObject->GetKeyState();
+	u8CurrBtnState = pstcCurrButton->GetKeyState();
 	
 	// 当按钮状态发生变化时
-	if ((u8CurrBtnState != pstcBtnObject->u8BtnStateDebounceBefore)
-		 && (pstcBtnObject->bBtnDebounceFlg == false))
+	if ((u8CurrBtnState != pstcCurrButton->u8BtnStateDebounceBefore)
+		 && (pstcCurrButton->bBtnDebounceFlg == false))
 	{
 		// 记录发生变化时的时刻
-		pstcBtnObject->u16BtnDebounceCnt = stcTaskManageObject.u32TaskTimeBaseCountVal;
+		pstcCurrButton->u16BtnDebounceCnt = stcTaskManageObject.u32TaskTimeBaseCountVal;
 		// 按钮消抖标志设置为true
-		pstcBtnObject->bBtnDebounceFlg = true;
+		pstcCurrButton->bBtnDebounceFlg = true;
 	}
 	// 执行按钮消抖
-	else if (pstcBtnObject->bBtnDebounceFlg)
+	else if (pstcCurrButton->bBtnDebounceFlg)
 	{
 		// 经过一定的按钮消抖时间后再获取状态，实现按钮消抖
 		if ((stcTaskManageObject.u32TaskTimeBaseCountVal - 
-			 pstcBtnObject->u16BtnDebounceCnt) > KEYBOARD_DEBOUNCE_TIME)
+			 pstcCurrButton->u16BtnDebounceCnt) > KEYBOARD_DEBOUNCE_TIME)
 		{
-			pstcBtnObject->bBtnDebounceFlg = false;
-			pstcBtnObject->u8BtnStateDebounceAfter = u8CurrBtnState;
+			pstcCurrButton->bBtnDebounceFlg = false;
+			pstcCurrButton->u8BtnStateDebounceAfter = u8CurrBtnState;
 		}
 	}
 }
 
 
 // 键盘按键扫描模块
-static void Keyboard_Scan(stcButtonObject_t *pstcBtnObject)
+static void Keyboard_Scan(void)
 {
 	uint8_t u8BtnStateValue = 0;
 	
-	u8BtnStateValue = pstcBtnObject->u8BtnStateDebounceBefore + (pstcBtnObject->u8BtnStateDebounceAfter << 1);
-	pstcBtnObject->u8BtnStateDebounceBefore = pstcBtnObject->u8BtnStateDebounceAfter;
+	u8BtnStateValue = pstcCurrButton->u8BtnStateDebounceBefore + (pstcCurrButton->u8BtnStateDebounceAfter << 1);
+	pstcCurrButton->u8BtnStateDebounceBefore = pstcCurrButton->u8BtnStateDebounceAfter;
 	
 	switch(u8BtnStateValue)
 	{
 		// 按键松开后
 		case 0:
-			if (pstcBtnObject->s8BtnLoosenCnt < 1)
-			{
-				pstcBtnObject->enBtnState = enBtnStatus_LOOSEN;
-			}
-			else
+			if (pstcCurrButton->enBtnState != enBtnStatus_LOOSEN)
 			{
 				if ((stcTaskManageObject.u32TaskTimeBaseCountVal - 
-					 pstcBtnObject->u16MultiPressIntervalCnt) > pstcBtnObject->u16MultiPressIntervalTime)
+					 pstcCurrButton->u16MultiPressIntervalCnt) > pstcCurrButton->u16MultiPressIntervalTime)
 				{
-					pstcBtnObject->enBtnState = (enButtonStatus_t)(pstcBtnObject->s8BtnLoosenCnt + 1);
-					pstcBtnObject->s8BtnLoosenCnt = 0;
+					pstcCurrButton->enBtnState = enBtnStatus_LOOSEN;
+					pstcCurrButton->s8BtnLoosenCnt = 0;
 				}
 			}
 			break;
 		// 按键被松开时
 		case 1:
-			pstcBtnObject->s8BtnLoosenCnt++;
-			if (pstcBtnObject->s8BtnLoosenCnt == 1)
-				pstcBtnObject->u16MultiPressIntervalCnt = stcTaskManageObject.u32TaskTimeBaseCountVal;
+			pstcCurrButton->enBtnState = (enButtonStatus_t)(enBtnStatus_ONCEPRESS_UP + pstcCurrButton->s8BtnLoosenCnt);
+			pstcCurrButton->u16MultiPressIntervalCnt = stcTaskManageObject.u32TaskTimeBaseCountVal;
+			pstcCurrButton->s8BtnLoosenCnt = (pstcCurrButton->s8BtnLoosenCnt + 1) % 2;
 			break;
 		// 按钮被按下时
 		case 2:
-			pstcBtnObject->u16LongPressDecideCnt = stcTaskManageObject.u32TaskTimeBaseCountVal;
+			pstcCurrButton->enBtnState = (enButtonStatus_t)(enBtnStatus_ONCEPRESS_DW + pstcCurrButton->s8BtnLoosenCnt);
+			pstcCurrButton->u16LongPressDecideCnt = stcTaskManageObject.u32TaskTimeBaseCountVal;
 			break;
 		// 按钮被按下后
 		case 3:
-			if ((stcTaskManageObject.u32TaskTimeBaseCountVal - 
-				 pstcBtnObject->u16LongPressDecideCnt) > pstcBtnObject->u16LongPressDecideTime)
+			if (pstcCurrButton->enBtnState != enBtnStatus_LONGPRESS)
 			{
-				pstcBtnObject->s8BtnLoosenCnt = - 1;
-				pstcBtnObject->enBtnState = enBtnStatus_LONGPRESS;
+				if ((stcTaskManageObject.u32TaskTimeBaseCountVal - 
+					 pstcCurrButton->u16LongPressDecideCnt) > pstcCurrButton->u16LongPressDecideTime)
+				{
+					pstcCurrButton->enBtnState = enBtnStatus_LONGPRESS;
+				}
 			}
 			break;
 		default:
@@ -183,23 +182,26 @@ static void Keyboard_Scan(stcButtonObject_t *pstcBtnObject)
 
 
 // 按钮信号发送
-static void Keyboard_SignalSend(stcEventSource_t *pstcEventSource)
+static void Keyboard_SignalSend(void)
 {
 	static EventSignal_t u32CurrBtnSignal = 0;
 	
 	// 如果按钮状态变更则发送对应的事件信号
 	if (pstcCurrButton->enBtnState != pstcCurrButton->enBtnStatePrev)
 	{
-		pstcCurrButton->enBtnStatePrev = pstcCurrButton->enBtnState;
-		
-		u32CurrBtnSignal &= ~(((EventSignal_t)3) << (pstcCurrButton->u8BtnNumber * 2));
-		u32CurrBtnSignal |= ((EventSignal_t)pstcCurrButton->enBtnState << (pstcCurrButton->u8BtnNumber * 2));
+		u32CurrBtnSignal &= ~(((EventSignal_t)7) << (pstcCurrButton->u8BtnNumber * 3));
+		u32CurrBtnSignal |= ((EventSignal_t)pstcCurrButton->enBtnState << (pstcCurrButton->u8BtnNumber * 3));
 		
 		Event_SignalGenerate(
-			pstcEventSource, 
+			&stcBtnEventSource, 
 			u32CurrBtnSignal, 
 			pstcCurrButton
 		);
+	}
+	else
+	{
+		pstcCurrButton->pstcButtonObjectPrev->enBtnStatePrev = 
+			pstcCurrButton->pstcButtonObjectPrev->enBtnState;
 	}
 }
 
@@ -208,13 +210,14 @@ static void Keyboard_SignalSend(stcEventSource_t *pstcEventSource)
 void Keyboard_Process(void)
 {
 	// 按键消抖处理
-	Keyboard_Debounce(pstcCurrButton);
+	Keyboard_Debounce();
 	
 	// 按键扫描处理
-	Keyboard_Scan(pstcCurrButton);
+	Keyboard_Scan();
 	
 	// 按钮信号发送
-	Keyboard_SignalSend(&stcBtnEventSource);
+	Keyboard_SignalSend();
 	
+	// 切换至下一个按键
 	pstcCurrButton = pstcCurrButton->pstcButtonObjectNext;
 }

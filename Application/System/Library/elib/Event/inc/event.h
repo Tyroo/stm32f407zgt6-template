@@ -1,49 +1,74 @@
 #ifndef __EVENT_H__
 #define __EVENT_H__
 
-typedef unsigned int EventSignal_t;
+
+/** 
+  * @defgroup Event modules parameter define
+  * \{
+  */
 
 #define EVENT_SOURCE_QUEUE_MAX_NUM			(10)
 #define EVENT_ASSERT(v)						do {if ((v) == 0) return;} while(0)
 
-/* >>> Event signal define start */
-
-/* Button signal: bit = 0 */
-#define KEY0_BTN_LONGPRESS_SIGNAL			((EventSignal_t)enBtnStatus_LONGPRESS   << 0)	// key0键长按信号
-#define KEY0_BTN_ONCEPRESS_SIGNAL			((EventSignal_t)enBtnStatus_ONCEPRESS   << 0)	// key0键单击信号
-#define KEY0_BTN_DOUBLEPRESS_SIGNAL			((EventSignal_t)enBtnStatus_DOUBLEPRESS << 0)	// key0键双击信号
-
-/* Button signal: bit = 2 */
-#define KEY1_BTN_LONGPRESS_SIGNAL			((EventSignal_t)enBtnStatus_LONGPRESS   << 2)	// key1键长按信号
-#define KEY1_BTN_ONCEPRESS_SIGNAL			((EventSignal_t)enBtnStatus_ONCEPRESS   << 2)	// key1键单击信号
-#define KEY1_BTN_DOUBLEPRESS_SIGNAL			((EventSignal_t)enBtnStatus_DOUBLEPRESS << 2)	// key1键双击信号
-
-/* Button signal: bit = 4 */
-#define KEY2_BTN_LONGPRESS_SIGNAL			((EventSignal_t)enBtnStatus_LONGPRESS   << 4)	// key2键长按信号
-#define KEY2_BTN_ONCEPRESS_SIGNAL			((EventSignal_t)enBtnStatus_ONCEPRESS   << 4)	// key2键单击信号
-#define KEY2_BTN_DOUBLEPRESS_SIGNAL			((EventSignal_t)enBtnStatus_DOUBLEPRESS << 4)	// key2键双击信号
-
-/* Button signal: bit = 6 */
-#define WEUP_BTN_LONGPRESS_SIGNAL			((EventSignal_t)enBtnStatus_LONGPRESS   << 6)	// weup键长按信号
-#define WEUP_BTN_ONCEPRESS_SIGNAL			((EventSignal_t)enBtnStatus_ONCEPRESS   << 6)	// weup键单击信号
-#define WEUP_BTN_DOUBLEPRESS_SIGNAL			((EventSignal_t)enBtnStatus_DOUBLEPRESS << 6)	// weup键双击信号
-
-/* Custom signal: bit = 8 */
-/*
-* #define CUSTOM_1_SIGNAL					((EventSignal_t)1 << (bit + 1))
-* #define CUSTOM_2_SIGNAL					((EventSignal_t)1 << (bit + 2))
-* #define CUSTOM_3_SIGNAL					((EventSignal_t)1 << (bit + 3))
-# #define 		...											...
-* #define CUSTOM_N_SIGNAL					((EventSignal_t)1 << (bit + N))
-*
-* TODO: (N >= 0 && N <= 31)
-*/
-
-#define CUSTOM_TEST_SIGNAL					((EventSignal_t)1 << 8)						// 自定义测试事件
-
-/* >>> Event signal define end */
+/**
+  * \}
+  */
 
 
+/** 
+  * @defgroup Signal Define
+  * @brief    
+  *			\Example\
+  *			#define CUSTOM_0_SIGNAL					((EventSignal_t)0b1    << ( 0 ))
+  *			#define CUSTOM_1_SIGNAL					((EventSignal_t)0b11   << ( 1 ))
+  *			#define CUSTOM_2_SIGNAL					((EventSignal_t)0b111  << ( 3 ))
+  *			#define CUSTOM_3_SIGNAL					((EventSignal_t)0b1111 << ( 6 ))
+  *			#define 		...											...
+  *			#define CUSTOM_N_SIGNAL					((EventSignal_t)1 << (bit + N))
+  *
+  *			\TODO\ 
+  *			Range: N >= 0 && N <= 31
+  * \{
+  */
+
+// Button signal: [bit = 0]
+#define KEY0_BTN_ONCEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_DW   << 0)	// KEY0单击按下信号
+#define KEY0_BTN_DOUBLEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_DW << 0)	// KEY0双击按下信号
+#define KEY0_BTN_LONGPRESS_SIGNAL			((EventSignal_t)enBtnStatus_LONGPRESS	   << 0)	// KEY0长按信号
+#define KEY0_BTN_ONCEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_UP   << 0)	// KEY0单击松开信号
+#define KEY0_BTN_DOUBLEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_UP << 0)	// KEY0双击松开信号
+
+// Button signal: [bit = 3]
+#define KEY1_BTN_ONCEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_DW   << 3)	// KEY1单击按下信号
+#define KEY1_BTN_DOUBLEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_DW << 3)	// KEY1双击按下信号
+#define KEY1_BTN_LONGPRESS_SIGNAL			((EventSignal_t)enBtnStatus_LONGPRESS	   << 3)	// KEY1长按信号
+#define KEY1_BTN_ONCEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_UP   << 3)	// KEY1单击松开信号
+#define KEY1_BTN_DOUBLEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_UP << 3)	// KEY1双击松开信号
+
+// Button signal: [bit = 6]
+#define KEY2_BTN_ONCEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_DW   << 6)	// KEY2单击按下信号
+#define KEY2_BTN_DOUBLEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_DW << 6)	// KEY2双击按下信号
+#define KEY2_BTN_LONGPRESS_SIGNAL			((EventSignal_t)enBtnStatus_LONGPRESS	   << 6)	// KEY2长按信号
+#define KEY2_BTN_ONCEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_UP   << 6)	// KEY2单击松开信号
+#define KEY2_BTN_DOUBLEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_UP << 6)	// KEY2双击松开信号
+
+// Button signal: [bit = 9]
+#define WKUP_BTN_ONCEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_DW   << 9)	// WKUP单击按下信号
+#define WKUP_BTN_DOUBLEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_DW << 9)	// WKUP双击按下信号
+#define WKUP_BTN_LONGPRESS_SIGNAL			((EventSignal_t)enBtnStatus_LONGPRESS	   << 9)	// WKUP长按信号
+#define WKUP_BTN_ONCEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_UP   << 9)	// WKUP单击松开信号
+#define WKUP_BTN_DOUBLEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_UP << 9)	// WKUP双击松开信号
+
+// Custom signal: [bit = 12]
+#define CUSTOM_TEST_SIGNAL					((EventSignal_t)1 << 12)							// 自定义测试事件
+
+/**
+  * \}
+  */
+
+/** @defgroup
+  * @{
+  */
 
 typedef enum enEventStatus
 {
@@ -53,90 +78,95 @@ typedef enum enEventStatus
 	enEventStatus_DISABLE,		// 失能该事件
 } enEventStatus_t;
 
-typedef struct stcEventHnadler
+typedef struct stcEventHandler
 {
-	EventSignal_t u32EventRegisterSignal;
+	unsigned int u32EventRegisterSignal;
 	enEventStatus_t enEventState;
 	
 	struct stcEventSource *pstcEventSource;
 	
-	struct stcEventHnadler *_pstcEventHandlerNext;
-	struct stcEventHnadler *_pstcEventHandlerPrev;
+	struct stcEventHandler *_pstcEventHandlerNext;
+	struct stcEventHandler *_pstcEventHandlerPrev;
 	
-	void (*pEventFunc)(struct stcEventHnadler *pstcEventHandler);
+	void (*pEventFunc)(struct stcEventHandler *pstcEventHandler);
 	
 } stcEventHandler_t;
-
 
 typedef struct stcEventSource
 {
 	void *pObject;
-	
 	stcEventHandler_t *pstcEventHandlerList;
-	
-	uint8_t u8EventTotalNumber; 
-	uint8_t u8EventWaitNumber;
-	
-	EventSignal_t u32EventTriggerSignal;
+	unsigned char u8EventTotalNumber;
+	unsigned char u8EventWaitNumber;
+	unsigned int u32EventTriggerSignal;
 } stcEventSource_t;
-
 
 typedef struct stcEventManage
 {
-	EventSignal_t u32CurrEventSignal;
-	EventSignal_t u32PrevEventSignal;
+	unsigned int u32CurrEventSignal;
+	unsigned int u32PrevEventSignal;
 	
-	uint8_t u8EventSourceFirstIndex;
-	uint8_t u8EventSourceLastIndex;
+	unsigned char u8EventSourceFirstIndex;
+	unsigned char u8EventSourceLastIndex;
 	stcEventSource_t *pstcEventSourceQueue[EVENT_SOURCE_QUEUE_MAX_NUM];
 	
 	stcEventHandler_t *pstcEventCurrHandler;
 } stcEventManage_t;
 
+typedef unsigned int EventSignal_t;
+
 typedef void (*EventFunc_t)(stcEventHandler_t *pstcEventHandler);
 
-extern stcEventManage_t stcEventManageObject;
+/**
+  * \}
+  */
 
+/** @funcgroup
+  * @{
+  */
+
+/**
+  * @brief  Handle the event that occurred and call it in the main loop
+  * @param  None
+  * @retval None
+  */
 void Event_Process(void);
+
+
+/**
+  * @brief  Set the status of the event
+  * @param  [pstcEvent] Event handle pointer @ref stcEventHandler_t
+  * @param  [enState] Event status @ref enEventStatus_t
+  * @retval None
+  */
 void Event_SetStatus(stcEventHandler_t *pstcEvent, enEventStatus_t enState);
+
+
+/**
+  * @brief  Register an event
+  * @param  [pstcEvent] Event handle pointer @ref stcEventHandler_t
+  * @param  [pEventSource] Event source @ref stcEventSource_t
+  * @param  [u32Signal] Register signal @ref Signal Define
+  * @param  [pEventFunc] The callback function executed after the event
+  * @retval None
+  */
 void Event_Register(stcEventHandler_t *pstcEvent, void *pEventSource, 
 					EventSignal_t u32Signal, EventFunc_t pEventFunc);
 
 
-
-/*
-* @[Event_SignalGenerate] function used example.
-* 
-* 1. #define CUSTOM_SIGNAL ((EventSignal_t)1 << bit)
-*
-* 2. stcEventSource_t stcCustomEventSource;
-*
-* 3. stcEventHandler_t stcCustomEventHandler;
-*
-* 4. void Custom_EventFunc() { printf("Custom_EventFunc running !"); }
-*
-* 5. Event_Register(
-*		&stcCustomEventHandler,
-*		&stcCustomEventSource,
-*		CUSTOM_SIGNAL,
-*		Custom_EventFunc
-*	 );
-*
-* 6. Event_SignalGenerate(
-*		&stcCustomEventSource,
-*		CUSTOM_SIGNAL,
-*		NULL
-*	 );
-*
-* Run Result:
-*
-* >> Custom_EventFunc running !
-*/
+/**
+  * @brief  Send a signal to trigger an event
+  * @param  [pEventSource] Event source @ref stcEventSource_t
+  * @param  [u32TriggerSignal] Signal to depart
+  * @param  [pSourceObject] The sending body object of the signal, which is used in the callback function
+  * @retval None
+  */
 static inline void Event_SignalGenerate(stcEventSource_t *pstcEventSource, 
 										EventSignal_t u32TriggerSignal,
 										void *pSourceObject)
 {
-	static uint8_t u8LastIndex;
+	extern stcEventManage_t stcEventManageObject;
+	static unsigned char u8LastIndex;
 	
 	u8LastIndex = stcEventManageObject.u8EventSourceLastIndex;
 		
@@ -151,5 +181,9 @@ static inline void Event_SignalGenerate(stcEventSource_t *pstcEventSource,
 		stcEventManageObject.u8EventSourceLastIndex = u8LastIndex;
 	}
 }
+
+/**
+  * \}
+  */
 
 #endif
