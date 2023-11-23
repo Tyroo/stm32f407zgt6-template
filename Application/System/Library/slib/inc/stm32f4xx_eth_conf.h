@@ -98,7 +98,7 @@
 #define PHY_DUPLEX_STATUS      ((uint16_t)0x0010) /* PHY Duplex mask */
 
 
-/* ¡ý¡ý¡ý¡ý¡ý¡ý¡ý¡ý¡ý¡ý    MII   ¡ý¡ý¡ý¡ý¡ý¡ý¡ý¡ý¡ý¡ý */
+/* Â¡Ã½Â¡Ã½Â¡Ã½Â¡Ã½Â¡Ã½Â¡Ã½Â¡Ã½Â¡Ã½Â¡Ã½Â¡Ã½    MII   Â¡Ã½Â¡Ã½Â¡Ã½Â¡Ã½Â¡Ã½Â¡Ã½Â¡Ã½Â¡Ã½Â¡Ã½Â¡Ã½ */
 
 ///* The LAN8720 PHY: MII Interrupt Control Register  */
 //#define PHY_MICR               ((uint16_t)0x11) /* MII Interrupt Control Register */
@@ -112,7 +112,7 @@
 
    /* Note : Common PHY registers are defined in stm32f4x7_eth.h file */
    
-/* ¡ü ¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü   MII   ¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü¡ü */
+/* Â¡Ã¼ Â¡Ã¼Â¡Ã¼Â¡Ã¼Â¡Ã¼Â¡Ã¼Â¡Ã¼Â¡Ã¼Â¡Ã¼Â¡Ã¼   MII   Â¡Ã¼Â¡Ã¼Â¡Ã¼Â¡Ã¼Â¡Ã¼Â¡Ã¼Â¡Ã¼Â¡Ã¼Â¡Ã¼Â¡Ã¼ */
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */

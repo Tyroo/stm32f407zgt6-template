@@ -53,6 +53,7 @@ dkms.conf
 
 # Filters local user related files in Keil project
 /*.ZJL
+/*.Zhangjialiang
 Application/Project/*
 Bootloader/Project/*
 !Application/Project/Application.uvprojx

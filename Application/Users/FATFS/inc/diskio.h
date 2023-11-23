@@ -10,7 +10,6 @@ extern "C" {
 #endif
 
 #include "ff.h"			/* Obtains integer types */
-#include "disk_api.h"	/* 导入用户侧IO接口头文件 */
 
 /* Status of Disk Functions */
 typedef BYTE	DSTATUS;

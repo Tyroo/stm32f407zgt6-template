@@ -1,8 +1,8 @@
 #include "user_app/inc/lwip_app_comm.h"
 
 
-const char *tcp_app_client_send_buff = "hello world!\r\n";	//UDP½ÓÊÕÊı¾İ»º³åÇø
-uint8_t tcp_app_client_recv_buff[TCP_APP_CLIENT_RX_BUFF_SIZE];	//UDP½ÓÊÕÊı¾İ»º³åÇø
+const char *tcp_app_client_send_buff = "hello world!\r\n";	//UDPæ¥æ”¶æ•°æ®ç¼“å†²åŒº
+uint8_t tcp_app_client_recv_buff[TCP_APP_CLIENT_RX_BUFF_SIZE];	//UDPæ¥æ”¶æ•°æ®ç¼“å†²åŒº
 
 struct tcp_pcb *pstcLwipTcpPcb;
 
@@ -11,17 +11,17 @@ ip_addr_t stcRemoteIpAddr;
 uint8_t tcpStatus = 0;
 
 
-// TCPÍ¨ĞÅ³õÊ¼»¯
+// TCPé€šä¿¡åˆå§‹åŒ–
 err_t lwip_app_tcp_client_init(void)
 {
 	err_t err;
 	
 	uint16_t numUdpPort = 8089;
 	
-	// ÉèÖÃÄ¬ÈÏIPµØÖ·
+	// è®¾ç½®é»˜è®¤IPåœ°å€
 	lwip_app_remote_ip_set(192, 168, 0, 101);
 	
-	// ĞÂ½¨Ò»¸öTCP_PCB¶ÔÏó
+	// æ–°å»ºä¸€ä¸ªTCP_PCBå¯¹è±¡
 	pstcLwipTcpPcb = tcp_new();
 	
 	if (pstcLwipTcpPcb != NULL)
@@ -45,18 +45,18 @@ err_t lwip_app_tcp_client_init(void)
 }
 
 
-//lwIP TCPÁ¬½Ó½¨Á¢ºóµ÷ÓÃ»Øµ÷º¯Êı
+//lwIP TCPè¿æ¥å»ºç«‹åè°ƒç”¨å›è°ƒå‡½æ•°
 err_t lwip_app_tcp_client_connect(void *arg, struct tcp_pcb *pTcpPcb, err_t err)
 {
-	// µ±Á¬½Ó³É¹¦ºó
+	// å½“è¿æ¥æˆåŠŸå
 	if (err == ERR_OK)
 	{
-		tcp_arg(pTcpPcb, &tcpStatus);        			// Ê¹ÓÃes¸üĞÂtpcbµÄcallback_arg
-		tcp_recv(pTcpPcb, lwip_app_tcp_client_recv);  	// ³õÊ¼»¯LwIPµÄtcp_recv»Øµ÷¹¦ÄÜ   
-		tcp_err(pTcpPcb, lwip_app_tcp_client_error); 	// ³õÊ¼»¯tcp_err()»Øµ÷º¯Êı
-		tcp_sent(pTcpPcb, lwip_app_tcp_client_sent);	// ³õÊ¼»¯LwIPµÄtcp_sent»Øµ÷¹¦ÄÜ
-		tcp_poll(pTcpPcb, lwip_app_tcp_client_poll, 1); // ³õÊ¼»¯LwIPµÄtcp_poll»Øµ÷¹¦ÄÜ
-		tcpStatus = enTcpClientConn;					// ÉèÖÃTCP×´Ì¬ÎªÒÑÁ¬½Ó³É¹¦
+		tcp_arg(pTcpPcb, &tcpStatus);        			// ä½¿ç”¨esæ›´æ–°tpcbçš„callback_arg
+		tcp_recv(pTcpPcb, lwip_app_tcp_client_recv);  	// åˆå§‹åŒ–LwIPçš„tcp_recvå›è°ƒåŠŸèƒ½   
+		tcp_err(pTcpPcb, lwip_app_tcp_client_error); 	// åˆå§‹åŒ–tcp_err()å›è°ƒå‡½æ•°
+		tcp_sent(pTcpPcb, lwip_app_tcp_client_sent);	// åˆå§‹åŒ–LwIPçš„tcp_sentå›è°ƒåŠŸèƒ½
+		tcp_poll(pTcpPcb, lwip_app_tcp_client_poll, 1); // åˆå§‹åŒ–LwIPçš„tcp_pollå›è°ƒåŠŸèƒ½
+		tcpStatus = enTcpClientConn;					// è®¾ç½®TCPçŠ¶æ€ä¸ºå·²è¿æ¥æˆåŠŸ
 		err = ERR_OK;
 	}
 	else
@@ -69,7 +69,7 @@ err_t lwip_app_tcp_client_connect(void *arg, struct tcp_pcb *pTcpPcb, err_t err)
 }
 
 
-// lwIP tcp_recv()º¯ÊıµÄ»Øµ÷º¯Êı
+// lwIP tcp_recv()å‡½æ•°çš„å›è°ƒå‡½æ•°
 err_t lwip_app_tcp_client_recv(void *arg,struct tcp_pcb *tpcb,struct pbuf *p, err_t err)
 {
 	struct pbuf *pData;
@@ -80,18 +80,18 @@ err_t lwip_app_tcp_client_recv(void *arg,struct tcp_pcb *tpcb,struct pbuf *p, er
 	LWIP_ASSERT("arg != NULL", arg != NULL);
 	pStatus = (uint8_t *)arg; 
 	
-	// Èç¹û´Ó·şÎñÆ÷½ÓÊÕµ½¿ÕµÄÊı¾İÖ¡¾Í¹Ø±ÕÁ¬½Ó
+	// å¦‚æœä»æœåŠ¡å™¨æ¥æ”¶åˆ°ç©ºçš„æ•°æ®å¸§å°±å…³é—­è¿æ¥
 	if(p != NULL)
 	{
-		// ½ÓÊÕµÄÊı¾İÕıÈ·
+		// æ¥æ”¶çš„æ•°æ®æ­£ç¡®
 		if (err == ERR_OK)
 		{
-			// µ±ÊÕµ½Êı¾İÕıÈ·£¬ÇÒÁ¬½ÓÒÀÈ»½¨Á¢Ê±
+			// å½“æ”¶åˆ°æ•°æ®æ­£ç¡®ï¼Œä¸”è¿æ¥ä¾ç„¶å»ºç«‹æ—¶
 			if (*pStatus > enTcpClientClose)
 			{
-				memset(tcp_app_client_recv_buff, 0, TCP_APP_CLIENT_RX_BUFF_SIZE);  //Êı¾İ½ÓÊÕ»º³åÇøÇåÁã
+				memset(tcp_app_client_recv_buff, 0, TCP_APP_CLIENT_RX_BUFF_SIZE);  //æ•°æ®æ¥æ”¶ç¼“å†²åŒºæ¸…é›¶
 				
-				for(pData=p; pData!=NULL; pData=pData->next)  //±éÀúÍêÕû¸öpbufÁ´±í
+				for(pData=p; pData!=NULL; pData=pData->next)  //éå†å®Œæ•´ä¸ªpbufé“¾è¡¨
 				{
 					if (pData->len > (TCP_APP_CLIENT_RX_BUFF_SIZE - numSize))
 					{
@@ -108,13 +108,13 @@ err_t lwip_app_tcp_client_recv(void *arg,struct tcp_pcb *tpcb,struct pbuf *p, er
 				}
 				
 				*pStatus = enTcpClientRecvOK;
-				tcp_recved(tpcb,p->tot_len);//ÓÃÓÚ»ñÈ¡½ÓÊÕÊı¾İ,Í¨ÖªLWIP¿ÉÒÔ»ñÈ¡¸ü¶àÊı¾İ
+				tcp_recved(tpcb,p->tot_len);//ç”¨äºè·å–æ¥æ”¶æ•°æ®,é€šçŸ¥LWIPå¯ä»¥è·å–æ›´å¤šæ•°æ®
 				retErr = ERR_OK;
 			}
-			// µ±ÊÕµ½Êı¾İÕıÈ·£¬µ«Á¬½ÓÒÑ¾­¶Ï¿ª
+			// å½“æ”¶åˆ°æ•°æ®æ­£ç¡®ï¼Œä½†è¿æ¥å·²ç»æ–­å¼€
 			else
 			{
-				//ÓÃÓÚ»ñÈ¡½ÓÊÕÊı¾İ,Í¨ÖªLWIP¿ÉÒÔ»ñÈ¡¸ü¶àÊı¾İ
+				//ç”¨äºè·å–æ¥æ”¶æ•°æ®,é€šçŸ¥LWIPå¯ä»¥è·å–æ›´å¤šæ•°æ®
 				tcp_recved(tpcb, p->tot_len);
 				retErr = ERR_OK;
 			}
@@ -126,20 +126,20 @@ err_t lwip_app_tcp_client_recv(void *arg,struct tcp_pcb *tpcb,struct pbuf *p, er
 		}
 	}
 	
-	pbuf_free(p);  	//ÊÍ·ÅÄÚ´æ
+	pbuf_free(p);  	//é‡Šæ”¾å†…å­˜
 	
 	return retErr;
 }
 
 
-//lwIP tcp_errº¯ÊıµÄ»Øµ÷º¯Êı
+//lwIP tcp_errå‡½æ•°çš„å›è°ƒå‡½æ•°
 void lwip_app_tcp_client_error(void *arg, err_t err)
 {  
 	// PASS...
 }
 
 
-//lwIP tcp_pollµÄ»Øµ÷º¯Êı
+//lwIP tcp_pollçš„å›è°ƒå‡½æ•°
 err_t lwip_app_tcp_client_poll(void *arg, struct tcp_pcb *tpcb)
 {
 	err_t err = ERR_OK;
@@ -150,29 +150,29 @@ err_t lwip_app_tcp_client_poll(void *arg, struct tcp_pcb *tpcb)
 	length = strlen(tcp_app_client_send_buff);
 	pStatus = (uint8_t *)arg;
 	
-	// Êı¾İ½ÓÊÕÍê³É
+	// æ•°æ®æ¥æ”¶å®Œæˆ
 	switch(tcpStatus)
 	{
-		// ½ÓÊÕÊı¾İ³É¹¦
+		// æ¥æ”¶æ•°æ®æˆåŠŸ
 		case enTcpClientRecvOK:
-			// ÉêÇëÄÚ´æ
+			// ç”³è¯·å†…å­˜
 			pBuff = pbuf_alloc(PBUF_TRANSPORT, length, PBUF_POOL);
-			// ½«tcp_app_client_send_buff[]ÖĞµÄÊı¾İ¿½±´µ½pBuffÖĞ
+			// å°†tcp_app_client_send_buff[]ä¸­çš„æ•°æ®æ‹·è´åˆ°pBuffä¸­
 			pbuf_take(pBuff, tcp_app_client_send_buff, length);
-			// ½«tcp_app_client_send_buff[]ÀïÃæ¸´ÖÆ¸øpbufµÄÊı¾İ·¢ËÍ³öÈ¥
+			// å°†tcp_app_client_send_buff[]é‡Œé¢å¤åˆ¶ç»™pbufçš„æ•°æ®å‘é€å‡ºå»
 			lwip_app_tcp_client_send_data(tpcb, pBuff, pStatus);
-			// ÉèÖÃtcpStatus×´Ì¬ÎªÓ¦´ğµÈ´ı
+			// è®¾ç½®tcpStatusçŠ¶æ€ä¸ºåº”ç­”ç­‰å¾…
 			*pStatus = enTcpClientAckWait;
-			// ÊÍ·ÅÄÚ´æ
+			// é‡Šæ”¾å†…å­˜
 			pbuf_free(pBuff);
 			break;
-		// ½ÓÊÕÊı¾İ³ö´í
+		// æ¥æ”¶æ•°æ®å‡ºé”™
 		case enTcpClientRecvErr:
 			break;
-		// ·¢ËÍÊ§°Ü
+		// å‘é€å¤±è´¥
 		case enTcpClientSendErr:
 			break;
-		// ¹Ø±ÕÁ¬½Ó
+		// å…³é—­è¿æ¥
 		case enTcpClientClose:
 			lwip_app_tcp_client_conn_close(pstcLwipTcpPcb);
 			err = ERR_ABRT;
@@ -185,7 +185,7 @@ err_t lwip_app_tcp_client_poll(void *arg, struct tcp_pcb *tpcb)
 }
 
 
-//lwIP tcp_sentµÄ»Øµ÷º¯Êı(µ±´ÓÔ¶¶ËÖ÷»ú½ÓÊÕµ½ACKĞÅºÅºó·¢ËÍÊı¾İ)
+//lwIP tcp_sentçš„å›è°ƒå‡½æ•°(å½“ä»è¿œç«¯ä¸»æœºæ¥æ”¶åˆ°ACKä¿¡å·åå‘é€æ•°æ®)
 err_t lwip_app_tcp_client_sent(void *arg, struct tcp_pcb *tpcb, u16_t len)
 {
 	tcpStatus = enTcpClientSendOK;
@@ -193,13 +193,13 @@ err_t lwip_app_tcp_client_sent(void *arg, struct tcp_pcb *tpcb, u16_t len)
 }
 
 
-//´Ëº¯ÊıÓÃÀ´·¢ËÍÊı¾İ
+//æ­¤å‡½æ•°ç”¨æ¥å‘é€æ•°æ®
 void lwip_app_tcp_client_send_data(struct tcp_pcb *pTcpPcb, struct pbuf *pData, uint8_t *pStatus)
 {
 	struct pbuf *pBuff;
  	err_t err = ERR_OK;
 	
-	while((err == ERR_OK) && (pData != NULL) && (pData->len <= tcp_sndbuf(pTcpPcb))) //½«Òª·¢ËÍµÄÊı¾İ¼ÓÈëµ½·¢ËÍ»º³å¶ÓÁĞÖĞ
+	while((err == ERR_OK) && (pData != NULL) && (pData->len <= tcp_sndbuf(pTcpPcb))) //å°†è¦å‘é€çš„æ•°æ®åŠ å…¥åˆ°å‘é€ç¼“å†²é˜Ÿåˆ—ä¸­
 	{
 		pBuff = pData;
 		
@@ -207,10 +207,10 @@ void lwip_app_tcp_client_send_data(struct tcp_pcb *pTcpPcb, struct pbuf *pData, 
 		
 		if(err == ERR_OK)
 		{  
-			pData = pBuff->next;		// Ö¸ÏòÏÂÒ»¸öpbuf
+			pData = pBuff->next;		// æŒ‡å‘ä¸‹ä¸€ä¸ªpbuf
 			
-			if(pData) pbuf_ref(pData);	// pbufµÄref¼ÓÒ»
-			pbuf_free(pBuff);			// ÊÍ·ÅÉÏÒ»¸öpbuf
+			if(pData) pbuf_ref(pData);	// pbufçš„refåŠ ä¸€
+			pbuf_free(pBuff);			// é‡Šæ”¾ä¸Šä¸€ä¸ªpbuf
 		}
 		else if(err == ERR_MEM)
 			pData = pBuff;
@@ -218,11 +218,11 @@ void lwip_app_tcp_client_send_data(struct tcp_pcb *pTcpPcb, struct pbuf *pData, 
 }
 
 
-//¹Ø±ÕÓë·şÎñÆ÷µÄÁ¬½Ó
+//å…³é—­ä¸æœåŠ¡å™¨çš„è¿æ¥
 void lwip_app_tcp_client_conn_close(struct tcp_pcb *pTcpPcb)
 {
-	//ÒÆ³ı»Øµ÷
-	tcp_abort(pTcpPcb);//ÖÕÖ¹Á¬½Ó,É¾³ıpcb¿ØÖÆ¿é
+	//ç§»é™¤å›è°ƒ
+	tcp_abort(pTcpPcb);//ç»ˆæ­¢è¿æ¥,åˆ é™¤pcbæ§åˆ¶å—
 	tcp_arg(pTcpPcb, NULL);  
 	tcp_recv(pTcpPcb, NULL);
 	tcp_sent(pTcpPcb, NULL);

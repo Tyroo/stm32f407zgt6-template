@@ -21,9 +21,14 @@
 /* Includes ------------------------------------------------------------------*/
 
 #include "usb_bsp.h"
+#include "delay.h"
+#include "usart.h"
+#include "system.h"
 
 
-#define USB_HOST_PWRCTRL PAout(15)	// PA15 USBπ©µÁ“˝Ω≈
+#define USB_HOST_PWRCTRL PAout(15)	// PA15 USB‰æõÁîµÂºïËÑö
+
+USB_OTG_CORE_HANDLE USB_Core;
 
 /** @defgroup USB_BSP_Private_Functions
   * @{
@@ -43,15 +48,15 @@ void USB_OTG_BSP_Init(USB_OTG_CORE_HANDLE *pdev)
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
 	RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_OTG_FS, ENABLE);
 	
-	/* ≈‰÷√GPIO“˝Ω≈ */
-	// ≈‰÷√GPIOA11°¢GPIOA12
+	/* ÈÖçÁΩÆGPIOÂºïËÑö */
+	// ÈÖçÁΩÆGPIOA11„ÄÅGPIOA12
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_12;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
-	// ≈‰÷√GPIOA15
+	// ÈÖçÁΩÆGPIOA15
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
@@ -69,13 +74,15 @@ void USB_OTG_BSP_Init(USB_OTG_CORE_HANDLE *pdev)
   */
 void USB_OTG_BSP_EnableInterrupt(USB_OTG_CORE_HANDLE *pdev)
 { 
-	// «¿’º”≈œ»º∂Œ™0£¨œÏ”¶”≈œ»º∂Œ™0£¨≤¢ πƒ‹
+	// Êä¢Âç†‰ºòÂÖàÁ∫ß‰∏∫0ÔºåÂìçÂ∫î‰ºòÂÖàÁ∫ß‰∏∫0ÔºåÂπ∂‰ΩøËÉΩ
 	Nvic_Config(OTG_FS_IRQn, 0, 3, 1);
 }
 
 
 void USB_OTG_BSP_DisableInterrupt(void)
 { 
+	// Êä¢Âç†‰ºòÂÖàÁ∫ß‰∏∫0ÔºåÂìçÂ∫î‰ºòÂÖàÁ∫ß‰∏∫0ÔºåÂπ∂‰ΩøËÉΩ
+	Nvic_Config(OTG_FS_IRQn, 0, 3, 0);
 }
 
 /**
@@ -110,6 +117,7 @@ void USB_OTG_BSP_DriveVBUS(USB_OTG_CORE_HANDLE *pdev, uint8_t state)
 
 void  USB_OTG_BSP_ConfigVBUS(USB_OTG_CORE_HANDLE *pdev)
 {
+	
 }
 
 
@@ -134,6 +142,12 @@ void USB_OTG_BSP_uDelay (const uint32_t usec)
 void USB_OTG_BSP_mDelay (const uint32_t msec)
 { 
 	Delay_Ms(msec);
+}
+
+
+void OTG_FS_IRQHandler(void)
+{
+	USBD_OTG_ISR_Handler(&USB_Core);
 }
 
 

@@ -12,17 +12,17 @@
 #define MEM_TYPE2 2
 #define MEM_TYPE3 3
 
-#define MEM1_MAX_SIZE 100*1024	// ÄÚ²¿ÄÚ´æ³Ø´óĞ¡100KB
-#define MEM2_MAX_SIZE 960*1024	// Íâ²¿ÄÚ´æ³Ø´óĞ¡960KB
-#define MEM3_MAX_SIZE 64*1024	// CCMÄÚ´æ³Ø´óĞ¡64KB
+#define MEM1_MAX_SIZE 100*1024	// å†…éƒ¨å†…å­˜æ± å¤§å°100KB
+#define MEM2_MAX_SIZE 960*1024	// å¤–éƒ¨å†…å­˜æ± å¤§å°960KB
+#define MEM3_MAX_SIZE 64*1024	// CCMå†…å­˜æ± å¤§å°64KB
 
-#define MEM1_BANK_SIZE 32	// ÄÚ²¿ÄÚ´æ¹ÜÀí¿é´óĞ¡32Byte
-#define MEM2_BANK_SIZE 32	// Íâ²¿ÄÚ´æ¹ÜÀí¿é´óĞ¡32Byte
-#define MEM3_BANK_SIZE 32	// CCMÄÚ´æ¹ÜÀí¿é´óĞ¡32Byte
+#define MEM1_BANK_SIZE 32	// å†…éƒ¨å†…å­˜ç®¡ç†å—å¤§å°32Byte
+#define MEM2_BANK_SIZE 32	// å¤–éƒ¨å†…å­˜ç®¡ç†å—å¤§å°32Byte
+#define MEM3_BANK_SIZE 32	// CCMå†…å­˜ç®¡ç†å—å¤§å°32Byte
 
-#define MEM1_TABLE_SIZE MEM1_MAX_SIZE/MEM1_BANK_SIZE	// ÄÚ²¿ÄÚ´æ¹ÜÀí¿é´óĞ¡32Byte
-#define MEM2_TABLE_SIZE MEM2_MAX_SIZE/MEM2_BANK_SIZE	// Íâ²¿ÄÚ´æ¹ÜÀí¿é´óĞ¡32Byte
-#define MEM3_TABLE_SIZE MEM3_MAX_SIZE/MEM3_BANK_SIZE	// CCMÄÚ´æ¹ÜÀí¿é´óĞ¡32Byte
+#define MEM1_TABLE_SIZE MEM1_MAX_SIZE/MEM1_BANK_SIZE	// å†…éƒ¨å†…å­˜ç®¡ç†å—å¤§å°32Byte
+#define MEM2_TABLE_SIZE MEM2_MAX_SIZE/MEM2_BANK_SIZE	// å¤–éƒ¨å†…å­˜ç®¡ç†å—å¤§å°32Byte
+#define MEM3_TABLE_SIZE MEM3_MAX_SIZE/MEM3_BANK_SIZE	// CCMå†…å­˜ç®¡ç†å—å¤§å°32Byte
 
 
 #define MALLOC_MANAGE_DEFAULT { Malloc_Init,\
@@ -32,14 +32,14 @@
 								{ 0, 0, 0 }}
 
 
-// ÄÚ´æ¹ÜÀí½á¹¹Ìå
+// å†…å­˜ç®¡ç†ç»“æ„ä½“
 typedef struct {
 	
-	void (*Init)(uint8_t); 						//³õÊ¼»¯·½·¨
-	uint8_t (*Perused)(uint8_t); 				//ÄÚ´æÊ¹ÓÃÂÊ
-	uint8_t* MallocPondArr[MEM_TYPE_SIZE];  	//ÄÚ´æ³Ø¹ÜÀíSRAMBANK¸öÇøÓòµÄÄÚ´æ
-	uint16_t* MallocTableArr[MEM_TYPE_SIZE];	//ÄÚ´æ¹ÜÀí×´Ì¬±í
-	uint8_t MallocReadyArr[MEM_TYPE_SIZE]; 	    //ÄÚ´æ¹ÜÀíÊÇ·ñ¾ÍĞ÷
+	void (*Init)(uint8_t); 						//åˆå§‹åŒ–æ–¹æ³•
+	uint8_t (*Perused)(uint8_t); 				//å†…å­˜ä½¿ç”¨ç‡
+	uint8_t* MallocPondArr[MEM_TYPE_SIZE];  	//å†…å­˜æ± ç®¡ç†SRAMBANKä¸ªåŒºåŸŸçš„å†…å­˜
+	uint16_t* MallocTableArr[MEM_TYPE_SIZE];	//å†…å­˜ç®¡ç†çŠ¶æ€è¡¨
+	uint8_t MallocReadyArr[MEM_TYPE_SIZE]; 	    //å†…å­˜ç®¡ç†æ˜¯å¦å°±ç»ª
 	
 } Malloc_Manage;
 
@@ -71,54 +71,54 @@ uint8_t Malloc_Perused(uint8_t MemType);
 #define NULL 0
 #endif
 
-//¶¨ÒåÈı¸öÄÚ´æ³Ø
-#define SRAMIN	 0		//ÄÚ²¿ÄÚ´æ³Ø
-#define SRAMEX   1		//Íâ²¿ÄÚ´æ³Ø
-#define SRAMCCM  2		//CCMÄÚ´æ³Ø(´Ë²¿·ÖSRAM½ö½öCPU¿ÉÒÔ·ÃÎÊ!!!)
+//å®šä¹‰ä¸‰ä¸ªå†…å­˜æ± 
+#define SRAMIN	 0		//å†…éƒ¨å†…å­˜æ± 
+#define SRAMEX   1		//å¤–éƒ¨å†…å­˜æ± 
+#define SRAMCCM  2		//CCMå†…å­˜æ± (æ­¤éƒ¨åˆ†SRAMä»…ä»…CPUå¯ä»¥è®¿é—®!!!)
 
 
-#define SRAMBANK 	3	//¶¨ÒåÖ§³ÖµÄSRAM¿éÊı.	
+#define SRAMBANK 	3	//å®šä¹‰æ”¯æŒçš„SRAMå—æ•°.	
 
 
-//mem1ÄÚ´æ²ÎÊıÉè¶¨.mem1ÍêÈ«´¦ÓÚÄÚ²¿SRAMÀïÃæ.
-#define MEM1_BLOCK_SIZE			32  	  						//ÄÚ´æ¿é´óĞ¡Îª32×Ö½Ú
-#define MEM1_MAX_SIZE			30 * 1024  						//×î´ó¹ÜÀíÄÚ´æ 100K
-#define MEM1_ALLOC_TABLE_SIZE	MEM1_MAX_SIZE/MEM1_BLOCK_SIZE 	//ÄÚ´æ±í´óĞ¡
+//mem1å†…å­˜å‚æ•°è®¾å®š.mem1å®Œå…¨å¤„äºå†…éƒ¨SRAMé‡Œé¢.
+#define MEM1_BLOCK_SIZE			32  	  						//å†…å­˜å—å¤§å°ä¸º32å­—èŠ‚
+#define MEM1_MAX_SIZE			30 * 1024  						//æœ€å¤§ç®¡ç†å†…å­˜ 100K
+#define MEM1_ALLOC_TABLE_SIZE	MEM1_MAX_SIZE/MEM1_BLOCK_SIZE 	//å†…å­˜è¡¨å¤§å°
 
-//mem2ÄÚ´æ²ÎÊıÉè¶¨.mem2µÄÄÚ´æ³Ø´¦ÓÚÍâ²¿SRAMÀïÃæ
-#define MEM2_BLOCK_SIZE			32  	  						//ÄÚ´æ¿é´óĞ¡Îª32×Ö½Ú
-#define MEM2_MAX_SIZE			200 * 1024  					//×î´ó¹ÜÀíÄÚ´æ200K
-#define MEM2_ALLOC_TABLE_SIZE	MEM2_MAX_SIZE/MEM2_BLOCK_SIZE 	//ÄÚ´æ±í´óĞ¡
+//mem2å†…å­˜å‚æ•°è®¾å®š.mem2çš„å†…å­˜æ± å¤„äºå¤–éƒ¨SRAMé‡Œé¢
+#define MEM2_BLOCK_SIZE			32  	  						//å†…å­˜å—å¤§å°ä¸º32å­—èŠ‚
+#define MEM2_MAX_SIZE			200 * 1024  					//æœ€å¤§ç®¡ç†å†…å­˜200K
+#define MEM2_ALLOC_TABLE_SIZE	MEM2_MAX_SIZE/MEM2_BLOCK_SIZE 	//å†…å­˜è¡¨å¤§å°
 		 
-//mem3ÄÚ´æ²ÎÊıÉè¶¨.mem3´¦ÓÚCCM,ÓÃÓÚ¹ÜÀíCCM(ÌØ±ğ×¢Òâ,Õâ²¿·ÖSRAM,½öCPU¿ÉÒÔ·ÃÎÊ!!)
-#define MEM3_BLOCK_SIZE			32  	  						//ÄÚ´æ¿é´óĞ¡Îª32×Ö½Ú
-#define MEM3_MAX_SIZE			60 * 1024  						//×î´ó¹ÜÀíÄÚ´æ60K
-#define MEM3_ALLOC_TABLE_SIZE	MEM3_MAX_SIZE/MEM3_BLOCK_SIZE 	//ÄÚ´æ±í´óĞ¡
+//mem3å†…å­˜å‚æ•°è®¾å®š.mem3å¤„äºCCM,ç”¨äºç®¡ç†CCM(ç‰¹åˆ«æ³¨æ„,è¿™éƒ¨åˆ†SRAM,ä»…CPUå¯ä»¥è®¿é—®!!)
+#define MEM3_BLOCK_SIZE			32  	  						//å†…å­˜å—å¤§å°ä¸º32å­—èŠ‚
+#define MEM3_MAX_SIZE			60 * 1024  						//æœ€å¤§ç®¡ç†å†…å­˜60K
+#define MEM3_ALLOC_TABLE_SIZE	MEM3_MAX_SIZE/MEM3_BLOCK_SIZE 	//å†…å­˜è¡¨å¤§å°
 		 
 
 
-//ÄÚ´æ¹ÜÀí¿ØÖÆÆ÷
+//å†…å­˜ç®¡ç†æ§åˆ¶å™¨
 struct _m_mallco_dev
 {
-	void (*init)(uint8_t);					//³õÊ¼»¯
-	uint8_t (*perused)(uint8_t);		  	    	//ÄÚ´æÊ¹ÓÃÂÊ
-	uint8_t 	*membase[SRAMBANK];				//ÄÚ´æ³Ø ¹ÜÀíSRAMBANK¸öÇøÓòµÄÄÚ´æ
-	uint16_t *memmap[SRAMBANK]; 				//ÄÚ´æ¹ÜÀí×´Ì¬±í
-	uint8_t  memrdy[SRAMBANK]; 				//ÄÚ´æ¹ÜÀíÊÇ·ñ¾ÍĞ÷
+	void (*init)(uint8_t);					//åˆå§‹åŒ–
+	uint8_t (*perused)(uint8_t);		  	    	//å†…å­˜ä½¿ç”¨ç‡
+	uint8_t 	*membase[SRAMBANK];				//å†…å­˜æ±  ç®¡ç†SRAMBANKä¸ªåŒºåŸŸçš„å†…å­˜
+	uint16_t *memmap[SRAMBANK]; 				//å†…å­˜ç®¡ç†çŠ¶æ€è¡¨
+	uint8_t  memrdy[SRAMBANK]; 				//å†…å­˜ç®¡ç†æ˜¯å¦å°±ç»ª
 };
-extern struct _m_mallco_dev mallco_dev;	 //ÔÚmallco.cÀïÃæ¶¨Òå
+extern struct _m_mallco_dev mallco_dev;	 //åœ¨mallco.cé‡Œé¢å®šä¹‰
 
-void mymemset(void *s,uint8_t c,uint32_t count);	//ÉèÖÃÄÚ´æ
-void mymemcpy(void *des,void *src,uint32_t n);//¸´ÖÆÄÚ´æ     
-void my_mem_init(uint8_t memx);				//ÄÚ´æ¹ÜÀí³õÊ¼»¯º¯Êı(Íâ/ÄÚ²¿µ÷ÓÃ)
-uint32_t my_mem_malloc(uint8_t memx,uint32_t size);	//ÄÚ´æ·ÖÅä(ÄÚ²¿µ÷ÓÃ)
-uint8_t my_mem_free(uint8_t memx,uint32_t offset);		//ÄÚ´æÊÍ·Å(ÄÚ²¿µ÷ÓÃ)
-uint8_t my_mem_perused(uint8_t memx);				//»ñµÃÄÚ´æÊ¹ÓÃÂÊ(Íâ/ÄÚ²¿µ÷ÓÃ) 
+void mymemset(void *s,uint8_t c,uint32_t count);	//è®¾ç½®å†…å­˜
+void mymemcpy(void *des,void *src,uint32_t n);//å¤åˆ¶å†…å­˜     
+void my_mem_init(uint8_t memx);				//å†…å­˜ç®¡ç†åˆå§‹åŒ–å‡½æ•°(å¤–/å†…éƒ¨è°ƒç”¨)
+uint32_t my_mem_malloc(uint8_t memx,uint32_t size);	//å†…å­˜åˆ†é…(å†…éƒ¨è°ƒç”¨)
+uint8_t my_mem_free(uint8_t memx,uint32_t offset);		//å†…å­˜é‡Šæ”¾(å†…éƒ¨è°ƒç”¨)
+uint8_t my_mem_perused(uint8_t memx);				//è·å¾—å†…å­˜ä½¿ç”¨ç‡(å¤–/å†…éƒ¨è°ƒç”¨) 
 ////////////////////////////////////////////////////////////////////////////////
-//ÓÃ»§µ÷ÓÃº¯Êı
-void myfree(uint8_t memx,void *ptr);  			//ÄÚ´æÊÍ·Å(Íâ²¿µ÷ÓÃ)
-void *mymalloc(uint8_t memx,uint32_t size);			//ÄÚ´æ·ÖÅä(Íâ²¿µ÷ÓÃ)
-void *myrealloc(uint8_t memx,void *ptr,uint32_t size);//ÖØĞÂ·ÖÅäÄÚ´æ(Íâ²¿µ÷ÓÃ)
+//ç”¨æˆ·è°ƒç”¨å‡½æ•°
+void myfree(uint8_t memx,void *ptr);  			//å†…å­˜é‡Šæ”¾(å¤–éƒ¨è°ƒç”¨)
+void *mymalloc(uint8_t memx,uint32_t size);			//å†…å­˜åˆ†é…(å¤–éƒ¨è°ƒç”¨)
+void *myrealloc(uint8_t memx,void *ptr,uint32_t size);//é‡æ–°åˆ†é…å†…å­˜(å¤–éƒ¨è°ƒç”¨)
 
 #endif
 

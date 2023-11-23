@@ -7,9 +7,9 @@ TFTLCD_Config TFTLCD_Conf;
 
 
 #ifdef USE_FSMC
-/* Ê¹ÓÃFSMCµÄÇé¿öÏÂ */
+/* ä½¿ç”¨FSMCçš„æƒ…å†µä¸‹ */
 
-// TFTLCD³õÊ¼»¯º¯Êı
+// TFTLCDåˆå§‹åŒ–å‡½æ•°
 void TFTLCD_Init(void) {
 	
 	u8 GPIOD_AF_Array[9] = {0,1,4,5,8,9,10,14,15};
@@ -17,13 +17,13 @@ void TFTLCD_Init(void) {
 	u8 GPIOF_AF_Array[1] = {12};
 	u8 GPIOG_AF_Array[1] = {12};
 	
-	/* ¶¨ÒåÅäÖÃ½á¹¹Ìå */
+	/* å®šä¹‰é…ç½®ç»“æ„ä½“ */
 	GPIO_InitTypeDef GPIO_InitStructure;
 	FSMC_NORSRAMInitTypeDef FSMC_InitStructure;
 	FSMC_NORSRAMTimingInitTypeDef FSMC_ReadWriteTiming; 
 	FSMC_NORSRAMTimingInitTypeDef FSMC_WriteTiming;
 
-	/* Ê±ÖÓÊ¹ÄÜ/Ê§ÄÜ */
+	/* æ—¶é’Ÿä½¿èƒ½/å¤±èƒ½ */
 	RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
@@ -31,94 +31,94 @@ void TFTLCD_Init(void) {
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE);
 	
-	/* ÅäÖÃGPIO */
-	// GPIOBÅäÖÃ
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;						// PB15 ÍÆÍìÊä³ö,¿ØÖÆ±³¹â
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;					// ÆÕÍ¨Êä³öÄ£Ê½
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;				// ÍÆÍìÊä³ö
+	/* é…ç½®GPIO */
+	// GPIOBé…ç½®
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;						// PB15 æ¨æŒ½è¾“å‡º,æ§åˆ¶èƒŒå…‰
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;					// æ™®é€šè¾“å‡ºæ¨¡å¼
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;				// æ¨æŒ½è¾“å‡º
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;			// 50MHz
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;					// ÉÏÀ­
-    GPIO_Init(GPIOB, &GPIO_InitStructure);								// ³õÊ¼»¯ //PB15 ÍÆÍìÊä³ö,¿ØÖÆ±³¹â
-	GPIO_SetBits(GPIOB, GPIO_Pin_15);											// ¿ªÆô±³¹â
-	// GPIODÅäÖÃ
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;					// ä¸Šæ‹‰
+    GPIO_Init(GPIOB, &GPIO_InitStructure);								// åˆå§‹åŒ– //PB15 æ¨æŒ½è¾“å‡º,æ§åˆ¶èƒŒå…‰
+	GPIO_SetBits(GPIOB, GPIO_Pin_15);											// å¼€å¯èƒŒå…‰
+	// GPIODé…ç½®
 	GPIO_InitStructure.GPIO_Pin =  (0x33)|(7<<8)|(3<<14); // PD0,1,4,5,8~15,NOE,NWE
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;					// ¸´ÓÃÊä³ö
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;				// ÍÆÍìÊä³ö
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;					// å¤ç”¨è¾“å‡º
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;				// æ¨æŒ½è¾“å‡º
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;		// 100MHz
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;					// ÉÏÀ­
-    GPIO_Init(GPIOD, &GPIO_InitStructure);								// ³õÊ¼»¯Êı¾İÏß
-	// GPIOEÅäÖÃ
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;					// ä¸Šæ‹‰
+    GPIO_Init(GPIOD, &GPIO_InitStructure);								// åˆå§‹åŒ–æ•°æ®çº¿
+	// GPIOEé…ç½®
 	GPIO_InitStructure.GPIO_Pin =  (0X1FF<<7);			// PE0,1,7~15,NBL0,NBL1
-	GPIO_Init(GPIOE, &GPIO_InitStructure);					// ³õÊ¼»¯Êı¾İÏß
-	// GPIOFÅäÖÃ
+	GPIO_Init(GPIOE, &GPIO_InitStructure);					// åˆå§‹åŒ–æ•°æ®çº¿
+	// GPIOFé…ç½®
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;			// PB15
-	GPIO_Init(GPIOF, &GPIO_InitStructure);					// ³õÊ¼»¯µØÖ·Ïß
-	// GPIOGÅäÖÃ	
+	GPIO_Init(GPIOF, &GPIO_InitStructure);					// åˆå§‹åŒ–åœ°å€çº¿
+	// GPIOGé…ç½®	
 	GPIO_InitStructure.GPIO_Pin =GPIO_Pin_12;				// PG0~5,10,NE3
-	GPIO_Init(GPIOG, &GPIO_InitStructure);					// ³õÊ¼»¯µØÖ·Ïß
+	GPIO_Init(GPIOG, &GPIO_InitStructure);					// åˆå§‹åŒ–åœ°å€çº¿
 	
-	/* GPIO¸´ÓÃÅäÖÃ */
+	/* GPIOå¤ç”¨é…ç½® */
 	Fsmc_AF_Config(GPIOD, GPIOD_AF_Array, 9);
 	Fsmc_AF_Config(GPIOE, GPIOE_AF_Array, 9);
 	Fsmc_AF_Config(GPIOF, GPIOF_AF_Array, 1);
 	Fsmc_AF_Config(GPIOG, GPIOG_AF_Array, 1);
 	
-	/* FSMCÅäÖÃ */
-	// FSMC¶ÁĞ´Ê±ĞòÅäÖÃ
-	FSMC_ReadWriteTiming.FSMC_AddressSetupTime = 0xF; //µØÖ·½¨Á¢Ê±¼äÎª 16 ¸ö HCLK
-	FSMC_ReadWriteTiming.FSMC_AddressHoldTime = 0x00; //µØÖ·±£³ÖÊ±¼äÄ£Ê½ A Î´ÓÃµ½
-	FSMC_ReadWriteTiming.FSMC_DataSetupTime = 60; 	//Êı¾İ±£´æÊ±¼äÎª 25¸ö HCLK
+	/* FSMCé…ç½® */
+	// FSMCè¯»å†™æ—¶åºé…ç½®
+	FSMC_ReadWriteTiming.FSMC_AddressSetupTime = 0xF; //åœ°å€å»ºç«‹æ—¶é—´ä¸º 16 ä¸ª HCLK
+	FSMC_ReadWriteTiming.FSMC_AddressHoldTime = 0x00; //åœ°å€ä¿æŒæ—¶é—´æ¨¡å¼ A æœªç”¨åˆ°
+	FSMC_ReadWriteTiming.FSMC_DataSetupTime = 60; 	//æ•°æ®ä¿å­˜æ—¶é—´ä¸º 25ä¸ª HCLK
 	FSMC_ReadWriteTiming.FSMC_BusTurnAroundDuration = 0x00;
 	FSMC_ReadWriteTiming.FSMC_CLKDivision = 0x00;
 	FSMC_ReadWriteTiming.FSMC_DataLatency = 0x00;
-	FSMC_ReadWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A; //Ä£Ê½ A 
-	// FSMCĞ´Ê±Ğò
-	FSMC_WriteTiming.FSMC_AddressSetupTime = 0x03; //µØÖ·½¨Á¢Ê±¼äÎª 3 ¸ö HCLK
-	FSMC_WriteTiming.FSMC_AddressHoldTime = 0x00; //µØÖ·±£³ÖÊ±¼äÄ£Ê½ A Î´ÓÃµ½
-	FSMC_WriteTiming.FSMC_DataSetupTime = 0x02; 	//Êı¾İ±£´æÊ±¼äÎª 3¸ö HCLK
+	FSMC_ReadWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A; //æ¨¡å¼ A 
+	// FSMCå†™æ—¶åº
+	FSMC_WriteTiming.FSMC_AddressSetupTime = 0x03; //åœ°å€å»ºç«‹æ—¶é—´ä¸º 3 ä¸ª HCLK
+	FSMC_WriteTiming.FSMC_AddressHoldTime = 0x00; //åœ°å€ä¿æŒæ—¶é—´æ¨¡å¼ A æœªç”¨åˆ°
+	FSMC_WriteTiming.FSMC_DataSetupTime = 0x02; 	//æ•°æ®ä¿å­˜æ—¶é—´ä¸º 3ä¸ª HCLK
 	FSMC_WriteTiming.FSMC_BusTurnAroundDuration = 0x00;
 	FSMC_WriteTiming.FSMC_CLKDivision = 0x00;
 	FSMC_WriteTiming.FSMC_DataLatency = 0x00;
-	FSMC_WriteTiming.FSMC_AccessMode = FSMC_AccessMode_A; //Ä£Ê½ A 
-	// FSMCÅäÖÃ
-	FSMC_InitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM4;						// ÉèÖÃFSMC¹ÜÀíµÄÍâ²¿SRAMµÄµØÖ·£¨Bank1µÄ¿é4£©
+	FSMC_WriteTiming.FSMC_AccessMode = FSMC_AccessMode_A; //æ¨¡å¼ A 
+	// FSMCé…ç½®
+	FSMC_InitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM4;						// è®¾ç½®FSMCç®¡ç†çš„å¤–éƒ¨SRAMçš„åœ°å€ï¼ˆBank1çš„å—4ï¼‰
 	FSMC_InitStructure.FSMC_AsynchronousWait = FSMC_AsynchronousWait_Disable;
 	FSMC_InitStructure.FSMC_BurstAccessMode = FSMC_BurstAccessMode_Disable;
-	FSMC_InitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable;	// ¹Ø±ÕÊı¾İµØÖ·¸´ÓÃ
-	FSMC_InitStructure.FSMC_MemoryType = FSMC_MemoryType_SRAM;				// ÄÚ´æÀàĞÍÎªSRAM
-	FSMC_InitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b; 	// ´æ´¢Æ÷Êı¾İ¿í¶ÈÎª8bit 
+	FSMC_InitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable;	// å…³é—­æ•°æ®åœ°å€å¤ç”¨
+	FSMC_InitStructure.FSMC_MemoryType = FSMC_MemoryType_SRAM;				// å†…å­˜ç±»å‹ä¸ºSRAM
+	FSMC_InitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b; 	// å­˜å‚¨å™¨æ•°æ®å®½åº¦ä¸º8bit 
 	FSMC_InitStructure.FSMC_WaitSignalPolarity = FSMC_WaitSignalPolarity_Low;
 	FSMC_InitStructure.FSMC_AsynchronousWait = FSMC_AsynchronousWait_Disable;
 	FSMC_InitStructure.FSMC_WrapMode = FSMC_WrapMode_Disable; 
 	FSMC_InitStructure.FSMC_WaitSignalActive = FSMC_WaitSignalActive_BeforeWaitState; 
-	FSMC_InitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;	// ´æ´¢Æ÷Ğ´Ê¹ÄÜ
+	FSMC_InitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;	// å­˜å‚¨å™¨å†™ä½¿èƒ½
 	FSMC_InitStructure.FSMC_WaitSignal = FSMC_WaitSignal_Disable; 
-	FSMC_InitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Enable; 		// ¶ÁĞ´Ê¹ÓÃ²»ÏàÍ¬µÄÊ±Ğò
+	FSMC_InitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Enable; 		// è¯»å†™ä½¿ç”¨ä¸ç›¸åŒçš„æ—¶åº
 	FSMC_InitStructure.FSMC_WriteBurst = FSMC_WriteBurst_Disable;
-	FSMC_InitStructure.FSMC_ReadWriteTimingStruct = &FSMC_ReadWriteTiming;	// ¶ÁĞ´Ê±Ğò²»ÏàÍ¬
-	FSMC_InitStructure.FSMC_WriteTimingStruct = &FSMC_WriteTiming;			// ¶ÁĞ´Ê±Ğò²»ÏàÍ¬
+	FSMC_InitStructure.FSMC_ReadWriteTimingStruct = &FSMC_ReadWriteTiming;	// è¯»å†™æ—¶åºä¸ç›¸åŒ
+	FSMC_InitStructure.FSMC_WriteTimingStruct = &FSMC_WriteTiming;			// è¯»å†™æ—¶åºä¸ç›¸åŒ
 	
-	/* Ê¹ÄÜ/Ê§ÄÜ */
-	FSMC_NORSRAMInit(&FSMC_InitStructure);									// ³õÊ¼»¯FSMCÅäÖÃ
-	FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM4, ENABLE);							// Ê¹ÄÜBANK1ÇøÓò4
+	/* ä½¿èƒ½/å¤±èƒ½ */
+	FSMC_NORSRAMInit(&FSMC_InitStructure);									// åˆå§‹åŒ–FSMCé…ç½®
+	FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM4, ENABLE);							// ä½¿èƒ½BANK1åŒºåŸŸ4
 	
-	/* TFTLCDÉè±¸³õÊ¼»¯ */
-	TFTLCD_Conf.TFTLCD_Dir = 0;		// ÊúÆÁÄ£Ê½
-	TFTLCD_Conf.TFTLCD_Height = 320;// ÆÁÄ»¸ß¶È320
-	TFTLCD_Conf.TFTLCD_Width = 240; // ÆÁÄ»¿í¶È240
-	TFTLCD_Conf.TFTLCD_Cmd = (TFTLCD_CMD){0xD3,0x36,0x2A,0x2B,0x2C,0x2E};	// ICÖ¸Áî
+	/* TFTLCDè®¾å¤‡åˆå§‹åŒ– */
+	TFTLCD_Conf.TFTLCD_Dir = 0;		// ç«–å±æ¨¡å¼
+	TFTLCD_Conf.TFTLCD_Height = 320;// å±å¹•é«˜åº¦320
+	TFTLCD_Conf.TFTLCD_Width = 240; // å±å¹•å®½åº¦240
+	TFTLCD_Conf.TFTLCD_Cmd = (TFTLCD_CMD){0xD3,0x36,0x2A,0x2B,0x2C,0x2E};	// ICæŒ‡ä»¤
 
-	TFTLCD_ReadDeviceId();								// »ñÈ¡TFTLCD IC ID
-	ILI9341_Init(&TFTLCD.RWCD_REG, &TFTLCD.RWCD_RAM);	// ILI9341³õÊ¼»¯
-	TFTLCD_SetScanDir(TFTLCD_Conf.TFTLCD_Dir);			// ÉèÖÃÆÁÄ»·½Ïò
-	TFTLCD_SetWindow(0, TFTLCD_Conf.TFTLCD_Width-1, 0, TFTLCD_Conf.TFTLCD_Height-1);	// ÔÚÆÁÄ»ÉÏ¿ª´°
+	TFTLCD_ReadDeviceId();								// è·å–TFTLCD IC ID
+	ILI9341_Init(&TFTLCD.RWCD_REG, &TFTLCD.RWCD_RAM);	// ILI9341åˆå§‹åŒ–
+	TFTLCD_SetScanDir(TFTLCD_Conf.TFTLCD_Dir);			// è®¾ç½®å±å¹•æ–¹å‘
+	TFTLCD_SetWindow(0, TFTLCD_Conf.TFTLCD_Width-1, 0, TFTLCD_Conf.TFTLCD_Height-1);	// åœ¨å±å¹•ä¸Šå¼€çª—
 	
 	TFTLCD_Clear(0xFFFFFF);	
 
 }
 
  
-// ÒÔÖ¸¶¨ÃüÁî¶ÁTFTLCD RAM
+// ä»¥æŒ‡å®šå‘½ä»¤è¯»TFTLCD RAM
 uint16_t TFTLCD_ReadRAM(uint16_t REG_Addr) {
 	TFTLCD.RWCD_REG = REG_Addr;
 	Delay_Us(5);
@@ -126,7 +126,7 @@ uint16_t TFTLCD_ReadRAM(uint16_t REG_Addr) {
 }
 
 
-// ÒÔÖ¸¶¨Ö¸ÁîĞ´TFTLCD RAM
+// ä»¥æŒ‡å®šæŒ‡ä»¤å†™TFTLCD RAM
 void TFTLCD_WriteRAM(uint16_t REG_Addr, uint16_t Data) {
 	TFTLCD.RWCD_REG = REG_Addr;
 	TFTLCD.RWCD_RAM = Data;
@@ -135,8 +135,8 @@ void TFTLCD_WriteRAM(uint16_t REG_Addr, uint16_t Data) {
 
 void TFTLCD_ReadDeviceId(void) {
 	TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Read_ID;
-	TFTLCD_Conf.TFTLCD_Id = TFTLCD.RWCD_RAM;	// ÎŞĞ§Êı¾İ
-	TFTLCD_Conf.TFTLCD_Id = TFTLCD.RWCD_RAM;	// ÎŞĞ§Êı¾İ 0x00
+	TFTLCD_Conf.TFTLCD_Id = TFTLCD.RWCD_RAM;	// æ— æ•ˆæ•°æ®
+	TFTLCD_Conf.TFTLCD_Id = TFTLCD.RWCD_RAM;	// æ— æ•ˆæ•°æ® 0x00
 	TFTLCD_Conf.TFTLCD_Id = TFTLCD.RWCD_RAM;	// 0x93
 	TFTLCD_Conf.TFTLCD_Id <<= 8;
 	TFTLCD_Conf.TFTLCD_Id |= TFTLCD.RWCD_RAM;	// 0x9341
@@ -144,18 +144,18 @@ void TFTLCD_ReadDeviceId(void) {
 
 
 void TFTLCD_SetScanDir(uint16_t Dir) {
-	// Dir=0£¬ÊúÆÁ£»Dir=1£¬ºáÆÁ
+	// Dir=0ï¼Œç«–å±ï¼›Dir=1ï¼Œæ¨ªå±
 	TFTLCD_WriteRAM(TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_ScanDir, Dir);
 }
 
 
 void TFTLCD_SetCursor(uint16_t XPos, uint16_t YPos) {
 	
-	// ÉèÖÃX×ø±ê
+	// è®¾ç½®Xåæ ‡
 	TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_XPos;
 	TFTLCD.RWCD_RAM = XPos>>8;
 	TFTLCD.RWCD_RAM = XPos&0xFF;
-	// ÉèÖÃY×ø±ê
+	// è®¾ç½®Yåæ ‡
 	TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_YPos;
 	TFTLCD.RWCD_RAM = YPos>>8;
 	TFTLCD.RWCD_RAM = YPos&0xFF;
@@ -168,16 +168,16 @@ void TFTLCD_DrawPoint(uint16_t XPos, uint16_t YPos, uint32_t Color) {
 	uint16_t Color16;
 	
 	Color16 = COLOR16(Color);
-	TFTLCD_SetCursor(XPos, YPos);	// ÉèÖÃµã×ø±ê
+	TFTLCD_SetCursor(XPos, YPos);	// è®¾ç½®ç‚¹åæ ‡
 	
 	TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_ColorCode;
 	TFTLCD.RWCD_RAM = Color16;
 }
 
 
-//ÔÚÖ¸¶¨ÇøÓòÄÚÌî³äÖ¸¶¨ÑÕÉ«¿é			 
-//(sx,sy),(ex,ey):Ìî³ä¾ØĞÎ¶Ô½Ç×ø±ê,ÇøÓò´óĞ¡Îª:(ex-sx+1)*(ey-sy+1)   
-//color:ÒªÌî³äµÄÑÕÉ«
+//åœ¨æŒ‡å®šåŒºåŸŸå†…å¡«å……æŒ‡å®šé¢œè‰²å—			 
+//(sx,sy),(ex,ey):å¡«å……çŸ©å½¢å¯¹è§’åæ ‡,åŒºåŸŸå¤§å°ä¸º:(ex-sx+1)*(ey-sy+1)   
+//color:è¦å¡«å……çš„é¢œè‰²
 void TFTLCD_DrawBlock(uint16_t StartXPos, uint16_t StartYPos, 
 	uint16_t EndXPos, uint16_t EndYPos, 
 	uint32_t *ColorBuff)
@@ -185,21 +185,21 @@ void TFTLCD_DrawBlock(uint16_t StartXPos, uint16_t StartYPos,
 	static uint16_t height, width;
 	static uint16_t i, j;
 	
-	width = EndXPos - StartXPos + 1; 			//µÃµ½Ìî³äµÄ¿í¶È
-	height = EndYPos - StartYPos + 1;			//¸ß¶È
+	width = EndXPos - StartXPos + 1; 			//å¾—åˆ°å¡«å……çš„å®½åº¦
+	height = EndYPos - StartYPos + 1;			//é«˜åº¦
 	
  	for(i=0;i<height;i++)
 	{
- 		TFTLCD_SetCursor(StartXPos, StartYPos+i);  //ÉèÖÃ¹â±êÎ»ÖÃ 
+ 		TFTLCD_SetCursor(StartXPos, StartYPos+i);  //è®¾ç½®å…‰æ ‡ä½ç½® 
 		TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_ColorCode;
 		
 		for(j=0;j<width;j++)
-			TFTLCD.RWCD_RAM = ColorBuff[i*width+j];//Ğ´ÈëÊı¾İ 
+			TFTLCD.RWCD_RAM = ColorBuff[i*width+j];//å†™å…¥æ•°æ® 
 	}		  
 } 
 
 
-// ÒÔÖ¸¶¨ÑÕÉ«ÇåÆÁ
+// ä»¥æŒ‡å®šé¢œè‰²æ¸…å±
 void TFTLCD_Clear(uint32_t Color) {
 	
 	uint32_t PointSum;
@@ -221,18 +221,18 @@ void TFTLCD_Clear(uint32_t Color) {
 }
 
 
-// ÔÚÆÁÄ»ÉÏ¿ª±ÙÒ»¸ö´°¿Ú
+// åœ¨å±å¹•ä¸Šå¼€è¾Ÿä¸€ä¸ªçª—å£
 void TFTLCD_SetWindow(uint16_t StarXPos, uint16_t EndXPos,
 	uint16_t StarYPos, uint16_t EndYPos) {
 	
-	// ¹æ»®ÆÁÄ»µÄºáÏò¿í¶È
+	// è§„åˆ’å±å¹•çš„æ¨ªå‘å®½åº¦
 	TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_XPos;
 	TFTLCD.RWCD_RAM = StarXPos>8;
 	TFTLCD.RWCD_RAM = StarXPos&0xFF;
 	TFTLCD.RWCD_RAM = EndXPos>8;
 	TFTLCD.RWCD_RAM = EndXPos&0xFF;
 	
-	// ¹æ»®ÆÁÄ»µÄ×İÏò¸ß¶È
+	// è§„åˆ’å±å¹•çš„çºµå‘é«˜åº¦
 	TFTLCD.RWCD_REG = TFTLCD_Conf.TFTLCD_Cmd.CMD_Write_YPos;
 	TFTLCD.RWCD_RAM = StarYPos>8;
 	TFTLCD.RWCD_RAM = StarYPos&0xFF;
@@ -245,7 +245,7 @@ void TFTLCD_SetWindow(uint16_t StarXPos, uint16_t EndXPos,
 
 
 #else
-// TFTLCD³õÊ¼»¯º¯Êı
+// TFTLCDåˆå§‹åŒ–å‡½æ•°
 __weak void TFTLCD_Init(void) {
 	
 	u8 GPIOD_AF_Array[9] = {0,1,4,5,8,9,10,14,15};
@@ -253,13 +253,13 @@ __weak void TFTLCD_Init(void) {
 	u8 GPIOF_AF_Array[1] = {12};
 	u8 GPIOG_AF_Array[1] = {12};
 	
-		/* ¶¨ÒåÅäÖÃ½á¹¹Ìå */
+		/* å®šä¹‰é…ç½®ç»“æ„ä½“ */
 	GPIO_InitTypeDef GPIO_InitStructure;
 	FSMC_NORSRAMInitTypeDef FSMC_InitStructure;
 	FSMC_NORSRAMTimingInitTypeDef FSMC_ReadWriteTiming; 
 	FSMC_NORSRAMTimingInitTypeDef FSMC_WriteTiming;
 
-	/* Ê±ÖÓÊ¹ÄÜ/Ê§ÄÜ */
+	/* æ—¶é’Ÿä½¿èƒ½/å¤±èƒ½ */
 	RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
@@ -267,77 +267,77 @@ __weak void TFTLCD_Init(void) {
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE);
 	
-	/* ÅäÖÃGPIO */
-	// GPIOBÅäÖÃ
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;						//PB15 ÍÆÍìÊä³ö,¿ØÖÆ±³¹â
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;					//ÆÕÍ¨Êä³öÄ£Ê½
+	/* é…ç½®GPIO */
+	// GPIOBé…ç½®
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;						//PB15 æ¨æŒ½è¾“å‡º,æ§åˆ¶èƒŒå…‰
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;					//æ™®é€šè¾“å‡ºæ¨¡å¼
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;			//50MHz
-  GPIO_Init(GPIOB, &GPIO_InitStructure);								//³õÊ¼»¯ //PB15 ÍÆÍìÊä³ö,¿ØÖÆ±³¹â
-	// GPIODÅäÖÃ
+  GPIO_Init(GPIOB, &GPIO_InitStructure);								//åˆå§‹åŒ– //PB15 æ¨æŒ½è¾“å‡º,æ§åˆ¶èƒŒå…‰
+	// GPIODé…ç½®
 	GPIO_InitStructure.GPIO_Pin =  (0x33)|(7<<8)|(3<<14); // PD0,1,4,5,8~15,NOE,NWE
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;					// ¸´ÓÃÊä³ö
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;				// ÍÆÍìÊä³ö
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;					// å¤ç”¨è¾“å‡º
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;				// æ¨æŒ½è¾“å‡º
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;		// 100MHz
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;					// ÉÏÀ­
-  GPIO_Init(GPIOD, &GPIO_InitStructure);								// ³õÊ¼»¯Êı¾İÏß
-	// GPIOEÅäÖÃ
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;					// ä¸Šæ‹‰
+  GPIO_Init(GPIOD, &GPIO_InitStructure);								// åˆå§‹åŒ–æ•°æ®çº¿
+	// GPIOEé…ç½®
 	GPIO_InitStructure.GPIO_Pin =  (0X1FF<<7);			// PE0,1,7~15,NBL0,NBL1
-	GPIO_Init(GPIOE, &GPIO_InitStructure);					// ³õÊ¼»¯Êı¾İÏß
-	// GPIOFÅäÖÃ
+	GPIO_Init(GPIOE, &GPIO_InitStructure);					// åˆå§‹åŒ–æ•°æ®çº¿
+	// GPIOFé…ç½®
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;			// PB15
-	GPIO_Init(GPIOF, &GPIO_InitStructure);					// ³õÊ¼»¯µØÖ·Ïß
-	// GPIOGÅäÖÃ	
+	GPIO_Init(GPIOF, &GPIO_InitStructure);					// åˆå§‹åŒ–åœ°å€çº¿
+	// GPIOGé…ç½®	
 	GPIO_InitStructure.GPIO_Pin =GPIO_Pin_12;				// PG0~5,10,NE3
-	GPIO_Init(GPIOG, &GPIO_InitStructure);					// ³õÊ¼»¯µØÖ·Ïß
+	GPIO_Init(GPIOG, &GPIO_InitStructure);					// åˆå§‹åŒ–åœ°å€çº¿
 	
-	/* GPIO¸´ÓÃÅäÖÃ */
+	/* GPIOå¤ç”¨é…ç½® */
 	Fsmc_AF_Config(GPIOD, GPIOD_AF_Array, 9);
 	Fsmc_AF_Config(GPIOE, GPIOE_AF_Array, 9);
 	Fsmc_AF_Config(GPIOF, GPIOF_AF_Array, 1);
 	Fsmc_AF_Config(GPIOG, GPIOG_AF_Array, 1);
 	
-	/* FSMCÅäÖÃ */
-	// FSMC¶ÁĞ´Ê±ĞòÅäÖÃ
-	FSMC_ReadWriteTiming.FSMC_AddressSetupTime = 0xF; //µØÖ·½¨Á¢Ê±¼äÎª 16 ¸ö HCLK
-	FSMC_ReadWriteTiming.FSMC_AddressHoldTime = 0x00; //µØÖ·±£³ÖÊ±¼äÄ£Ê½ A Î´ÓÃµ½
-	FSMC_ReadWriteTiming.FSMC_DataSetupTime = 0x19; 	//Êı¾İ±£´æÊ±¼äÎª 24¸ö HCLK
+	/* FSMCé…ç½® */
+	// FSMCè¯»å†™æ—¶åºé…ç½®
+	FSMC_ReadWriteTiming.FSMC_AddressSetupTime = 0xF; //åœ°å€å»ºç«‹æ—¶é—´ä¸º 16 ä¸ª HCLK
+	FSMC_ReadWriteTiming.FSMC_AddressHoldTime = 0x00; //åœ°å€ä¿æŒæ—¶é—´æ¨¡å¼ A æœªç”¨åˆ°
+	FSMC_ReadWriteTiming.FSMC_DataSetupTime = 0x19; 	//æ•°æ®ä¿å­˜æ—¶é—´ä¸º 24ä¸ª HCLK
 	FSMC_ReadWriteTiming.FSMC_BusTurnAroundDuration = 0x00;
 	FSMC_ReadWriteTiming.FSMC_CLKDivision = 0x00;
 	FSMC_ReadWriteTiming.FSMC_DataLatency = 0x00;
-	FSMC_ReadWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A; //Ä£Ê½ A 
-	// FSMCĞ´Ê±Ğò
-	FSMC_WriteTiming.FSMC_AddressSetupTime = 0xF; //µØÖ·½¨Á¢Ê±¼äÎª 16 ¸ö HCLK
-	FSMC_WriteTiming.FSMC_AddressHoldTime = 0x00; //µØÖ·±£³ÖÊ±¼äÄ£Ê½ A Î´ÓÃµ½
-	FSMC_WriteTiming.FSMC_DataSetupTime = 0x19; 	//Êı¾İ±£´æÊ±¼äÎª 24¸ö HCLK
+	FSMC_ReadWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A; //æ¨¡å¼ A 
+	// FSMCå†™æ—¶åº
+	FSMC_WriteTiming.FSMC_AddressSetupTime = 0xF; //åœ°å€å»ºç«‹æ—¶é—´ä¸º 16 ä¸ª HCLK
+	FSMC_WriteTiming.FSMC_AddressHoldTime = 0x00; //åœ°å€ä¿æŒæ—¶é—´æ¨¡å¼ A æœªç”¨åˆ°
+	FSMC_WriteTiming.FSMC_DataSetupTime = 0x19; 	//æ•°æ®ä¿å­˜æ—¶é—´ä¸º 24ä¸ª HCLK
 	FSMC_WriteTiming.FSMC_BusTurnAroundDuration = 0x00;
 	FSMC_WriteTiming.FSMC_CLKDivision = 0x00;
 	FSMC_WriteTiming.FSMC_DataLatency = 0x00;
-	FSMC_WriteTiming.FSMC_AccessMode = FSMC_AccessMode_A; //Ä£Ê½ A 
-	// FSMCÅäÖÃ
-	FSMC_InitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM4;										// ÉèÖÃFSMC¹ÜÀíµÄÍâ²¿SRAMµÄµØÖ·£¨Bank1µÄ¿é4£©
+	FSMC_WriteTiming.FSMC_AccessMode = FSMC_AccessMode_A; //æ¨¡å¼ A 
+	// FSMCé…ç½®
+	FSMC_InitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM4;										// è®¾ç½®FSMCç®¡ç†çš„å¤–éƒ¨SRAMçš„åœ°å€ï¼ˆBank1çš„å—4ï¼‰
 	FSMC_InitStructure.FSMC_AsynchronousWait = FSMC_AsynchronousWait_Disable;
 	FSMC_InitStructure.FSMC_BurstAccessMode = FSMC_BurstAccessMode_Disable;
-	FSMC_InitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable; // ¹Ø±ÕÊı¾İµØÖ·¸´ÓÃ
-	FSMC_InitStructure.FSMC_MemoryType = FSMC_MemoryType_SRAM;						// ÄÚ´æÀàĞÍÎªSRAM
-	FSMC_InitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b; 	// ´æ´¢Æ÷Êı¾İ¿í¶ÈÎª8bit 
+	FSMC_InitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable; // å…³é—­æ•°æ®åœ°å€å¤ç”¨
+	FSMC_InitStructure.FSMC_MemoryType = FSMC_MemoryType_SRAM;						// å†…å­˜ç±»å‹ä¸ºSRAM
+	FSMC_InitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b; 	// å­˜å‚¨å™¨æ•°æ®å®½åº¦ä¸º8bit 
 	FSMC_InitStructure.FSMC_WaitSignalPolarity = FSMC_WaitSignalPolarity_Low;
 	FSMC_InitStructure.FSMC_AsynchronousWait = FSMC_AsynchronousWait_Disable;
 	FSMC_InitStructure.FSMC_WrapMode = FSMC_WrapMode_Disable; 
 	FSMC_InitStructure.FSMC_WaitSignalActive = FSMC_WaitSignalActive_BeforeWaitState; 
-	FSMC_InitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;	// ´æ´¢Æ÷Ğ´Ê¹ÄÜ
+	FSMC_InitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;	// å­˜å‚¨å™¨å†™ä½¿èƒ½
 	FSMC_InitStructure.FSMC_WaitSignal = FSMC_WaitSignal_Disable; 
-	FSMC_InitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Enable; 			// ¶ÁĞ´Ê¹ÓÃ²»ÏàÍ¬µÄÊ±Ğò
+	FSMC_InitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Enable; 			// è¯»å†™ä½¿ç”¨ä¸ç›¸åŒçš„æ—¶åº
 	FSMC_InitStructure.FSMC_WriteBurst = FSMC_WriteBurst_Disable;
-	FSMC_InitStructure.FSMC_ReadWriteTimingStruct = &FSMC_ReadWriteTiming;// ¶ÁĞ´Ê±Ğò²»ÏàÍ¬
-	FSMC_InitStructure.FSMC_WriteTimingStruct = &FSMC_WriteTiming; 				// ¶ÁĞ´Ê±Ğò²»ÏàÍ¬
+	FSMC_InitStructure.FSMC_ReadWriteTimingStruct = &FSMC_ReadWriteTiming;// è¯»å†™æ—¶åºä¸ç›¸åŒ
+	FSMC_InitStructure.FSMC_WriteTimingStruct = &FSMC_WriteTiming; 				// è¯»å†™æ—¶åºä¸ç›¸åŒ
 	
-	/* Ê¹ÄÜ/Ê§ÄÜ */
-	FSMC_NORSRAMInit(&FSMC_InitStructure); 				// ³õÊ¼»¯FSMCÅäÖÃ
-	FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM4, ENABLE); // Ê¹ÄÜBANK1ÇøÓò4
+	/* ä½¿èƒ½/å¤±èƒ½ */
+	FSMC_NORSRAMInit(&FSMC_InitStructure); 				// åˆå§‹åŒ–FSMCé…ç½®
+	FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM4, ENABLE); // ä½¿èƒ½BANK1åŒºåŸŸ4
 }
 
 
-// ÒÔÖ¸¶¨ÃüÁî¶ÁTFTLCD RAM
+// ä»¥æŒ‡å®šå‘½ä»¤è¯»TFTLCD RAM
 uint16_t TFTLCD_ReadRAM(uint16_t REG_Addr) {
 	TFTLCD.RWCD_REG = REG_Addr;
 	Delay_Us(5);
@@ -345,7 +345,7 @@ uint16_t TFTLCD_ReadRAM(uint16_t REG_Addr) {
 }
 
 
-// ÒÔÖ¸¶¨Ö¸ÁîĞ´TFTLCD RAM
+// ä»¥æŒ‡å®šæŒ‡ä»¤å†™TFTLCD RAM
 void TFTLCD_WriteRAM(uint16_t REG_Addr, uint16_t Data) {
 	TFTLCD.RWCD_REG = REG_Addr;
 	TFTLCD.RWCD_RAM = Data;

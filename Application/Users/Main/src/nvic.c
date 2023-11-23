@@ -1,16 +1,16 @@
-/** ÖĞ¶Ï·Ö×é-ÓÅÏÈ¼¶ÅäÖÃÄ£¿é£¨ÑéÖ¤Í¨¹ı£© **/
+/** ä¸­æ–­åˆ†ç»„-ä¼˜å…ˆçº§é…ç½®æ¨¡å—ï¼ˆéªŒè¯é€šè¿‡ï¼‰ **/
 #include "nvic.h"
 
 
-// ÅäÖÃNVIC£¬¶ÔÖĞ¶Ï·Ö×éµÈµÈ
+// é…ç½®NVICï¼Œå¯¹ä¸­æ–­åˆ†ç»„ç­‰ç­‰
 void Nvic_Init(int Group) {
-	/* ¶ÔNVIC·Ö×é */
+	/* å¯¹NVICåˆ†ç»„ */
 	uint32_t GroupDefaultValue;
 	
-//	/* ÉèÖÃÖĞ¶ÏÏòÁ¿±íÆ«ÒÆ */
+//	/* è®¾ç½®ä¸­æ–­å‘é‡è¡¨åç§» */
 //	SCB->VTOR = (FLASH_BASE | 0x2000);
 //	
-//	__set_PRIMASK(0);    //¿ªÆô×ÜÖĞ¶Ï
+//	__set_PRIMASK(0);    //å¼€å¯æ€»ä¸­æ–­
 	
 	switch(Group) {
 		
@@ -32,13 +32,13 @@ void Nvic_Init(int Group) {
 
 void Nvic_Config(int NvicName, int PrePriority, int SubPriority, int Cmd) {
 	
-	NVIC_InitTypeDef NVIC_InitStructre;																	// ¶¨ÒåÒ»¸öNVICÅäÖÃ½á¹¹Ìå
+	NVIC_InitTypeDef NVIC_InitStructre;																	// å®šä¹‰ä¸€ä¸ªNVICé…ç½®ç»“æ„ä½“
 	
-	NVIC_InitStructre.NVIC_IRQChannel = NvicName;												// Ö¸¶¨ÖĞ¶ÏÔ´Ãû³Æ
-	NVIC_InitStructre.NVIC_IRQChannelPreemptionPriority = PrePriority;	// ÉèÖÃÖĞ¶ÏµÄÇÀÕ¼ÓÅÏÈ¼¶
-	NVIC_InitStructre.NVIC_IRQChannelSubPriority = SubPriority; 				// ÉèÖÃÖĞ¶ÏµÄÏìÓ¦ÓÅÏÈ¼¶
-	NVIC_InitStructre.NVIC_IRQChannelCmd = Cmd? ENABLE : DISABLE;				// ÊÇ·ñÊ¹ÄÜÖĞ¶Ï£¬1Ê¹ÄÜ£¬0Ê§ÄÜ
+	NVIC_InitStructre.NVIC_IRQChannel = NvicName;												// æŒ‡å®šä¸­æ–­æºåç§°
+	NVIC_InitStructre.NVIC_IRQChannelPreemptionPriority = PrePriority;	// è®¾ç½®ä¸­æ–­çš„æŠ¢å ä¼˜å…ˆçº§
+	NVIC_InitStructre.NVIC_IRQChannelSubPriority = SubPriority; 				// è®¾ç½®ä¸­æ–­çš„å“åº”ä¼˜å…ˆçº§
+	NVIC_InitStructre.NVIC_IRQChannelCmd = Cmd? ENABLE : DISABLE;				// æ˜¯å¦ä½¿èƒ½ä¸­æ–­ï¼Œ1ä½¿èƒ½ï¼Œ0å¤±èƒ½
 	
-	NVIC_Init(&NVIC_InitStructre);																			// Ó¦ÓÃNVICÅäÖÃ¸ü¸Ä
+	NVIC_Init(&NVIC_InitStructre);																			// åº”ç”¨NVICé…ç½®æ›´æ”¹
 	
 }

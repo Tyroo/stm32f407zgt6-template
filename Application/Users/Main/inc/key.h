@@ -3,7 +3,7 @@
 
 #include "stm32f4xx.h"
 
-/*ÏÂÃæµÄ·½Ê½ÊÇÍ¨¹ıÖ±½Ó²Ù×÷¿âº¯Êı·½Ê½¶ÁÈ¡ IO*/
+/*ä¸‹é¢çš„æ–¹å¼æ˜¯é€šè¿‡ç›´æ¥æ“ä½œåº“å‡½æ•°æ–¹å¼è¯»å– IO*/
 
 #define KEY0 GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_4) //PE4
 #define KEY1 GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_3) //PE3 
@@ -25,10 +25,10 @@ typedef enum
 } enKeyPress;
 
 
-void Key_Init(void); //IO ³õÊ¼»¯
-u8 Key_Scan(u8); 		 //°´¼üÉ¨Ãèº¯Êı
+void Key_Init(void); //IO åˆå§‹åŒ–
+u8 Key_Scan(u8); 		 //æŒ‰é”®æ‰«æå‡½æ•°
 u8 Key0_Scan(void);
-enKeyPress ThreeStageKeyScan(void);	// Èı×´Ì¬°´Å¥É¨Ãè
+enKeyPress ThreeStageKeyScan(void);	// ä¸‰çŠ¶æ€æŒ‰é’®æ‰«æ
 
 
 #endif

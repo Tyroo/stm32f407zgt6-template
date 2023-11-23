@@ -1,33 +1,33 @@
 #include "led.h"
 
 
-// ³õÊ¼»¯LEDÄ£¿é
+// åˆå§‹åŒ–LEDæ¨¡å—
 void Led_Init() {
 	
-	/* ÅäÖÃ½á¹¹Ìå¶¨Òå */
+	/* é…ç½®ç»“æ„ä½“å®šä¹‰ */
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
-	/* Ê±ÖÓÊ¹ÄÜ */
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE);	// Ê¹ÄÜPC¶Ë¿ÚÊ±ÖÓ
+	/* æ—¶é’Ÿä½¿èƒ½ */
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE);	// ä½¿èƒ½PCç«¯å£æ—¶é’Ÿ
 	
-	/* GPIOFÅäÖÃ */
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;			// ÉèÖÃ¸ÃGPIOÎªÊä³ö
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10|GPIO_Pin_9;	// ÉèÖÃÎª10¿Ú
-	GPIO_InitStructure.GPIO_Speed = GPIO_Medium_Speed;		// Êä³öËÙ¶ÈÎªÖĞËÙ
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;			// ÍÆÍìÊä³ö
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;		// ²»Ê¹ÓÃÒı½ÅÉÏÏÂÀ­
+	/* GPIOFé…ç½® */
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;			// è®¾ç½®è¯¥GPIOä¸ºè¾“å‡º
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10|GPIO_Pin_9;	// è®¾ç½®ä¸º10å£
+	GPIO_InitStructure.GPIO_Speed = GPIO_Medium_Speed;		// è¾“å‡ºé€Ÿåº¦ä¸ºä¸­é€Ÿ
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;			// æ¨æŒ½è¾“å‡º
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;		// ä¸ä½¿ç”¨å¼•è„šä¸Šä¸‹æ‹‰
 	
-	/* Ó¦ÓÃGPIOÅäÖÃ */
+	/* åº”ç”¨GPIOé…ç½® */
 	GPIO_Init(GPIOF, &GPIO_InitStructure);
 }
 
 
-// ÉèÖÃLEDµÆ×´Ì¬
+// è®¾ç½®LEDç¯çŠ¶æ€
 void Led_Control(uint8_t Status) {
 	
 	if (Status&1)
-		GPIO_ResetBits(GPIOF, GPIO_Pin_10);		// ¿ªÆôLEDµÆ
+		GPIO_ResetBits(GPIOF, GPIO_Pin_10);		// å¼€å¯LEDç¯
 	else
-		GPIO_SetBits(GPIOF, GPIO_Pin_10);		// ¹Ø±ÕLEDµÆ
+		GPIO_SetBits(GPIOF, GPIO_Pin_10);		// å…³é—­LEDç¯
 		
 }

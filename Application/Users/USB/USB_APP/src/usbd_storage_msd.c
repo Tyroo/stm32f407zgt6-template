@@ -74,7 +74,7 @@ const int8_t STORAGE_Inquirydata[] = {  // 36
   0x00,
   0x00,
   'S', 'T', 'M', ' ', ' ', ' ', ' ', ' ', /* Manufacturer : 8 bytes */
-  'm', 'i', 'c', 'r', 'o', 'S', 'D', ' ', /* Product : 16 Bytes */
+  'W', '2', '5', 'Q', '6', '4', ' ', ' ', /* Product : 16 Bytes */
   'F', 'l', 'a', 's', 'h', ' ', ' ', ' ',
   '1', '.', '0', '0',           /* Version : 4 Bytes */
 };
@@ -105,7 +105,7 @@ int8_t STORAGE_Write(uint8_t lun,
 int8_t STORAGE_GetMaxLun(void);
 
 
-USBD_STORAGE_cb_TypeDef USBD_MICRO_SDIO_fops = {
+USBD_STORAGE_cb_TypeDef USBD_Storage_Flash_fops = {
   STORAGE_Init,
   STORAGE_GetCapacity,
   STORAGE_IsReady,
@@ -116,7 +116,7 @@ USBD_STORAGE_cb_TypeDef USBD_MICRO_SDIO_fops = {
   (int8_t *) STORAGE_Inquirydata,
 };
 
-USBD_STORAGE_cb_TypeDef *USBD_STORAGE_fops = &USBD_MICRO_SDIO_fops;
+USBD_STORAGE_cb_TypeDef *USBD_STORAGE_fops = &USBD_Storage_Flash_fops;
 
 /**
   * @}
@@ -149,7 +149,9 @@ int8_t STORAGE_Init(uint8_t lun)
 int8_t STORAGE_GetCapacity(uint8_t lun, uint32_t * block_num,
                            uint32_t * block_size)
 {
-  return 0;
+	*block_size = 512;
+	*block_num = 1024 * 1024 * 12 / 512;
+	return 0;
 }
 
 /**

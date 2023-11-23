@@ -10,33 +10,33 @@
 /**
 *	@define
 **/
-#define DELAY_ONE_US 21						// ��ʱ1us����ֵ
-#define DELAY_ONE_MS (DELAY_ONE_US * 1000) 	// ��ʱ1ms����ֵ
+#define DELAY_ONE_US 21						// 延时1us计数值
+#define DELAY_ONE_MS (DELAY_ONE_US * 1000) 	// 延时1ms计数值
 
 
 /**
 * @function
-*	���ã���ʱģ���ʼ������
-*	������void
-*	����ֵ��void
+*	作用：延时模块初始化函数
+*	参数：void
+*	返回值：void
 **/
 void Delay_Init(void);
 
 
 /**
 * @function
-*	���ã�ʵ��΢�뼶��ʱ
-*	������{ Us��Ҫ��ʱ��΢���� }
-*	����ֵ��void
+*	作用：实现微秒级延时
+*	参数：{ Us：要延时的微秒数 }
+*	返回值：void
 **/
 void Delay_Us(uint32_t Us);
 
 
 /**
 * @function
-*	���ã�ʵ�ֺ��뼶��ʱ
-*	������{ Ms��Ҫ��ʱ�ĺ����� }
-*	����ֵ��void
+*	作用：实现毫秒级延时
+*	参数：{ Ms：要延时的毫秒数 }
+*	返回值：void
 **/
 void Delay_Ms(uint32_t Ms);
 

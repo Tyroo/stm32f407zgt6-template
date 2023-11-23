@@ -2,8 +2,8 @@
 
 
 LwipObjectTypeDef stcLwipObject;
-struct netif lwip_netif;		//¶¨ÒåÒ»¸öÈ«¾ÖµÄÍøÂç½Ó¿Ú
-struct dhcp* dhcp;				//¶¨ÒåÒ»¸öDHCPÈ«¾ÖÖ¸Õë
+struct netif lwip_netif;		//å®šä¹‰ä¸€ä¸ªå…¨å±€çš„ç½‘ç»œæ¥å£
+struct dhcp* dhcp;				//å®šä¹‰ä¸€ä¸ªDHCPå…¨å±€æŒ‡é’ˆ
 
 
 uint32_t lwip_sys_timer;	
@@ -11,21 +11,21 @@ uint32_t TCPTimer = 0;
 uint32_t ARPTimer = 0;
 
 #if LWIP_DHCP
-uint32_t DHCPfineTimer = 0;		//DHCP¾«Ï¸´¦Àí¼ÆÊ±Æ÷
-uint32_t DHCPCoarseTimer = 0;	//DHCP´Ö²Ú´¦Àí¼ÆÊ±Æ÷
+uint32_t DHCPfineTimer = 0;		//DHCPç²¾ç»†å¤„ç†è®¡æ—¶å™¨
+uint32_t DHCPCoarseTimer = 0;	//DHCPç²—ç³™å¤„ç†è®¡æ—¶å™¨
 #endif
 
 
-// lwip APP³õÊ¼»¯
+// lwip APPåˆå§‹åŒ–
 void lwip_app_init(void)
 {
-	ip_addr_t ipaddr;  					// IPµØÖ·
-	ip_addr_t netmask; 					// ×ÓÍøÑÚÂë
-	ip_addr_t gw;      					// Ä¬ÈÏÍø¹Ø
+	ip_addr_t ipaddr;  					// IPåœ°å€
+	ip_addr_t netmask; 					// å­ç½‘æ©ç 
+	ip_addr_t gw;      					// é»˜è®¤ç½‘å…³
 
 	/* Initilialize the LwIP stack without RTOS */
 	lwip_init();
-	/* Default MAC address£¬IP address, gateway, subnet mask settings */
+	/* Default MAC addressï¼ŒIP address, gateway, subnet mask settings */
 	lwip_app_default_ip_set(&stcLwipObject);
 	
 	/* USER CODE BEGIN 0 */
@@ -64,7 +64,7 @@ void lwip_app_init(void)
 	/* DHCP get ip address */
 #ifdef LWIP_UDP
 	
-	stcLwipObject.dhcpstatus = 0;	// DHCP±ê¼ÇÎª0
+	stcLwipObject.dhcpstatus = 0;	// DHCPæ ‡è®°ä¸º0
 
 	while((stcLwipObject.dhcpstatus != 2) && (stcLwipObject.dhcpstatus != 0XFF))
 	{
@@ -77,7 +77,7 @@ void lwip_app_init(void)
 }
 
 
-// UDPÉèÖÃÔ¶¶ËIPµØÖ·
+// UDPè®¾ç½®è¿œç«¯IPåœ°å€
 void lwip_app_remote_ip_set(uint8_t Ip0, uint8_t Ip1, 
 							uint8_t Ip2, uint8_t Ip3)
 {
@@ -91,36 +91,36 @@ void lwip_app_remote_ip_set(uint8_t Ip0, uint8_t Ip1,
 void lwip_app_default_ip_set(LwipObjectTypeDef *pObject)
 {
 	uint32_t sn0;
-	sn0 = *(vu32*)(0x1FFF7A10);//»ñÈ¡STM32µÄÎ¨Ò»IDµÄÇ°24Î»×÷ÎªMACµØÖ·ºóÈı×Ö½Ú
+	sn0 = *(vu32*)(0x1FFF7A10);//è·å–STM32çš„å”¯ä¸€IDçš„å‰24ä½ä½œä¸ºMACåœ°å€åä¸‰å­—èŠ‚
 	
-	// Ä¬ÈÏÔ¶¶ËIPÎª:192.168.1.100
+	// é»˜è®¤è¿œç«¯IPä¸º:192.168.1.100
 	pObject->remoteip[0] = 192;	
 	pObject->remoteip[1] = 168;
 	pObject->remoteip[2] = 0;
 	pObject->remoteip[3] = 101;
 	
-	// MACµØÖ·ÉèÖÃ(¸ßÈı×Ö½Ú¹Ì¶¨Îª:2.0.0,µÍÈı×Ö½ÚÓÃSTM32Î¨Ò»ID)
-	// ¸ßÈı×Ö½Ú(IEEE³ÆÖ®Îª×éÖ¯Î¨Ò»ID,OUI)µØÖ·¹Ì¶¨Îª:2.0.0
+	// MACåœ°å€è®¾ç½®(é«˜ä¸‰å­—èŠ‚å›ºå®šä¸º:2.0.0,ä½ä¸‰å­—èŠ‚ç”¨STM32å”¯ä¸€ID)
+	// é«˜ä¸‰å­—èŠ‚(IEEEç§°ä¹‹ä¸ºç»„ç»‡å”¯ä¸€ID,OUI)åœ°å€å›ºå®šä¸º:2.0.0
 	pObject->mac[0] = 2;
 	pObject->mac[1] = 0;
 	pObject->mac[2] = 0;
-	pObject->mac[3] = (sn0>>16)&0XFF;//µÍÈı×Ö½ÚÓÃSTM32µÄÎ¨Ò»ID
+	pObject->mac[3] = (sn0>>16)&0XFF;//ä½ä¸‰å­—èŠ‚ç”¨STM32çš„å”¯ä¸€ID
 	pObject->mac[4] = (sn0>>8)&0XFFF;;
 	pObject->mac[5] = sn0&0XFF; 
 	
-	//Ä¬ÈÏ±¾µØIPÎª:192.168.1.30
+	//é»˜è®¤æœ¬åœ°IPä¸º:192.168.1.30
 	pObject->ip[0] = 192;	
 	pObject->ip[1] = 168;
 	pObject->ip[2] = 0;
 	pObject->ip[3] = 122;
 	
-	// Ä¬ÈÏ×ÓÍøÑÚÂë:255.255.255.0
+	// é»˜è®¤å­ç½‘æ©ç :255.255.255.0
 	pObject->netmask[0] = 255;	
 	pObject->netmask[1] = 255;
 	pObject->netmask[2] = 255;
 	pObject->netmask[3] = 0;
 	
-	// Ä¬ÈÏÍø¹Ø:192.168.1.1
+	// é»˜è®¤ç½‘å…³:192.168.1.1
 	pObject->gateway[0] = 192;	
 	pObject->gateway[1] = 168;
 	pObject->gateway[2] = 0;
@@ -135,7 +135,7 @@ void lwip_periodic_handle(void)
 #if LWIP_TCP
 	
 	numTimeDelta = (lwip_sys_timer - TCPTimer + 0xFFFFFFFF) % 0xFFFFFFFF;
-	//Ã¿250msµ÷ÓÃÒ»´Îtcp_tmr()º¯Êı
+	//æ¯250msè°ƒç”¨ä¸€æ¬¡tcp_tmr()å‡½æ•°
 	if (numTimeDelta >= TCP_TMR_INTERVAL)
 	{
 		TCPTimer = lwip_sys_timer;
@@ -145,7 +145,7 @@ void lwip_periodic_handle(void)
 #endif
 	
 	numTimeDelta = (lwip_sys_timer - ARPTimer + 0xFFFFFFFF) % 0xFFFFFFFF;
-	//ARPÃ¿5sÖÜÆÚĞÔµ÷ÓÃÒ»´Î
+	//ARPæ¯5så‘¨æœŸæ€§è°ƒç”¨ä¸€æ¬¡
 	if (numTimeDelta >= ARP_TMR_INTERVAL)
 	{
 		ARPTimer = lwip_sys_timer;
@@ -155,16 +155,16 @@ void lwip_periodic_handle(void)
 #if LWIP_DHCP
 
 	numTimeDelta = (lwip_sys_timer - DHCPfineTimer + 0xFFFFFFFF) % 0xFFFFFFFF;
-	//Ã¿500msµ÷ÓÃÒ»´Îdhcp_fine_tmr()
+	//æ¯500msè°ƒç”¨ä¸€æ¬¡dhcp_fine_tmr()
 	if (numTimeDelta >= DHCP_FINE_TIMER_MSECS)
 	{
 		DHCPfineTimer = lwip_sys_timer;
 		dhcp_fine_tmr();
-		lwip_dhcp_process_handle();  //DHCP´¦Àí
+		lwip_dhcp_process_handle();  //DHCPå¤„ç†
 	}
 
 	numTimeDelta = (lwip_sys_timer - DHCPCoarseTimer + 0xFFFFFFFF) % 0xFFFFFFFF;
-	//Ã¿60sÖ´ĞĞÒ»´ÎDHCP´Ö²Ú´¦Àí
+	//æ¯60sæ‰§è¡Œä¸€æ¬¡DHCPç²—ç³™å¤„ç†
 	if (numTimeDelta >= DHCP_COARSE_TIMER_MSECS)
 	{
 		DHCPCoarseTimer = lwip_sys_timer;
@@ -181,33 +181,33 @@ void lwip_dhcp_process_handle(void)
 	
 	switch(stcLwipObject.dhcpstatus)
 	{
-	case 0: //¿ªÆô DHCP
+	case 0: //å¼€å¯ DHCP
 		dhcp_start(&lwip_netif);
-		stcLwipObject.dhcpstatus = 1; //µÈ´ıÍ¨¹ı DHCP »ñÈ¡µ½µÄµØÖ·
+		stcLwipObject.dhcpstatus = 1; //ç­‰å¾…é€šè¿‡ DHCP è·å–åˆ°çš„åœ°å€
 		break;
-	case 1: //µÈ´ı»ñÈ¡µ½ IP µØÖ·
+	case 1: //ç­‰å¾…è·å–åˆ° IP åœ°å€
 	{
-		ip = lwip_netif.ip_addr.addr; 		//¶ÁÈ¡ĞÂ IP µØÖ·
-		netmask = lwip_netif.netmask.addr;	//¶ÁÈ¡×ÓÍøÑÚÂë
-		gw = lwip_netif.gw.addr; 			//¶ÁÈ¡Ä¬ÈÏÍø¹Ø
+		ip = lwip_netif.ip_addr.addr; 		//è¯»å–æ–° IP åœ°å€
+		netmask = lwip_netif.netmask.addr;	//è¯»å–å­ç½‘æ©ç 
+		gw = lwip_netif.gw.addr; 			//è¯»å–é»˜è®¤ç½‘å…³
 		
-		if(ip != 0) //ÕıÈ·»ñÈ¡µ½ IP µØÖ·µÄÊ±ºò
+		if(ip != 0) //æ­£ç¡®è·å–åˆ° IP åœ°å€çš„æ—¶å€™
 		{
-			stcLwipObject.dhcpstatus = 2; //DHCP ³É¹¦
+			stcLwipObject.dhcpstatus = 2; //DHCP æˆåŠŸ
 
-			//½âÎö³öÍ¨¹ı DHCP »ñÈ¡µ½µÄ IP µØÖ·
+			//è§£æå‡ºé€šè¿‡ DHCP è·å–åˆ°çš„ IP åœ°å€
 			stcLwipObject.ip[3]=(uint8_t)(ip>>24); 
 			stcLwipObject.ip[2]=(uint8_t)(ip>>16);
 			stcLwipObject.ip[1]=(uint8_t)(ip>>8);
 			stcLwipObject.ip[0]=(uint8_t)(ip);
 
-			//½âÎöÍ¨¹ı DHCP »ñÈ¡µ½µÄ×ÓÍøÑÚÂëµØÖ·
+			//è§£æé€šè¿‡ DHCP è·å–åˆ°çš„å­ç½‘æ©ç åœ°å€
 			stcLwipObject.netmask[3]=(uint8_t)(netmask>>24);
 			stcLwipObject.netmask[2]=(uint8_t)(netmask>>16);
 			stcLwipObject.netmask[1]=(uint8_t)(netmask>>8);
 			stcLwipObject.netmask[0]=(uint8_t)(netmask);
 
-			//½âÎö³öÍ¨¹ı DHCP »ñÈ¡µ½µÄÄ¬ÈÏÍø¹Ø
+			//è§£æå‡ºé€šè¿‡ DHCP è·å–åˆ°çš„é»˜è®¤ç½‘å…³
 			stcLwipObject.gateway[3]=(uint8_t)(gw>>24);
 			stcLwipObject.gateway[2]=(uint8_t)(gw>>16);
 			stcLwipObject.gateway[1]=(uint8_t)(gw>>8);
@@ -219,9 +219,9 @@ void lwip_dhcp_process_handle(void)
 			
 			if (dhcp->tries > LWIP_MAX_DHCP_TRIES)
 			{
-				//Í¨¹ı DHCP ·şÎñ»ñÈ¡ IP µØÖ·Ê§°Ü,ÇÒ³¬¹ı×î´ó³¢ÊÔ´ÎÊı
-				stcLwipObject.dhcpstatus = 0XFF;//DHCP ³¬Ê±Ê§°Ü.
-				//Ê¹ÓÃ¾²Ì¬ IP µØÖ·
+				//é€šè¿‡ DHCP æœåŠ¡è·å– IP åœ°å€å¤±è´¥,ä¸”è¶…è¿‡æœ€å¤§å°è¯•æ¬¡æ•°
+				stcLwipObject.dhcpstatus = 0XFF;//DHCP è¶…æ—¶å¤±è´¥.
+				//ä½¿ç”¨é™æ€ IP åœ°å€
 				IP4_ADDR(&(lwip_netif.ip_addr),stcLwipObject.ip[0],stcLwipObject.ip[1],\
 				stcLwipObject.ip[2],stcLwipObject.ip[3]);
 				IP4_ADDR(&(lwip_netif.netmask),stcLwipObject.netmask[0],\

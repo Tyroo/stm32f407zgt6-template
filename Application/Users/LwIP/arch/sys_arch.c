@@ -40,7 +40,7 @@
 
 #include "user_app/inc/lwip_app_comm.h"
 
-extern uint32_t lwip_sys_timer;		//lwip±¾µØÊ±¼ä¼ÆÊıÆ÷,µ¥Î»:ms
+extern uint32_t lwip_sys_timer;		//lwipæœ¬åœ°æ—¶é—´è®¡æ•°å™¨,å•ä½:ms
 
 /** Set this to 1 to enable assertion checks that SYS_ARCH_PROTECT() is only
  * called once in a call stack (calling it nested might cause trouble in some

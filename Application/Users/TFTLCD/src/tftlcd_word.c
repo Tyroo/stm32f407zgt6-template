@@ -2,7 +2,7 @@
 
 
 													
-// 显示单个字符
+// 鏄剧ず鍗曚釜瀛楃
 void TFTLCD_Word(uint16_t XPix, uint16_t YPix, void* _Obj) 
 {			
 	uint8_t Row, Col;
@@ -32,7 +32,7 @@ void TFTLCD_Word(uint16_t XPix, uint16_t YPix, void* _Obj)
 }
 
 
-// 显示多个字符
+// 鏄剧ず澶氫釜瀛楃
 void TFTLCD_Words(uint16_t XPix, uint16_t YPix, 
     uint16_t Width, uint16_t Height, void* _Obj) 
 {

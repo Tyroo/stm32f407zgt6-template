@@ -32,35 +32,35 @@
   */
 
 // Button signal: [bit = 0]
-#define KEY0_BTN_ONCEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_DW   << 0)	// KEY0µ¥»÷°´ÏÂÐÅºÅ
-#define KEY0_BTN_DOUBLEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_DW << 0)	// KEY0Ë«»÷°´ÏÂÐÅºÅ
-#define KEY0_BTN_LONGPRESS_SIGNAL			((EventSignal_t)enBtnStatus_LONGPRESS	   << 0)	// KEY0³¤°´ÐÅºÅ
-#define KEY0_BTN_ONCEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_UP   << 0)	// KEY0µ¥»÷ËÉ¿ªÐÅºÅ
-#define KEY0_BTN_DOUBLEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_UP << 0)	// KEY0Ë«»÷ËÉ¿ªÐÅºÅ
+#define KEY0_BTN_ONCEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_DW   << 0)	// KEY0å•å‡»æŒ‰ä¸‹ä¿¡å·
+#define KEY0_BTN_DOUBLEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_DW << 0)	// KEY0åŒå‡»æŒ‰ä¸‹ä¿¡å·
+#define KEY0_BTN_LONGPRESS_SIGNAL			((EventSignal_t)enBtnStatus_LONGPRESS	   << 0)	// KEY0é•¿æŒ‰ä¿¡å·
+#define KEY0_BTN_ONCEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_UP   << 0)	// KEY0å•å‡»æ¾å¼€ä¿¡å·
+#define KEY0_BTN_DOUBLEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_UP << 0)	// KEY0åŒå‡»æ¾å¼€ä¿¡å·
 
 // Button signal: [bit = 3]
-#define KEY1_BTN_ONCEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_DW   << 3)	// KEY1µ¥»÷°´ÏÂÐÅºÅ
-#define KEY1_BTN_DOUBLEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_DW << 3)	// KEY1Ë«»÷°´ÏÂÐÅºÅ
-#define KEY1_BTN_LONGPRESS_SIGNAL			((EventSignal_t)enBtnStatus_LONGPRESS	   << 3)	// KEY1³¤°´ÐÅºÅ
-#define KEY1_BTN_ONCEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_UP   << 3)	// KEY1µ¥»÷ËÉ¿ªÐÅºÅ
-#define KEY1_BTN_DOUBLEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_UP << 3)	// KEY1Ë«»÷ËÉ¿ªÐÅºÅ
+#define KEY1_BTN_ONCEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_DW   << 3)	// KEY1å•å‡»æŒ‰ä¸‹ä¿¡å·
+#define KEY1_BTN_DOUBLEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_DW << 3)	// KEY1åŒå‡»æŒ‰ä¸‹ä¿¡å·
+#define KEY1_BTN_LONGPRESS_SIGNAL			((EventSignal_t)enBtnStatus_LONGPRESS	   << 3)	// KEY1é•¿æŒ‰ä¿¡å·
+#define KEY1_BTN_ONCEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_UP   << 3)	// KEY1å•å‡»æ¾å¼€ä¿¡å·
+#define KEY1_BTN_DOUBLEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_UP << 3)	// KEY1åŒå‡»æ¾å¼€ä¿¡å·
 
 // Button signal: [bit = 6]
-#define KEY2_BTN_ONCEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_DW   << 6)	// KEY2µ¥»÷°´ÏÂÐÅºÅ
-#define KEY2_BTN_DOUBLEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_DW << 6)	// KEY2Ë«»÷°´ÏÂÐÅºÅ
-#define KEY2_BTN_LONGPRESS_SIGNAL			((EventSignal_t)enBtnStatus_LONGPRESS	   << 6)	// KEY2³¤°´ÐÅºÅ
-#define KEY2_BTN_ONCEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_UP   << 6)	// KEY2µ¥»÷ËÉ¿ªÐÅºÅ
-#define KEY2_BTN_DOUBLEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_UP << 6)	// KEY2Ë«»÷ËÉ¿ªÐÅºÅ
+#define KEY2_BTN_ONCEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_DW   << 6)	// KEY2å•å‡»æŒ‰ä¸‹ä¿¡å·
+#define KEY2_BTN_DOUBLEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_DW << 6)	// KEY2åŒå‡»æŒ‰ä¸‹ä¿¡å·
+#define KEY2_BTN_LONGPRESS_SIGNAL			((EventSignal_t)enBtnStatus_LONGPRESS	   << 6)	// KEY2é•¿æŒ‰ä¿¡å·
+#define KEY2_BTN_ONCEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_UP   << 6)	// KEY2å•å‡»æ¾å¼€ä¿¡å·
+#define KEY2_BTN_DOUBLEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_UP << 6)	// KEY2åŒå‡»æ¾å¼€ä¿¡å·
 
 // Button signal: [bit = 9]
-#define WKUP_BTN_ONCEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_DW   << 9)	// WKUPµ¥»÷°´ÏÂÐÅºÅ
-#define WKUP_BTN_DOUBLEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_DW << 9)	// WKUPË«»÷°´ÏÂÐÅºÅ
-#define WKUP_BTN_LONGPRESS_SIGNAL			((EventSignal_t)enBtnStatus_LONGPRESS	   << 9)	// WKUP³¤°´ÐÅºÅ
-#define WKUP_BTN_ONCEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_UP   << 9)	// WKUPµ¥»÷ËÉ¿ªÐÅºÅ
-#define WKUP_BTN_DOUBLEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_UP << 9)	// WKUPË«»÷ËÉ¿ªÐÅºÅ
+#define WKUP_BTN_ONCEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_DW   << 9)	// WKUPå•å‡»æŒ‰ä¸‹ä¿¡å·
+#define WKUP_BTN_DOUBLEPRESS_DW_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_DW << 9)	// WKUPåŒå‡»æŒ‰ä¸‹ä¿¡å·
+#define WKUP_BTN_LONGPRESS_SIGNAL			((EventSignal_t)enBtnStatus_LONGPRESS	   << 9)	// WKUPé•¿æŒ‰ä¿¡å·
+#define WKUP_BTN_ONCEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_ONCEPRESS_UP   << 9)	// WKUPå•å‡»æ¾å¼€ä¿¡å·
+#define WKUP_BTN_DOUBLEPRESS_UP_SIGNAL		((EventSignal_t)enBtnStatus_DOUBLEPRESS_UP << 9)	// WKUPåŒå‡»æ¾å¼€ä¿¡å·
 
 // Custom signal: [bit = 12]
-#define CUSTOM_TEST_SIGNAL					((EventSignal_t)1 << 12)							// ×Ô¶¨Òå²âÊÔÊÂ¼þ
+#define CUSTOM_TEST_SIGNAL					((EventSignal_t)1 << 12)							// è‡ªå®šä¹‰æµ‹è¯•äº‹ä»¶
 
 /**
   * \}
@@ -72,10 +72,10 @@
 
 typedef enum enEventStatus
 {
-	enEventStatus_NULL,			// Ïú»ÙÊÂ¼þ
-	enEventStatus_ENABLE,		// ÔÚÊÂ¼þ±»±éÀúÖ®Ç°Ê¹ÄÜ
-	enEventStatus_AT_ENABLE,	// ÔÚÊÂ¼þ±»±éÀúÖ®ºóÊ¹ÄÜ
-	enEventStatus_DISABLE,		// Ê§ÄÜ¸ÃÊÂ¼þ
+	enEventStatus_NULL,			// é”€æ¯äº‹ä»¶
+	enEventStatus_ENABLE,		// åœ¨äº‹ä»¶è¢«éåŽ†ä¹‹å‰ä½¿èƒ½
+	enEventStatus_AT_ENABLE,	// åœ¨äº‹ä»¶è¢«éåŽ†ä¹‹åŽä½¿èƒ½
+	enEventStatus_DISABLE,		// å¤±èƒ½è¯¥äº‹ä»¶
 } enEventStatus_t;
 
 typedef struct stcEventHandler

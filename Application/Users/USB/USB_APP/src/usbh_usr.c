@@ -25,8 +25,8 @@
 
 /* USB variable define */
 static uint8_t        AppState;
-USBH_HOST             USB_Host;
-USB_OTG_CORE_HANDLE   USB_OTG_Core;
+USBH_HOST             USBH_MSC;
+USB_OTG_CORE_HANDLE   USB_Core_Host;
 USB_ManageType		  USB_Manage;
 
 
@@ -42,7 +42,7 @@ BYTE Work[FF_MAX_SS];
 
 void OTG_FS_IRQHandler(void)
 {
-    USBH_OTG_ISR_Handler(&USB_OTG_Core);
+    USBH_OTG_ISR_Handler(&USB_Core_Host);
 }
 
 /*  Points to the DEVICE_PROP structure of current device */
@@ -85,9 +85,9 @@ USBH_Usr_cb_TypeDef USR_USBH_cb =
 */
 void USBH_USR_Init(void)
 {
-    // USBH³õÊ¼»¯»Øµ÷º¯Êı
+    // USBHåˆå§‹åŒ–å›è°ƒå‡½æ•°
 	USB_Manage = ((USB_ManageType){ 0, 0, 0 });
-	printf("USBÉè±¸³õÊ¼»¯Íê³É£¡\r\n");
+	printf("USBè®¾å¤‡åˆå§‹åŒ–å®Œæˆï¼\r\n");
 }
 
 /**
@@ -98,7 +98,7 @@ void USBH_USR_Init(void)
 */
 void USBH_USR_DeviceAttached(void)
 {
-	printf("¼ì²âµ½ÓĞUSBÉè±¸²åÈë£¡\r\n");
+	printf("æ£€æµ‹åˆ°æœ‰USBè®¾å¤‡æ’å…¥ï¼\r\n");
 }
 
 
@@ -109,8 +109,8 @@ void USBH_USR_DeviceAttached(void)
 */
 void USBH_USR_UnrecoveredError (void)
 {
-  // Êä³öUSB´íÎóĞÅÏ¢
-	printf("USB³öÏÖÁËÎŞ·¨»Ö¸´µÄ´íÎó£¡\r\n");
+  // è¾“å‡ºUSBé”™è¯¯ä¿¡æ¯
+	printf("USBå‡ºç°äº†æ— æ³•æ¢å¤çš„é”™è¯¯ï¼\r\n");
 }
 
 
@@ -122,8 +122,8 @@ void USBH_USR_UnrecoveredError (void)
 */
 void USBH_USR_DeviceDisconnected (void)
 {
-  // USB¶Ï¿ªÁ¬½Ó»Øµ÷º¯Êı
-	printf("USBÉè±¸¶Ï¿ªÁËÁ¬½Ó£¡\r\n");
+  // USBæ–­å¼€è¿æ¥å›è°ƒå‡½æ•°
+	printf("USBè®¾å¤‡æ–­å¼€äº†è¿æ¥ï¼\r\n");
 }
 /**
 * @brief  USBH_USR_ResetUSBDevice 
@@ -132,7 +132,7 @@ void USBH_USR_DeviceDisconnected (void)
 */
 void USBH_USR_ResetDevice(void)
 {
-	printf("USBÉè±¸³õÊ¼»¯£¡\r\n");
+	printf("USBè®¾å¤‡åˆå§‹åŒ–ï¼\r\n");
 }
 
 
@@ -144,20 +144,20 @@ void USBH_USR_ResetDevice(void)
 */
 void USBH_USR_DeviceSpeedDetected(uint8_t DeviceSpeed)
 {
-    // ¼ì²â½ÓÈëµÄUSBÉè±¸ÀàĞÍ²¢Êä³ö£¨¸ßËÙ¡¢È«ËÙ¡¢µÍËÙ£©
+    // æ£€æµ‹æ¥å…¥çš„USBè®¾å¤‡ç±»å‹å¹¶è¾“å‡ºï¼ˆé«˜é€Ÿã€å…¨é€Ÿã€ä½é€Ÿï¼‰
 	switch(DeviceSpeed)
 	{
 		case HPRT0_PRTSPD_HIGH_SPEED:
-			printf("µ±Ç°Éè±¸ÎªUSB¸ßËÙÉè±¸£¡\r\n");
+			printf("å½“å‰è®¾å¤‡ä¸ºUSBé«˜é€Ÿè®¾å¤‡ï¼\r\n");
 			break;
 		case HPRT0_PRTSPD_FULL_SPEED:
-			printf("µ±Ç°Éè±¸ÎªUSBÈ«ËÙÉè±¸£¡\r\n");
+			printf("å½“å‰è®¾å¤‡ä¸ºUSBå…¨é€Ÿè®¾å¤‡ï¼\r\n");
 			break;
 		case HPRT0_PRTSPD_LOW_SPEED:
-			printf("µ±Ç°Éè±¸ÎªUSBµÍËÙÉè±¸£¡\r\n");
+			printf("å½“å‰è®¾å¤‡ä¸ºUSBä½é€Ÿè®¾å¤‡ï¼\r\n");
 			break;
 		default:
-			printf("Éè±¸´íÎó£¡\r\n");
+			printf("è®¾å¤‡é”™è¯¯ï¼\r\n");
 			break;
 	}
 }
@@ -173,8 +173,8 @@ void USBH_USR_Device_DescAvailable(void *DeviceDesc)
 	USBH_DevDesc_TypeDef *hs;
 	hs = DeviceDesc;
 
-	printf("VID : %04Xh\r\n", (uint32_t)(*hs).idVendor); 	// ´òÓ¡Éè±¸³§ÉÌID
-	printf("PID : %04Xh\r\n", (uint32_t)(*hs).idProduct); 	// ´òÓ¡²úÆ·ID
+	printf("VID : %04Xh\r\n", (uint32_t)(*hs).idVendor); 	// æ‰“å°è®¾å¤‡å‚å•†ID
+	printf("PID : %04Xh\r\n", (uint32_t)(*hs).idProduct); 	// æ‰“å°äº§å“ID
 }
 
 /**
@@ -185,8 +185,8 @@ void USBH_USR_Device_DescAvailable(void *DeviceDesc)
 */
 void USBH_USR_DeviceAddressAssigned(void)
 {
-	// ´Ó»úµØÖ··ÖÅä³É¹¦»Øµ÷º¯Êı
-	printf("USBÉè±¸µØÖ··ÖÅä³É¹¦£¡\r\n");
+	// ä»æœºåœ°å€åˆ†é…æˆåŠŸå›è°ƒå‡½æ•°
+	printf("USBè®¾å¤‡åœ°å€åˆ†é…æˆåŠŸï¼\r\n");
 }
 
 
@@ -200,18 +200,18 @@ void USBH_USR_Configuration_DescAvailable(USBH_CfgDesc_TypeDef * cfgDesc,
                                           USBH_InterfaceDesc_TypeDef *itfDesc,
                                           USBH_EpDesc_TypeDef *epDesc)
 {
-    // ÅäÖÃÃèÊö·ûÓĞĞ§»Øµ÷º¯Êı
+    // é…ç½®æè¿°ç¬¦æœ‰æ•ˆå›è°ƒå‡½æ•°
 	USBH_InterfaceDesc_TypeDef* Id;
 	Id = itfDesc;
 	
 	if (Id->bInterfaceClass == 0x08)
 	{
-		printf("´ËUSBÉè±¸Îª¿ÉÒÆ¶¯´æ´¢Æ÷Éè±¸£¡\r\n");
+		printf("æ­¤USBè®¾å¤‡ä¸ºå¯ç§»åŠ¨å­˜å‚¨å™¨è®¾å¤‡ï¼\r\n");
 		USB_Manage.Type = 3;
 	}
 	else
 	{
-		printf("´ËUSBÉè±¸ÎªHIDÉè±¸£¡\r\n");
+		printf("æ­¤USBè®¾å¤‡ä¸ºHIDè®¾å¤‡ï¼\r\n");
 	}
 }
 
@@ -223,7 +223,7 @@ void USBH_USR_Configuration_DescAvailable(USBH_CfgDesc_TypeDef * cfgDesc,
 */
 void USBH_USR_Manufacturer_String(void *ManufacturerString)
 {
-    // ´òÓ¡Éè±¸ÖÆÔìÉÌ
+    // æ‰“å°è®¾å¤‡åˆ¶é€ å•†
 //  printf("Manufacturer : %s\n", (char *)ManufacturerString);
 }
 
@@ -235,7 +235,7 @@ void USBH_USR_Manufacturer_String(void *ManufacturerString)
 */
 void USBH_USR_Product_String(void *ProductString)
 {
-    // ´òÓ¡²úÆ·×Ö·û´®
+    // æ‰“å°äº§å“å­—ç¬¦ä¸²
 //  printf("Product : %s\n", (char *)ProductString);  
 }
 
@@ -247,7 +247,7 @@ void USBH_USR_Product_String(void *ProductString)
 */
 void USBH_USR_SerialNum_String(void *SerialNumString)
 {
-    //´òÓ¡Éè±¸´®ºÅ
+    //æ‰“å°è®¾å¤‡ä¸²å·
 //  printf( "Serial Number : %s\n", (char *)SerialNumString);    
 } 
 
@@ -261,7 +261,7 @@ void USBH_USR_SerialNum_String(void *SerialNumString)
 */
 void USBH_USR_EnumerationDone(void)
 {
-    // USBÃ¶¾ÙÍê³É»Øµ÷º¯Êı
+    // USBæšä¸¾å®Œæˆå›è°ƒå‡½æ•°
 } 
 
 
@@ -273,7 +273,7 @@ void USBH_USR_EnumerationDone(void)
 */
 void USBH_USR_DeviceNotSupported(void)
 {
-    // Æ÷¼ş²»±»Ö§³Ö»Øµ÷º¯Êı
+    // å™¨ä»¶ä¸è¢«æ”¯æŒå›è°ƒå‡½æ•°
 //  printf ("> Device not supported."); 
 }  
 
@@ -286,7 +286,7 @@ void USBH_USR_DeviceNotSupported(void)
 */
 USBH_USR_Status USBH_USR_UserInput(void)
 {
-    // µÈ´ıÓÃ»§ÊäÈë»Øµ÷º¯Êı
+    // ç­‰å¾…ç”¨æˆ·è¾“å…¥å›è°ƒå‡½æ•°
   return USBH_USR_RESP_OK;
 }  
 
@@ -298,7 +298,7 @@ USBH_USR_Status USBH_USR_UserInput(void)
 */
 void USBH_USR_OverCurrentDetected (void)
 {
-    // ¶Ë¿ÚµçÁ÷¹ı´ó»Øµ÷º¯Êı
+    // ç«¯å£ç”µæµè¿‡å¤§å›è°ƒå‡½æ•°
 //  printf ("Overcurrent detected.");
 }
 
@@ -311,10 +311,10 @@ void USBH_USR_OverCurrentDetected (void)
 */
 int USBH_USR_MSC_Application(void)
 {
-    // UÅÌ²åÈëºóµÄ²Ù×÷
+    // Uç›˜æ’å…¥åçš„æ“ä½œ
 	uint8_t Result;
 	
-	Result = HCD_IsDeviceConnected(&USB_OTG_Core);
+	Result = HCD_IsDeviceConnected(&USB_Core_Host);
 	
 	switch(AppState)
 	{
@@ -332,10 +332,10 @@ int USBH_USR_MSC_Application(void)
 			}
 			break;
 		case USH_USR_FS_OK_OPERATION:
-			printf("USB²Ù×÷Íê³É£¡");
+			printf("USBæ“ä½œå®Œæˆï¼");
 			Result = 0;
 		case USH_USR_FS_ERR_OPERATION:
-			printf("USB²Ù×÷Ê§°Ü£¡");
+			printf("USBæ“ä½œå¤±è´¥ï¼");
 			Result = 1;
 		default:
 			Result = 1;
@@ -361,20 +361,20 @@ void USBH_USR_DeInit(void)
 /**
 * @brief  USBH_User_App
 * @param  None
-* @retval 0: Normal£»1: Anomaly
+* @retval 0: Normalï¼›1: Anomaly
 */ 
 int USBH_User_App(void)
 {
 	FatfsReadSize = 10;
 	
-	while(HCD_IsDeviceConnected(&USB_OTG_Core))//Éè±¸Á¬½Ó³É¹¦
+	while(HCD_IsDeviceConnected(&USB_Core_Host))//è®¾å¤‡è¿æ¥æˆåŠŸ
 	{	
 		F_Sate = f_open(Fi, "2:123.txt", FA_READ | FA_OPEN_EXISTING);
 		F_Sate = f_read(Fi, ReadTextBuff, sizeof(ReadTextBuff), &FatfsReadSize);
 		
 		if (F_Sate == FR_OK)
 		{
-			Uart1_Send("³É¹¦¶ÁÈ¡µ½ÎÄ¼şÄÚÈİ:");
+			Uart1_Send("æˆåŠŸè¯»å–åˆ°æ–‡ä»¶å†…å®¹:");
 			Uart1_Send((char*)ReadTextBuff);
 			return 0;
 		}

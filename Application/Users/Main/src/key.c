@@ -2,7 +2,7 @@
 #include "delay.h"
 
 
-//°´¼ü³õÊ¼»¯º¯Êı
+//æŒ‰é”®åˆå§‹åŒ–å‡½æ•°
 void Key_Init(void)
 {
 
@@ -10,15 +10,15 @@ void Key_Init(void)
 
 
 
-// °´¼üÉ¨Ãèº¯Êı£¬mode£º0²»Ö§³ÖÁ¬Ğø°´£¬1Ö§³ÖÁ¬Ğø°´
+// æŒ‰é”®æ‰«æå‡½æ•°ï¼Œmodeï¼š0ä¸æ”¯æŒè¿ç»­æŒ‰ï¼Œ1æ”¯æŒè¿ç»­æŒ‰
 u8 Key_Scan(u8 mode)
 {
-	static u8 key_up=1;//°´¼ü°´ËÉ¿ª±êÖ¾
+	static u8 key_up=1;//æŒ‰é”®æŒ‰æ¾å¼€æ ‡å¿—
 	
-	if(mode) key_up=1; //Ö§³ÖÁ¬°´ 
+	if(mode) key_up=1; //æ”¯æŒè¿æŒ‰ 
 	
 	if(key_up&&(KEY0==0||KEY1==0||KEY2==0||WK_UP==1)) {
-		Delay_Ms(10);//È¥¶¶¶¯
+		Delay_Ms(10);//å»æŠ–åŠ¨
 		key_up=0;
 		if(KEY0==0) return 1;
 		else if(KEY1==0) return 2;
@@ -27,18 +27,18 @@ u8 Key_Scan(u8 mode)
 	}else if(KEY0==1&&KEY1==1&&KEY2==1&&WK_UP==0) {
 		key_up=1; 
 	}else {}
-	return 0;// ÎŞ°´¼ü°´ÏÂ
+	return 0;// æ— æŒ‰é”®æŒ‰ä¸‹
 }
 
 
-// ×ÔËø°´Å¥KEY0
+// è‡ªé”æŒ‰é’®KEY0
 u8 Key0_Scan() {
 	
 	static u8 KeyUp = 1;
 	static u8 KeyCode = 0;
 	
 	if (KeyUp && (KEY0 == 0)) {
-		Delay_Ms(10);	//È¥¶¶¶¯
+		Delay_Ms(10);	//å»æŠ–åŠ¨
 		if (KEY0 == 0) {
 			KeyUp = 0;
 			KeyCode += 1;
@@ -52,12 +52,12 @@ u8 Key0_Scan() {
 }
 
 
-// Èı×´Ì¬°´Å¥É¨Ãè
+// ä¸‰çŠ¶æ€æŒ‰é’®æ‰«æ
 u8 PressCount = 0;
 u32 PointPressCount = 0;
 u32 LongPressCount = 0;
 
-extern uint32_t lwip_sys_timer;	//lwip±¾µØÊ±¼ä¼ÆÊıÆ÷,µ¥Î»:ms
+extern uint32_t lwip_sys_timer;	//lwipæœ¬åœ°æ—¶é—´è®¡æ•°å™¨,å•ä½:ms
 
 enKeyPress ThreeStageKeyScan(void)
 {
@@ -77,7 +77,7 @@ enKeyPress ThreeStageKeyScan(void)
 	static u8 u8KeyStateLock = 0;
 
 	
-	/* °´¼üÏû¶¶ */
+	/* æŒ‰é”®æ¶ˆæŠ– */
 	if((KEY0 != u8KeyOld) && (u8KeyStateLock == 0))
 	{
 		u16OldTimeCnt = lwip_sys_timer;
@@ -93,18 +93,18 @@ enKeyPress ThreeStageKeyScan(void)
 		}
 	}
 	
-	/* °´¼ü×´Ì¬»ñÈ¡ */
+	/* æŒ‰é”®çŠ¶æ€è·å– */
 	u8KeyState = u8KeyOld + (u8KeyNew<<1);
 	u8KeyOld = u8KeyNew;
 	
-	/* °´¼ü¶¯×÷´¦Àí */
-	// µ±°´Å¥±»ËÉ¿ªÊ±
+	/* æŒ‰é”®åŠ¨ä½œå¤„ç† */
+	// å½“æŒ‰é’®è¢«æ¾å¼€æ—¶
 	if(u8KeyState == 2)
 	{
 		u32LongPressDealyCnt = 0;
 		s8KeyPressCnt++;
 	}
-	// µ±°´Å¥Ò»Ö±´¦ÓÚ°´ÏÂ×´Ì¬Ê±
+	// å½“æŒ‰é’®ä¸€ç›´å¤„äºæŒ‰ä¸‹çŠ¶æ€æ—¶
 	else if(u8KeyState == 0)
 	{
 		u32LongPressDealyCnt++;
@@ -114,7 +114,7 @@ enKeyPress ThreeStageKeyScan(void)
 			enRet = enLongPress;
 		}
 	}
-	// °´Å¥±»ËÉ¿ªÒ»´Îºó
+	// æŒ‰é’®è¢«æ¾å¼€ä¸€æ¬¡å
 	else if(s8KeyPressCnt > 0)
 	{
 		u32OncePressDealyCnt++;

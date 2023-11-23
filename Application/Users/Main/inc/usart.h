@@ -25,18 +25,18 @@ extern char UsartReceiveData[50];
 
 /**
 * @function
-* ×÷ÓÃ£º³õÊ¼»¯UART1
-* ²ÎÊı£º{ Baud: UARTµÄ²¨ÌØÂÊ }
-* ·µ»ØÖµ£ºvoid
+* ä½œç”¨ï¼šåˆå§‹åŒ–UART1
+* å‚æ•°ï¼š{ Baud: UARTçš„æ³¢ç‰¹ç‡ }
+* è¿”å›å€¼ï¼švoid
 **/
 void Uart1_Init(uint32_t Baud);
 
 
 /**
 * @function
-* ×÷ÓÃ£ºÊ¹ÓÃUSART1·¢ËÍÊı¾İ
-* ²ÎÊı£º{ Data: Òª·¢ËÍµÄÊı¾İÖ¸Õë }
-* ·µ»ØÖµ£ºvoid
+* ä½œç”¨ï¼šä½¿ç”¨USART1å‘é€æ•°æ®
+* å‚æ•°ï¼š{ Data: è¦å‘é€çš„æ•°æ®æŒ‡é’ˆ }
+* è¿”å›å€¼ï¼švoid
 **/
 void Uart1_Send(char *Data);
 

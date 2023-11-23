@@ -1,9 +1,9 @@
 /*******************************************************************************
-** Ãû³Æ£ºtask.c
-** ¹¦ÄÜ£ºÈÎÎñµ÷¶È
-** °æ±¾£ºV1.0
-** ×÷Õß£ºÕÅ¼ÎÁ¼ 
-** ÈÕÆÚ£º2023Äê1ÔÂ4ÈÕ
+** åç§°ï¼štask.c
+** åŠŸèƒ½ï¼šä»»åŠ¡è°ƒåº¦
+** ç‰ˆæœ¬ï¼šV1.0
+** ä½œè€…ï¼šå¼ å˜‰è‰¯ 
+** æ—¥æœŸï¼š2023å¹´1æœˆ4æ—¥
 *******************************************************************************/
 
 
@@ -17,7 +17,7 @@ static void Task_StopTaskDelete(stcTaskHandler_t *pstcTask);
 static void Task_IdleTaskFunc(void);
 
 
-// ÈÎÎñµ÷¶ÈÄ£¿é³õÊ¼»¯
+// ä»»åŠ¡è°ƒåº¦æ¨¡å—åˆå§‹åŒ–
 void Task_Init(void)
 {
 	stcIdleTaskHandler.pTaskFunction = &Task_IdleTaskFunc;
@@ -35,7 +35,7 @@ void Task_Init(void)
 }
 
 
-// ÈÎÎñÍ£Ö¹´¦Àí
+// ä»»åŠ¡åœæ­¢å¤„ç†
 static void Task_Stop(stcTaskHandler_t *pstcTask)
 {
 	if ((pstcTask->u16TaskNumber != stcIdleTaskHandler.u16TaskNumber) && 
@@ -49,7 +49,7 @@ static void Task_Stop(stcTaskHandler_t *pstcTask)
 }
 
 
-// ÈÎÎñÉèÖÃÑÓÊ±
+// ä»»åŠ¡è®¾ç½®å»¶æ—¶
 static void Task_Delay(stcTaskHandler_t *pstcTask, uint32_t u32DelayCountVal)
 {
 	switch(pstcTask->u8TaskStatus)
@@ -70,7 +70,7 @@ static void Task_Delay(stcTaskHandler_t *pstcTask, uint32_t u32DelayCountVal)
 }
 
 
-// ÈÎÎñÔÝÍ£
+// ä»»åŠ¡æš‚åœ
 static void Task_Pause(stcTaskHandler_t *pstcTask)
 {
 	if (pstcTask->u16TaskNumber != stcIdleTaskHandler.u16TaskNumber)
@@ -78,7 +78,7 @@ static void Task_Pause(stcTaskHandler_t *pstcTask)
 }
 
 
-// ÈÎÎñÈ«ËÙÔËÐÐ
+// ä»»åŠ¡å…¨é€Ÿè¿è¡Œ
 static void Task_Run(stcTaskHandler_t *pstcTask)
 {
 	pstcTask->u8TaskStatus = enTaskStatus_RUN;
@@ -87,7 +87,7 @@ static void Task_Run(stcTaskHandler_t *pstcTask)
 }
 
 
-// ÈÎÎñ×´Ì¬ÉèÖÃ
+// ä»»åŠ¡çŠ¶æ€è®¾ç½®
 void Task_SetStatus(stcTaskHandler_t *pstcTask, enTaskStatus_t enState, uint32_t u32DelayCountVal)
 {
 	TASK_ASSERT(pstcTask != NULL);
@@ -115,7 +115,7 @@ void Task_SetStatus(stcTaskHandler_t *pstcTask, enTaskStatus_t enState, uint32_t
 }
 
 
-// ÈÎÎñ´´½¨
+// ä»»åŠ¡åˆ›å»º
 void Task_Create(stcTaskHandler_t *pstcTask, void (*pTaskFunc)(void))
 {
 	TASK_ASSERT(pstcTask != NULL);
@@ -137,7 +137,7 @@ void Task_Create(stcTaskHandler_t *pstcTask, void (*pTaskFunc)(void))
 }
 
 
-// ÔÝÍ£µ÷¶ÈÆ÷
+// æš‚åœè°ƒåº¦å™¨
 void Task_SchedulerPause(void)
 {
 	if (stcTaskManageObject.enSchedulerState == enSchedulerStatus_RUN)
@@ -152,7 +152,7 @@ void Task_SchedulerPause(void)
 }
 
 
-// »Ö¸´µ÷¶ÈÆ÷µÄÔËÐÐ£¨µ÷¶ÈÆ÷Î´ÍêÈ«ÔÝÍ£µÄÇé¿öÏÂ»Ö¸´µ÷¶ÈÆ÷Ôò»á»Ö¸´Ê§°Ü£©
+// æ¢å¤è°ƒåº¦å™¨çš„è¿è¡Œï¼ˆè°ƒåº¦å™¨æœªå®Œå…¨æš‚åœçš„æƒ…å†µä¸‹æ¢å¤è°ƒåº¦å™¨åˆ™ä¼šæ¢å¤å¤±è´¥ï¼‰
 bool Task_SchedulerWaitRun(void)
 {
 	bool bRet = false;
@@ -190,7 +190,7 @@ bool Task_SchedulerWaitRun(void)
 }
 
 
-// ÈÎÎñµ÷¶È
+// ä»»åŠ¡è°ƒåº¦
 void Task_Scheduler(void)
 {
 	static uint32_t u32TaskTimeCountCurrent = 0;
@@ -227,7 +227,7 @@ void Task_Scheduler(void)
 }
 
 
-// É¾³ýÒ»¸öÖ¸¶¨µÄÍ£Ö¹ÈÎÎñ
+// åˆ é™¤ä¸€ä¸ªæŒ‡å®šçš„åœæ­¢ä»»åŠ¡
 static void Task_StopTaskDelete(stcTaskHandler_t *pstcTask)
 {
 	TASK_ASSERT(pstcTask != NULL);
@@ -243,13 +243,13 @@ static void Task_StopTaskDelete(stcTaskHandler_t *pstcTask)
 }
 
 
-// ¿ÕÏÐÈÎÎñ
+// ç©ºé—²ä»»åŠ¡
 static void Task_IdleTaskFunc(void)
 {
-	// µ÷¶ÈÆ÷Õý³£ÔËÐÐ´¦Àí
+	// è°ƒåº¦å™¨æ­£å¸¸è¿è¡Œå¤„ç†
 	if (stcTaskManageObject.enSchedulerState != enSchedulerStatus_WAITSTOP)
 	{
-		// ÇåÀí±»Í£Ö¹µÄÈÎÎñ
+		// æ¸…ç†è¢«åœæ­¢çš„ä»»åŠ¡
 		if (stcTaskManageObject.u8StopTaskNumber > 0)
 		{
 			stcTaskManageObject.u8StopTaskNumber--;
@@ -260,41 +260,42 @@ static void Task_IdleTaskFunc(void)
 			stcTaskManageObject.pstcStopTaskHandlerTable[
 				stcTaskManageObject.u8StopTaskNumber] = NULL;
 		}
+		
+		return;
 	}
-	// µ÷¶ÈÆ÷Ô¤Í£Ö¹´¦Àí
-	else
+	
+	// è°ƒåº¦å™¨é¢„åœæ­¢å¤„ç†
+	if (stcTaskManageObject.u8TotalTaskNumber > 1)
 	{
-		if (stcTaskManageObject.u8TotalTaskNumber > 1)
-		{
-			stcTaskManageObject.pstcSchedulerPauseClogsTaskHandler = 
-				stcTaskManageObject.pstcSchedulerPauseClogsTaskHandler->_pstcTaskHandlerNext;
-			
-			if (stcTaskManageObject.pstcSchedulerPauseClogsTaskHandler->u8TaskStatus != enTaskStatus_STOP)
-			{
-				stcTaskManageObject.u8TotalTaskNumber--;
-				stcTaskManageObject.u8StopTaskNumber++;
-				
-				if (stcTaskManageObject.pstcSchedulerPauseClogsTaskHandler->u8TaskStatus == enTaskStatus_DELAY)
-				{
-					stcTaskManageObject.pstcSchedulerPauseClogsTaskHandler->u32SchedulerPauseTaskDelayCountVal = 
-						stcTaskManageObject.u32SchedulerPauseTimePointCountVal - 
-						stcTaskManageObject.pstcSchedulerPauseClogsTaskHandler->u32TaskExecuteTimePointCountVal;
-				}
-			}
-		}
-		else
+		stcTaskManageObject.pstcSchedulerPauseClogsTaskHandler = 
+			stcTaskManageObject.pstcSchedulerPauseClogsTaskHandler->_pstcTaskHandlerNext;
+		
+		if (stcTaskManageObject.pstcSchedulerPauseClogsTaskHandler->u8TaskStatus != enTaskStatus_STOP)
 		{
 			stcTaskManageObject.u8TotalTaskNumber--;
 			stcTaskManageObject.u8StopTaskNumber++;
 			
-			stcTaskManageObject.pstcSchedulerPauseClogsTaskHandler = 
-				stcTaskManageObject.pstcSchedulerPausePointTaskHandler;
-			
-			stcTaskManageObject.enSchedulerState = enSchedulerStatus_STOP;
-			
-			stcIdleTaskHandler.u32SchedulerPauseTaskDelayCountVal = 0;
-			Task_SetStatus(&stcIdleTaskHandler, enTaskStatus_DELAY, 1000);
+			if (stcTaskManageObject.pstcSchedulerPauseClogsTaskHandler->u8TaskStatus == enTaskStatus_DELAY)
+			{
+				stcTaskManageObject.pstcSchedulerPauseClogsTaskHandler->u32SchedulerPauseTaskDelayCountVal = 
+					stcTaskManageObject.u32SchedulerPauseTimePointCountVal - 
+					stcTaskManageObject.pstcSchedulerPauseClogsTaskHandler->u32TaskExecuteTimePointCountVal;
+			}
 		}
-		stcTaskManageObject.pstcCurrTaskHandler = stcTaskManageObject.pstcCurrTaskHandler->_pstcTaskHandlerPrev;
 	}
+	else
+	{
+		stcTaskManageObject.u8TotalTaskNumber--;
+		stcTaskManageObject.u8StopTaskNumber++;
+		
+		stcTaskManageObject.pstcSchedulerPauseClogsTaskHandler = 
+			stcTaskManageObject.pstcSchedulerPausePointTaskHandler;
+		
+		stcTaskManageObject.enSchedulerState = enSchedulerStatus_STOP;
+		
+		stcIdleTaskHandler.u32SchedulerPauseTaskDelayCountVal = 0;
+		Task_SetStatus(&stcIdleTaskHandler, enTaskStatus_DELAY, 1000);
+	}
+	
+	stcTaskManageObject.pstcCurrTaskHandler = stcTaskManageObject.pstcCurrTaskHandler->_pstcTaskHandlerPrev;
 }

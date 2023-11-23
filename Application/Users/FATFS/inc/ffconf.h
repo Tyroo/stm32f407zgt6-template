@@ -8,7 +8,7 @@
 / Function Configurations
 /---------------------------------------------------------------------------*/
 
-#define FF_FS_READONLY	0	// ÊÇ·ñÖ»¶Á
+#define FF_FS_READONLY	0	// ÃŠÃ‡Â·Ã±Ã–Â»Â¶Ã
 /* This option switches read-only configuration. (0:Read/Write or 1:Read-only)
 /  Read-only configuration removes writing API functions, f_write(), f_sync(),
 /  f_unlink(), f_mkdir(), f_chmod(), f_rename(), f_truncate(), f_getfree()
@@ -59,7 +59,7 @@
 #define FF_USE_STRFUNC	1   // Change
 #define FF_PRINT_LLI	0
 #define FF_PRINT_FLOAT	0
-#define FF_STRF_ENCODE	3	// Change£º0->3
+#define FF_STRF_ENCODE	3	// Change 0->3
 /* FF_USE_STRFUNC switches string functions, f_gets(), f_putc(), f_puts() and
 /  f_printf().
 /
@@ -263,7 +263,7 @@
 */
 
 
-#define FF_FS_LOCK		0
+#define FF_FS_LOCK		1
 /* The option FF_FS_LOCK switches file lock function to control duplicated file open
 /  and illegal operation to open objects. This option must be 0 when FF_FS_READONLY
 /  is 1.

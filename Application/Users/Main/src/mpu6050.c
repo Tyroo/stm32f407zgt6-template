@@ -2,59 +2,59 @@
 
 
 
-// ³õÊ¼»¯MPU6050
+// åˆå§‹åŒ–MPU6050
 bool MPU6050_Init(void)
 {
 	bool Res;
 	uint8_t RxDev;
 	
-	/* ¸´Î»MPU6050 */
+	/* å¤ä½MPU6050 */
 	Res = MPU6050_Tx_Data(MPU6050_DEV_ADDR, MPU6050_PWR_MGMT1_REG, 1, PTU8(MPU6050_RESET_CMD));
 	Delay_Ms(100);
 	Res = MPU6050_Tx_Data(MPU6050_DEV_ADDR, MPU6050_PWR_MGMT1_REG, 1, PTU8(MPU6050_RESET_CMD));
 	
-	/* ÉèÖÃ½ÇËÙ¶È´«¸ÐÆ÷ºÍ¼ÓËÙ¶È´«¸ÐÆ÷µÄÂúÁ¿³Ì·¶Î§ */
-	MPU6050_SetGyroFsr(3);					// ÍÓÂÝÒÇ´«¸ÐÆ÷,¡À2000dps
-	MPU6050_SetAccelFsr(0);					// ¼ÓËÙ¶È´«¸ÐÆ÷,¡À2g
-	MPU6050_SetRate(50);					// ÉèÖÃ²ÉÑùÂÊ50Hz
+	/* è®¾ç½®è§’é€Ÿåº¦ä¼ æ„Ÿå™¨å’ŒåŠ é€Ÿåº¦ä¼ æ„Ÿå™¨çš„æ»¡é‡ç¨‹èŒƒå›´ */
+	MPU6050_SetGyroFsr(3);					// é™€èžºä»ªä¼ æ„Ÿå™¨,Â±2000dps
+	MPU6050_SetAccelFsr(0);					// åŠ é€Ÿåº¦ä¼ æ„Ÿå™¨,Â±2g
+	MPU6050_SetRate(50);					// è®¾ç½®é‡‡æ ·çŽ‡50Hz
 	
-	/* ÉèÖÃÆäËû²ÎÊý */
+	/* è®¾ç½®å…¶ä»–å‚æ•° */
 	MPU6050_Rx_Data(MPU6050_DEV_ADDR, MPU6050_DEVICE_ID_REG, 1, &RxDev);
 
 	Res = (bool)(RxDev == MPU6050_DEV_ADDR);
 	
-	mpu_dmp_init();	// MPU6050 DMP³õÊ¼»¯
+	mpu_dmp_init();	// MPU6050 DMPåˆå§‹åŒ–
 	
 	return Res;
 }
 
 
-//ÉèÖÃMPU6050ÍÓÂÝÒÇ´«¸ÐÆ÷ÂúÁ¿³Ì·¶Î§
-//Fsr:0,¡À250dps;1,¡À500dps;2,¡À1000dps;3,¡À2000dps
-//·µ»ØÖµ:0,ÉèÖÃ³É¹¦
-//    ÆäËû,ÉèÖÃÊ§°Ü 
+//è®¾ç½®MPU6050é™€èžºä»ªä¼ æ„Ÿå™¨æ»¡é‡ç¨‹èŒƒå›´
+//Fsr:0,Â±250dps;1,Â±500dps;2,Â±1000dps;3,Â±2000dps
+//è¿”å›žå€¼:0,è®¾ç½®æˆåŠŸ
+//    å…¶ä»–,è®¾ç½®å¤±è´¥ 
 bool MPU6050_SetGyroFsr(uint8_t Fsr)
 {
-	//ÉèÖÃÍÓÂÝÒÇÂúÁ¿³Ì·¶Î§ 
+	//è®¾ç½®é™€èžºä»ªæ»¡é‡ç¨‹èŒƒå›´ 
 	return MPU6050_Tx_Data(MPU6050_DEV_ADDR, MPU6050_GYRO_CFG_REG, 1, PTU8(Fsr<<3)); 
 }
 
 
-//ÉèÖÃMPU6050¼ÓËÙ¶È´«¸ÐÆ÷ÂúÁ¿³Ì·¶Î§
-//Fsr:0,¡À2g;1,¡À4g;2,¡À8g;3,¡À16g
-//·µ»ØÖµ:0,ÉèÖÃ³É¹¦
-//    ÆäËû,ÉèÖÃÊ§°Ü 
+//è®¾ç½®MPU6050åŠ é€Ÿåº¦ä¼ æ„Ÿå™¨æ»¡é‡ç¨‹èŒƒå›´
+//Fsr:0,Â±2g;1,Â±4g;2,Â±8g;3,Â±16g
+//è¿”å›žå€¼:0,è®¾ç½®æˆåŠŸ
+//    å…¶ä»–,è®¾ç½®å¤±è´¥ 
 bool MPU6050_SetAccelFsr(uint8_t Fsr)
 {
-	//ÉèÖÃ¼ÓËÙ¶È´«¸ÐÆ÷ÂúÁ¿³Ì·¶Î§  
+	//è®¾ç½®åŠ é€Ÿåº¦ä¼ æ„Ÿå™¨æ»¡é‡ç¨‹èŒƒå›´  
 	return MPU6050_Tx_Data(MPU6050_DEV_ADDR, MPU6050_ACCEL_CFG_REG, 1, PTU8(Fsr<<3));
 }
 
 
-//ÉèÖÃMPU6050µÄÊý×ÖµÍÍ¨ÂË²¨Æ÷
-//Lpf:Êý×ÖµÍÍ¨ÂË²¨ÆµÂÊ(Hz)
-//·µ»ØÖµ:0,ÉèÖÃ³É¹¦
-//    ÆäËû,ÉèÖÃÊ§°Ü 
+//è®¾ç½®MPU6050çš„æ•°å­—ä½Žé€šæ»¤æ³¢å™¨
+//Lpf:æ•°å­—ä½Žé€šæ»¤æ³¢é¢‘çŽ‡(Hz)
+//è¿”å›žå€¼:0,è®¾ç½®æˆåŠŸ
+//    å…¶ä»–,è®¾ç½®å¤±è´¥ 
 bool MPU6050_SetLPF(uint16_t Lpf)
 {
 	uint8_t Data;
@@ -66,14 +66,14 @@ bool MPU6050_SetLPF(uint16_t Lpf)
 	else if (Lpf>=10) Data = 5;
 	else              Data = 6;
 	
-	return MPU6050_Tx_Data(MPU6050_DEV_ADDR, MPU6050_CFG_REG, 1, &Data);//ÉèÖÃÊý×ÖµÍÍ¨ÂË²¨Æ÷  
+	return MPU6050_Tx_Data(MPU6050_DEV_ADDR, MPU6050_CFG_REG, 1, &Data);//è®¾ç½®æ•°å­—ä½Žé€šæ»¤æ³¢å™¨  
 }
 
 
-//ÉèÖÃMPU6050µÄ²ÉÑùÂÊ(¼Ù¶¨Fs=1KHz)
+//è®¾ç½®MPU6050çš„é‡‡æ ·çŽ‡(å‡å®šFs=1KHz)
 //Rate:4~1000(Hz)
-//·µ»ØÖµ:0,ÉèÖÃ³É¹¦
-//    ÆäËû,ÉèÖÃÊ§°Ü 
+//è¿”å›žå€¼:0,è®¾ç½®æˆåŠŸ
+//    å…¶ä»–,è®¾ç½®å¤±è´¥ 
 bool MPU6050_SetRate(uint16_t Rate)
 {
 	bool Res;
@@ -83,15 +83,15 @@ bool MPU6050_SetRate(uint16_t Rate)
 	if (Rate<4) Rate = 4;
 	
 	Data = 1000/Rate - 1;
-	Res = MPU6050_Tx_Data(MPU6050_DEV_ADDR, MPU6050_SAMPLE_RATE_REG, 1, &Data);	//ÉèÖÃÊý×ÖµÍÍ¨ÂË²¨Æ÷
- 	Res = MPU6050_SetLPF(Rate/2);	//×Ô¶¯ÉèÖÃLPFÎª²ÉÑùÂÊµÄÒ»°ë
+	Res = MPU6050_Tx_Data(MPU6050_DEV_ADDR, MPU6050_SAMPLE_RATE_REG, 1, &Data);	//è®¾ç½®æ•°å­—ä½Žé€šæ»¤æ³¢å™¨
+ 	Res = MPU6050_SetLPF(Rate/2);	//è‡ªåŠ¨è®¾ç½®LPFä¸ºé‡‡æ ·çŽ‡çš„ä¸€åŠ
 	
 	return Res;
 }
 
 
-//µÃµ½ÎÂ¶ÈÖµ
-//·µ»ØÖµ:ÎÂ¶ÈÖµ(À©´óÁË100±¶)
+//å¾—åˆ°æ¸©åº¦å€¼
+//è¿”å›žå€¼:æ¸©åº¦å€¼(æ‰©å¤§äº†100å€)
 short MPU6050_GetTemperature(void)
 {
 	bool Res;
@@ -105,16 +105,16 @@ short MPU6050_GetTemperature(void)
 	if (Res == false) return 0;
 	
     Raw = ((uint16_t)RxBuff[0]<<8) | RxBuff[1];  
-    Temp = (36.53 + ((double)Raw)/340);	// ¸ù¾Ý¹«Ê½¼ÆËãÎÂ¶È
+    Temp = (36.53 + ((double)Raw)/340);	// æ ¹æ®å…¬å¼è®¡ç®—æ¸©åº¦
     
 	return (Temp*100);
 }
 
 
-//µÃµ½ÍÓÂÝÒÇÖµ(Ô­Ê¼Öµ)
-//Gx,Gx,Gx:ÍÓÂÝÒÇx,y,zÖáµÄÔ­Ê¼¶ÁÊý(´ø·ûºÅ)
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,´íÎó´úÂë
+//å¾—åˆ°é™€èžºä»ªå€¼(åŽŸå§‹å€¼)
+//Gx,Gx,Gx:é™€èžºä»ªx,y,zè½´çš„åŽŸå§‹è¯»æ•°(å¸¦ç¬¦å·)
+//è¿”å›žå€¼:0,æˆåŠŸ
+//    å…¶ä»–,é”™è¯¯ä»£ç 
 uint8_t MPU6050_GetGyroscope(short *Gx,short *Gy,short *Gz)
 {
     uint8_t RxBuff[6], Res;  
@@ -132,10 +132,10 @@ uint8_t MPU6050_GetGyroscope(short *Gx,short *Gy,short *Gz)
 }
 
 
-//µÃµ½¼ÓËÙ¶ÈÖµ(Ô­Ê¼Öµ)
-//Ax,Ax,Ax:ÍÓÂÝÒÇx,y,zÖáµÄÔ­Ê¼¶ÁÊý(´ø·ûºÅ)
-//·µ»ØÖµ:0,³É¹¦
-//    ÆäËû,´íÎó´úÂë
+//å¾—åˆ°åŠ é€Ÿåº¦å€¼(åŽŸå§‹å€¼)
+//Ax,Ax,Ax:é™€èžºä»ªx,y,zè½´çš„åŽŸå§‹è¯»æ•°(å¸¦ç¬¦å·)
+//è¿”å›žå€¼:0,æˆåŠŸ
+//    å…¶ä»–,é”™è¯¯ä»£ç 
 uint8_t MPU6050_GetAccelerometer(short *Ax,short *Ay,short *Az)
 {
     uint8_t RxBuff[6], Res;  
@@ -153,74 +153,17 @@ uint8_t MPU6050_GetAccelerometer(short *Ax,short *Ay,short *Az)
 }
 
 
-// ·¢ËÍÊý¾Ý¸øMPU6050
+// å‘é€æ•°æ®ç»™MPU6050
 bool MPU6050_Tx_Data(uint8_t DevAddr, uint16_t RegAddr, 
 		uint8_t TxLen, uint8_t* Buff) 
 {
-	bool 	Res;	// Ó¦´ðÏìÓ¦
-	uint8_t Index;	// ½ÓÊÕÊý¾ÝË÷Òý
-
-	Res = true, Index = 0;
-	
-	IIC_Start();					// ·¢ËÍIICÆðÊ¼ÐÅºÅ
-	Res = IIC_Send_Byte((DevAddr<<1) | MPU6050_WRITE_CMD);// ·¢ËÍ¼Ä´æÆ÷µØÖ·¸ßÎ»
-	Res = IIC_Send_Byte(RegAddr); 		// ·¢ËÍ¼Ä´æÆ÷µØÖ·
-	
-//	/* ½ÓÊÕÊý¾Ý´æÈëÊý×é, ½ÓÊÕ×îºóÒ»¸ö×Ö½ÚºóÎÞÐèÓ¦´ð */
-//	IIC_Start();					// ·¢ËÍIICÆðÊ¼ÐÅºÅ
-	Res = IIC_Send_Byte((DevAddr<<1) | MPU6050_READ_CMD); // ·¢ËÍ¶ÁÃüÁî
-	
-	if (!Res) 
-	{ 
-		IIC_Stop();
-		return false;
-	}
-	
-	while((Index < TxLen) && (Res == true)) 
-	{
-		Res = IIC_Send_Byte(*(Buff+Index));	// ¶ÁÈ¡ÒÔÒ»¸ö×Ö½Ú						
-		Index++;
-	}
-	
-	IIC_Stop();					// Í£Ö¹·¢ËÍ
-	
-	return Res;
+	return (bool)(I2C_WriteRegister(DevAddr, RegAddr, Buff, TxLen));
 }
 
 
-// ½ÓÊÕÀ´×ÔMPU6050µÄÊý¾Ý
+// æŽ¥æ”¶æ¥è‡ªMPU6050çš„æ•°æ®
 bool MPU6050_Rx_Data(uint8_t DevAddr, uint16_t RegAddr, 
 		uint8_t RxLen, uint8_t* Buff) 
 {
-	bool 	Res;	// Ó¦´ðÏìÓ¦
-	uint8_t Index;	// ½ÓÊÕÊý¾ÝË÷Òý
-
-	Res = true, Index = 0;
-	
-	IIC_Start();					// ·¢ËÍIICÆðÊ¼ÐÅºÅ
-	Res = IIC_Send_Byte((DevAddr<<1) | MPU6050_WRITE_CMD);// ·¢ËÍ¼Ä´æÆ÷µØÖ·¸ßÎ»
-	Res = IIC_Send_Byte(RegAddr); 		// ·¢ËÍ¼Ä´æÆ÷µØÖ·
-	
-//	/* ½ÓÊÕÊý¾Ý´æÈëÊý×é, ½ÓÊÕ×îºóÒ»¸ö×Ö½ÚºóÎÞÐèÓ¦´ð */
-//	IIC_Start();						// ·¢ËÍIICÆðÊ¼ÐÅºÅ
-	Res = IIC_Send_Byte((DevAddr<<1) | MPU6050_READ_CMD); // ·¢ËÍ¶ÁÃüÁî
-	
-	if (!Res) 
-	{ 
-		IIC_Stop();
-		return false;
-	}
-	
-	while((Index < RxLen) && (Res == true)) 
-	{
-		if (Index != 1)
-			*(Buff+Index) = IIC_Read_Byte(1);	// ·¢ËÍÓ¦´ðÐÅºÅ
-		else
-			*(Buff+Index) = IIC_Read_Byte(0);	// ·¢ËÍ·ÇÓ¦´ðÐÅºÅ							
-		Index++;
-	}
-	
-	IIC_Stop();									// Í£Ö¹·¢ËÍ
-	
-	return (bool)Res;
+	return (bool)(I2C_WriteRegister(DevAddr, RegAddr, Buff, RxLen));
 }

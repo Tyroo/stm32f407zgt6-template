@@ -1,223 +1,214 @@
-#include "main.h"
-
 /*******************************************************************************
-** Ãû³Æ£ºkeyboard.c
-** ¹¦ÄÜ£º°´¼ü×´Ì¬´¦Àí
-** °æ±¾£ºV1.0
-** ×÷Õß£ºÕÅ¼ÎÁ¼ 
-** ÈÕÆÚ£º2023Äê1ÔÂ4ÈÕ
+** åç§°ï¼škeyboard.c
+** åŠŸèƒ½ï¼šæŒ‰é”®çŠ¶æ€å¤„ç†
+** ç‰ˆæœ¬ï¼šV1.0
+** ä½œè€…ï¼šå¼ å˜‰è‰¯ 
+** æ—¥æœŸï¼š2023å¹´1æœˆ4æ—¥
 *******************************************************************************/
 
 
-stcButtonObject_t *pstcCurrButton;
-stcEventSource_t stcBtnEventSource;
+#include <stdio.h>
+#include "keyboard.h"
+#include "stm32f4xx_gpio.h"
 
-stcButtonObject_t stcKEY0Button;	// KEY0¼ü
-stcButtonObject_t stcKEY1Button;	// KEY1¼ü
-stcButtonObject_t stcKEY2Button;	// KEY2¼ü
-stcButtonObject_t stcWKUPButton;	// WAKE_UP¼ü
 
-static uint8_t GetKEY0BtnState(void);
-static uint8_t GetKEY1BtnState(void);
-static uint8_t GetKEY2BtnState(void);
-static uint8_t GetWKUPBtnState(void);
+stcButtonObject_t * gpstcCurrButton;
 
-stcButtonObject_t *pstcButtonTable[KEYBOARD_BUTTON_NUX] = 
+stcButtonObject_t gstcKey01Button;	// KEY01
+stcButtonObject_t gstcKey02Button;	// KEY02
+stcButtonObject_t gstcKey03Button;	// KEY03
+stcButtonObject_t gstcKey04Button;	// KEY04
+stcButtonObject_t gstcKey05Button;	// KEY05
+
+
+static unsigned char GPIO_GetKey01BtnState(void)
 {
-	&stcKEY0Button, &stcKEY1Button, &stcKEY2Button,
-	&stcWKUPButton
-};
-
-pButtonState_t pstcButtonStateFuncTable[KEYBOARD_BUTTON_NUX] = 
+	return ((GPIOA->IDR & GPIO_Pin_2) != Bit_RESET);
+}
+static unsigned char GPIO_GetKey02BtnState(void)
 {
-	&GetKEY0BtnState, &GetKEY1BtnState, &GetKEY2BtnState,
-	&GetWKUPBtnState
-};
-
-
-static uint8_t GetKEY0BtnState(void) { return (uint8_t)(1 - GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_4)); }
-static uint8_t GetKEY1BtnState(void)  { return (uint8_t)(1 - GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_3)); }
-static uint8_t GetKEY2BtnState(void)  { return (uint8_t)(1 - GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_2)); }
-static uint8_t GetWKUPBtnState(void)  { return (uint8_t)GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0); }
-
-
-// ¼üÅÌÄ£¿é³õÊ¼»¯
-void Keyboard_Init(void)
+	return ((GPIOB->IDR & GPIO_Pin_11) == Bit_RESET);
+}
+static unsigned char GPIO_GetKey03BtnState(void)
 {
-	/* GPIO³õÊ¼»¯ */
-	GPIO_InitTypeDef GPIO_InitStructure;
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOE, ENABLE);// Ê¹ÄÜ GPIOA,GPIOE Ê±ÖÓ
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4; // KEY0 KEY1 KEY2 ¶ÔÓ¦Òı½Å
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;//ÆÕÍ¨ÊäÈëÄ£Ê½
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100M
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//ÉÏÀ­
-	GPIO_Init(GPIOE, &GPIO_InitStructure);//³õÊ¼»¯ GPIOE2,3,4
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;//WK_UP ¶ÔÓ¦Òı½Å PA0
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN ;//ÏÂÀ­
-	GPIO_Init(GPIOA, &GPIO_InitStructure);//³õÊ¼»¯ GPIOA0
-	
-	/* °´¼ü´¦ÀíÄ£¿é³õÊ¼»¯ */
-	if (pstcButtonTable[0] == NULL)
-		for( ; ; );
-	
-	pstcCurrButton = pstcButtonTable[0];
-	pstcCurrButton->pstcButtonObjectNext = pstcCurrButton;
-	pstcCurrButton->pstcButtonObjectPrev = pstcCurrButton;
-
-	for(uint8_t i=0; i<KEYBOARD_BUTTON_NUX; i++)
-	{
-		Keyboard_AddButton(
-			pstcButtonTable[i], 
-			pstcButtonStateFuncTable[i]
-		);
-		pstcButtonTable[i]->u8BtnNumber = i;
-	}
+	return ((GPIOA->IDR & GPIO_Pin_7) == Bit_RESET);
+}
+static unsigned char GPIO_GetKey04BtnState(void)
+{
+	return ((GPIOB->IDR & GPIO_Pin_1) == Bit_RESET);
+}
+static unsigned char GPIO_GetKey05BtnState(void)
+{
+	return ((GPIOB->IDR & GPIO_Pin_10) == Bit_RESET);
 }
 
 
-void Keyboard_AddButton(stcButtonObject_t *pstcButton, pButtonState_t pButtonStateFunc)
+
+stcButtonObject_t *pstcButtonTable[KEYBOARD_BUTTON_NUM] = 
 {
-	stcButtonObject_t *pstcFirstButton = pstcButtonTable[0];
-	
-	if (pstcButton != NULL)
+	&gstcKey01Button, &gstcKey02Button, &gstcKey03Button,
+	&gstcKey04Button, &gstcKey05Button
+};
+
+
+pu8ButtonState_t pstcButtonStateFuncTable[KEYBOARD_BUTTON_NUM] = 
+{
+	GPIO_GetKey01BtnState, GPIO_GetKey02BtnState, GPIO_GetKey03BtnState,
+	GPIO_GetKey04BtnState, GPIO_GetKey05BtnState
+};
+
+
+// é”®ç›˜æ¨¡å—åˆå§‹åŒ–
+void Keyboard_Init(void)
+{
+	for(uint8_t i = 0; i < KEYBOARD_BUTTON_NUM; i++)
 	{
-		if (pstcButton != pstcFirstButton)
-		{
-			pstcButton->pstcButtonObjectPrev = pstcFirstButton->pstcButtonObjectPrev;
-			pstcButton->pstcButtonObjectNext = pstcFirstButton;
-			pstcFirstButton->pstcButtonObjectPrev->pstcButtonObjectNext = pstcButton;
-			pstcFirstButton->pstcButtonObjectPrev = pstcButton;
-		}
-		pstcButton->GetKeyState = pButtonStateFunc;
-		Keyboard_SetBtnDecideTime(pstcButton, 2000, 800);
+		// åŠ å…¥æŒ‰é’®
+		Keyboard_AddButton(pstcButtonTable[i], pstcButtonStateFuncTable[i]);
 	}
+	
+	// è®¾ç½®æŒ‰é’®é•¿æŒ‰åˆ¤å®šæ—¶é—´å’ŒåŒå‡»åˆ¤å®šæ—¶é—´
+	Keyboard_SetBtnDecideTime(pstcButtonTable[0], 2000, 100);
+	Keyboard_SetBtnDecideTime(pstcButtonTable[1], 1500, 100);
+	Keyboard_SetBtnDecideTime(pstcButtonTable[2], 3000, 100);
+	Keyboard_SetBtnDecideTime(pstcButtonTable[3], 1500, 100);
+	Keyboard_SetBtnDecideTime(pstcButtonTable[4], 1500, 100);
+}
+
+
+void Keyboard_AddButton(stcButtonObject_t *pstcButton, pu8ButtonState_t pu8ButtonStateFunc)
+{
+	static stcButtonObject_t * gpstcHeadButton = NULL;
+	
+	if (pstcButton == NULL) return;
+	
+	if (gpstcHeadButton != NULL)
+	{
+		pstcButton->pstcButtonObjectPrev = gpstcHeadButton->pstcButtonObjectPrev;
+		pstcButton->pstcButtonObjectNext = gpstcHeadButton;
+		gpstcHeadButton->pstcButtonObjectPrev->pstcButtonObjectNext = pstcButton;
+		gpstcHeadButton->pstcButtonObjectPrev = pstcButton;
+		pstcButton->u8BtnNumber = pstcButton->pstcButtonObjectPrev->u8BtnNumber + 1;
+	}
+	else
+	{
+		pstcButton->pstcButtonObjectNext = pstcButton;
+		pstcButton->pstcButtonObjectPrev = pstcButton;
+		pstcButton->u8BtnNumber = 0;
+		gpstcHeadButton = pstcButton;
+		gpstcCurrButton = gpstcHeadButton;
+	}
+	
+	pstcButton->pu8GetKeyStateFunc = pu8ButtonStateFunc;
 }
 
 
 void Keyboard_SetBtnDecideTime(stcButtonObject_t *pstcButton, 
-		uint16_t u16LongPressTime, uint16_t u16MultiPressTime)
+							   uint16_t u16LongPressTime, uint16_t u16MultiActiveTime)
 {
 	pstcButton->u16LongPressDecideTime = u16LongPressTime;
-	pstcButton->u16MultiPressIntervalTime = u16MultiPressTime;
+	pstcButton->u16MultiPressIntervalTime = u16MultiActiveTime;
+	pstcButton->u16MultiLooseIntervalTime = u16MultiActiveTime;
 }
 
 
 static void Keyboard_Debounce(void)
 {
-	uint8_t u8CurrBtnState = 0;
+	uint8_t u8CurrBtnState = gpstcCurrButton->pu8GetKeyStateFunc();
 	
-	u8CurrBtnState = pstcCurrButton->GetKeyState();
-	
-	// µ±°´Å¥×´Ì¬·¢Éú±ä»¯Ê±
-	if ((u8CurrBtnState != pstcCurrButton->u8BtnStateDebounceBefore)
-		 && (pstcCurrButton->bBtnDebounceFlg == false))
+	// å½“æŒ‰é’®çŠ¶æ€å‘ç”Ÿå˜åŒ–æ—¶
+	if (u8CurrBtnState != gpstcCurrButton->u8BtnStateDebounceBefore)
 	{
-		// ¼ÇÂ¼·¢Éú±ä»¯Ê±µÄÊ±¿Ì
-		pstcCurrButton->u16BtnDebounceCnt = stcTaskManageObject.u32TaskTimeBaseCountVal;
-		// °´Å¥Ïû¶¶±êÖ¾ÉèÖÃÎªtrue
-		pstcCurrButton->bBtnDebounceFlg = true;
-	}
-	// Ö´ĞĞ°´Å¥Ïû¶¶
-	else if (pstcCurrButton->bBtnDebounceFlg)
-	{
-		// ¾­¹ıÒ»¶¨µÄ°´Å¥Ïû¶¶Ê±¼äºóÔÙ»ñÈ¡×´Ì¬£¬ÊµÏÖ°´Å¥Ïû¶¶
-		if ((stcTaskManageObject.u32TaskTimeBaseCountVal - 
-			 pstcCurrButton->u16BtnDebounceCnt) > KEYBOARD_DEBOUNCE_TIME)
+		// è®°å½•å‘ç”Ÿå˜åŒ–æ—¶çš„æ—¶åˆ»
+		if (gpstcCurrButton->u32BtnDebounceCnt == 0)
 		{
-			pstcCurrButton->bBtnDebounceFlg = false;
-			pstcCurrButton->u8BtnStateDebounceAfter = u8CurrBtnState;
+			gpstcCurrButton->u32BtnDebounceCnt = KEYBOARD_GET_TIMEBASE();
 		}
+		// ç»è¿‡ä¸€å®šçš„æŒ‰é’®æ¶ˆæŠ–æ—¶é—´åå†è·å–çŠ¶æ€ï¼Œå®ç°æŒ‰é’®æ¶ˆæŠ–
+		else if (((uint32_t)(KEYBOARD_GET_TIMEBASE() - gpstcCurrButton->u32BtnDebounceCnt)) > KEYBOARD_DEBOUNCE_TIME)
+		{
+			gpstcCurrButton->u8BtnStateDebounceAfter = u8CurrBtnState;
+			gpstcCurrButton->u32BtnDebounceCnt = 0;
+		}
+	}
+	else
+	{
+		gpstcCurrButton->u32BtnDebounceCnt = 0;
 	}
 }
 
 
-// ¼üÅÌ°´¼üÉ¨ÃèÄ£¿é
+// é”®ç›˜æŒ‰é”®æ‰«ææ¨¡å—
 static void Keyboard_Scan(void)
 {
-	uint8_t u8BtnStateValue = 0;
-	
-	u8BtnStateValue = pstcCurrButton->u8BtnStateDebounceBefore + (pstcCurrButton->u8BtnStateDebounceAfter << 1);
-	pstcCurrButton->u8BtnStateDebounceBefore = pstcCurrButton->u8BtnStateDebounceAfter;
-	
-	switch(u8BtnStateValue)
+	switch(gpstcCurrButton->u8BtnStateDebounceBefore | (gpstcCurrButton->u8BtnStateDebounceAfter << 1))
 	{
-		// °´¼üËÉ¿ªºó
+		// æŒ‰é”®æ¾å¼€å
 		case 0:
-			if (pstcCurrButton->enBtnState != enBtnStatus_LOOSEN)
+			gpstcCurrButton->enBtnState = enBtnStatus_LOOSEN;
+		
+			if (gpstcCurrButton->u8BtnPressCnt > 0)
 			{
-				if ((stcTaskManageObject.u32TaskTimeBaseCountVal - 
-					 pstcCurrButton->u16MultiPressIntervalCnt) > pstcCurrButton->u16MultiPressIntervalTime)
+				if (((uint32_t)(KEYBOARD_GET_TIMEBASE() - gpstcCurrButton->u32MultiPressIntervalCnt)) >= 
+					gpstcCurrButton->u16MultiPressIntervalTime)
 				{
-					pstcCurrButton->enBtnState = enBtnStatus_LOOSEN;
-					pstcCurrButton->s8BtnLoosenCnt = 0;
+					gpstcCurrButton->enBtnState = (enButtonStatus_t)(gpstcCurrButton->u8BtnPressCnt + enBtnStatus_DOUBLEPRESS_UP);
+					gpstcCurrButton->u8BtnPressCnt = 0;
+				}
+			}
+			
+			if (gpstcCurrButton->u8BtnLooseCnt > 0)
+			{
+				if (((uint32_t)(KEYBOARD_GET_TIMEBASE() - gpstcCurrButton->u32MultiLooseIntervalCnt)) >= 
+					gpstcCurrButton->u16MultiLooseIntervalTime)
+				{
+					gpstcCurrButton->enBtnState = (enButtonStatus_t)(gpstcCurrButton->u8BtnLooseCnt);
+					gpstcCurrButton->u8BtnLooseCnt = 0;
 				}
 			}
 			break;
-		// °´¼ü±»ËÉ¿ªÊ±
+		// æŒ‰é”®è¢«æ¾å¼€æ—¶
 		case 1:
-			pstcCurrButton->enBtnState = (enButtonStatus_t)(enBtnStatus_ONCEPRESS_UP + pstcCurrButton->s8BtnLoosenCnt);
-			pstcCurrButton->u16MultiPressIntervalCnt = stcTaskManageObject.u32TaskTimeBaseCountVal;
-			pstcCurrButton->s8BtnLoosenCnt = (pstcCurrButton->s8BtnLoosenCnt + 1) % 2;
+			if (gpstcCurrButton->u8BtnLooseCnt == 0)
+				gpstcCurrButton->u32MultiLooseIntervalCnt = KEYBOARD_GET_TIMEBASE();
+			gpstcCurrButton->u8BtnLooseCnt = (gpstcCurrButton->u8BtnLooseCnt + 1) % 3;
 			break;
-		// °´Å¥±»°´ÏÂÊ±
+		// æŒ‰é’®è¢«æŒ‰ä¸‹æ—¶
 		case 2:
-			pstcCurrButton->enBtnState = (enButtonStatus_t)(enBtnStatus_ONCEPRESS_DW + pstcCurrButton->s8BtnLoosenCnt);
-			pstcCurrButton->u16LongPressDecideCnt = stcTaskManageObject.u32TaskTimeBaseCountVal;
+			if (gpstcCurrButton->u8BtnPressCnt == 0)
+				gpstcCurrButton->u32MultiPressIntervalCnt = KEYBOARD_GET_TIMEBASE();
+			gpstcCurrButton->u8BtnPressCnt = (gpstcCurrButton->u8BtnPressCnt + 1) % 3;
 			break;
-		// °´Å¥±»°´ÏÂºó
+		// æŒ‰é’®è¢«æŒ‰ä¸‹å
 		case 3:
-			if (pstcCurrButton->enBtnState != enBtnStatus_LONGPRESS)
+			if (gpstcCurrButton->u8BtnPressCnt > 0)
 			{
-				if ((stcTaskManageObject.u32TaskTimeBaseCountVal - 
-					 pstcCurrButton->u16LongPressDecideCnt) > pstcCurrButton->u16LongPressDecideTime)
+				if (((uint32_t)(KEYBOARD_GET_TIMEBASE() - gpstcCurrButton->u32MultiPressIntervalCnt)) >= 
+					gpstcCurrButton->u16LongPressDecideTime)
 				{
-					pstcCurrButton->enBtnState = enBtnStatus_LONGPRESS;
+					gpstcCurrButton->enBtnState = enBtnStatus_LONGPRESS;
+					gpstcCurrButton->u8BtnPressCnt = 0;
+					gpstcCurrButton->u8BtnLooseCnt = 2;
 				}
 			}
 			break;
 		default:
 			break;
 	}
-}
-
-
-// °´Å¥ĞÅºÅ·¢ËÍ
-static void Keyboard_SignalSend(void)
-{
-	static EventSignal_t u32CurrBtnSignal = 0;
 	
-	// Èç¹û°´Å¥×´Ì¬±ä¸üÔò·¢ËÍ¶ÔÓ¦µÄÊÂ¼şĞÅºÅ
-	if (pstcCurrButton->enBtnState != pstcCurrButton->enBtnStatePrev)
-	{
-		u32CurrBtnSignal &= ~(((EventSignal_t)7) << (pstcCurrButton->u8BtnNumber * 3));
-		u32CurrBtnSignal |= ((EventSignal_t)pstcCurrButton->enBtnState << (pstcCurrButton->u8BtnNumber * 3));
-		
-		Event_SignalGenerate(
-			&stcBtnEventSource, 
-			u32CurrBtnSignal, 
-			pstcCurrButton
-		);
-	}
-	else
-	{
-		pstcCurrButton->pstcButtonObjectPrev->enBtnStatePrev = 
-			pstcCurrButton->pstcButtonObjectPrev->enBtnState;
-	}
+	// æŒ‰é’®çŠ¶æ€é”å­˜
+	gpstcCurrButton->u8BtnStateDebounceBefore = gpstcCurrButton->u8BtnStateDebounceAfter;
+	// åˆ‡æ¢è‡³ä¸‹ä¸€ä¸ªæŒ‰é”®
+	gpstcCurrButton = gpstcCurrButton->pstcButtonObjectNext;
 }
 
 
-// °´¼ü×´Ì¬´¦Àí
+// æŒ‰é”®çŠ¶æ€å¤„ç†
 void Keyboard_Process(void)
 {
-	// °´¼üÏû¶¶´¦Àí
+	// æŒ‰é”®æ¶ˆæŠ–å¤„ç†
 	Keyboard_Debounce();
 	
-	// °´¼üÉ¨Ãè´¦Àí
+	// æŒ‰é”®æ‰«æå¤„ç†
 	Keyboard_Scan();
-	
-	// °´Å¥ĞÅºÅ·¢ËÍ
-	Keyboard_SignalSend();
-	
-	// ÇĞ»»ÖÁÏÂÒ»¸ö°´¼ü
-	pstcCurrButton = pstcCurrButton->pstcButtonObjectNext;
 }

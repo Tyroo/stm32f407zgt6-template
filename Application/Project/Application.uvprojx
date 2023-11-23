@@ -16,8 +16,8 @@
         <TargetCommonOption>
           <Device>STM32F407ZGTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F4xx_DFP.2.16.0</PackID>
-          <PackURL>http://www.keil.com/pack/</PackURL>
+          <PackID>Keil.STM32F4xx_DFP.2.6.0</PackID>
+          <PackURL>http://www.keil.com/pack</PackURL>
           <Cpu>IRAM(0x20000000,0x00020000) IRAM2(0x10000000,0x00010000) IROM(0x08000000,0x00100000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -394,39 +394,14 @@
               <FilePath>..\Users\Main\src\delay.c</FilePath>
             </File>
             <File>
-              <FileName>delay.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Users\Main\inc\delay.h</FilePath>
-            </File>
-            <File>
               <FileName>led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Users\Main\src\led.c</FilePath>
             </File>
             <File>
-              <FileName>led.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Users\Main\inc\led.h</FilePath>
-            </File>
-            <File>
               <FileName>spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Users\Main\src\spi.c</FilePath>
-            </File>
-            <File>
-              <FileName>spi.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Users\Main\inc\spi.h</FilePath>
-            </File>
-            <File>
-              <FileName>key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Users\Main\src\key.c</FilePath>
-            </File>
-            <File>
-              <FileName>key.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Users\Main\inc\key.h</FilePath>
             </File>
             <File>
               <FileName>i2c.c</FileName>
@@ -439,11 +414,6 @@
               <FilePath>..\Users\Main\src\fsmc.c</FilePath>
             </File>
             <File>
-              <FileName>fsmc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Users\Main\inc\fsmc.h</FilePath>
-            </File>
-            <File>
               <FileName>nvic.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Users\Main\src\nvic.c</FilePath>
@@ -454,19 +424,9 @@
               <FilePath>..\Users\Main\src\can.c</FilePath>
             </File>
             <File>
-              <FileName>can.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Users\Main\inc\can.h</FilePath>
-            </File>
-            <File>
               <FileName>at24c02.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Users\Main\src\at24c02.c</FilePath>
-            </File>
-            <File>
-              <FileName>at24c02.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Users\Main\inc\at24c02.h</FilePath>
             </File>
             <File>
               <FileName>mpu6050.c</FileName>
@@ -494,11 +454,6 @@
               <FilePath>..\Users\Main\src\dma.c</FilePath>
             </File>
             <File>
-              <FileName>dma.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Users\Main\inc\dma.h</FilePath>
-            </File>
-            <File>
               <FileName>malloc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Users\Main\src\malloc.c</FilePath>
@@ -512,6 +467,21 @@
               <FileName>keyboard.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Users\Main\src\keyboard.c</FilePath>
+            </File>
+            <File>
+              <FileName>ads1115.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\Main\src\ads1115.c</FilePath>
+            </File>
+            <File>
+              <FileName>jlx12832.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\Main\src\jlx12832.c</FilePath>
+            </File>
+            <File>
+              <FileName>mx25l64.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\Main\src\mx25l64.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -644,11 +614,6 @@
               <FilePath>..\System\Library\slib\src\stm32f4xx_hash_sha1.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\System\Library\slib\src\stm32f4xx_i2c.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\System\Library\slib\src\stm32f4xx_it.c</FilePath>
@@ -764,24 +729,9 @@
               <FilePath>..\System\Library\elib\eMPL\src\inv_mpu_dmp_motion_driver.c</FilePath>
             </File>
             <File>
-              <FileName>pid.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\System\Library\elib\PID\inc\pid.h</FilePath>
-            </File>
-            <File>
               <FileName>pid.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\System\Library\elib\PID\src\pid.c</FilePath>
-            </File>
-            <File>
-              <FileName>event.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\System\Library\elib\Event\src\event.c</FilePath>
-            </File>
-            <File>
-              <FileName>task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\System\Library\elib\Task\src\task.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -934,11 +884,6 @@
           <GroupName>FATFS</GroupName>
           <Files>
             <File>
-              <FileName>diskio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Users\FATFS\src\diskio.c</FilePath>
-            </File>
-            <File>
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Users\FATFS\src\ff.c</FilePath>
@@ -954,9 +899,14 @@
               <FilePath>..\Users\FATFS\src\ffunicode.c</FilePath>
             </File>
             <File>
-              <FileName>disk_api.c</FileName>
+              <FileName>diskio_if.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Users\FATFS\src\disk_api.c</FilePath>
+              <FilePath>..\Users\FATFS\src\diskio_if.c</FilePath>
+            </File>
+            <File>
+              <FileName>diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\FATFS\src\diskio.c</FilePath>
             </File>
           </Files>
         </Group>

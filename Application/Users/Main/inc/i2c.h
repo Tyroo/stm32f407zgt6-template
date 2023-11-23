@@ -2,37 +2,34 @@
 #define __I2C_H__
 
 
-/**
-* @include
-**/
-#include "stm32f4xx.h"
+#include "stm32f4xx_gpio.h"
 #include "delay.h"
-#include "system.h"
 
+// SDAå’ŒSCLéœ€è¦é…ç½®ä¸ºå¼€æ¼è¾“å‡ºæ¨¡å¼
 
-/**
-*	@define
-**/
-// I2CÎª·¢ËÍÄ£Ê½
-#define IIC_Mode_Tx() {GPIOB->MODER &= ~(3<<18);GPIOB->MODER |= 1<<9*2;}
-// I2CÎª½ÓÊÕÄ£Ê½
-#define IIC_Mode_Rx() {GPIOB->MODER &= ~(3<<18);GPIOB->MODER |= 0<<9*2;}
-// GPIOBÒý½ÅÓ³ÉäIICÏß
-#define IIC_SCL     		PBout(8)	// IICÊ±ÖÓÏß
-#define IIC_SDA_OUT     	PBout(9)	// IICÊý¾ÝÊä³öÏß
-#define IIC_SDA_IN			PBin(9)		// IICÊý¾Ý¶ÁÈëÏß
-#define IIC_DATA_SIZE_MAX 	32			// IIC½ÓÊÕÊý¾Ý×î´ó³¤¶È£¨×Ö½Ú£©
+#define I2C_SDA_R()					((GPIOB->IDR & GPIO_Pin_9) != Bit_RESET)
 
+#define I2C_SDA_H()					(GPIOB->BSRR = (uint32_t)GPIO_Pin_9)
+#define I2C_SDA_L()					(GPIOB->BSRR = (uint32_t)GPIO_Pin_9 << 16U)
 
-void IIC_Init(void);
+#define I2C_SCL_H()					(GPIOB->BSRR = (uint32_t)GPIO_Pin_8)
+#define I2C_SCL_L()					(GPIOB->BSRR = (uint32_t)GPIO_Pin_8 << 16U)
 
-static void IIC_TxReply(uint8_t Res);
-static bool IIC_RxReply(void);
+#define I2C_DELAY_US(t)				Delay_Us(t)
 
-void IIC_Stop(void);
-void IIC_Start(void);
+#define I2C_DATA_HOLD_TIME_US		(2)
+#define I2C_DATA_PREP_TIME_US		(2)
 
-bool IIC_Send_Byte(uint8_t Data);
-uint8_t IIC_Read_Byte(uint8_t IsAck);
+#if (I2C_DATA_HOLD_TIME_US < 2) || (I2C_DATA_PREP_TIME_US < 2)
+	#error "Data preparation time or hold time is too short!"
+#endif
+
+unsigned char I2C_ReadByte(void);
+unsigned char I2C_WriteByte(unsigned char u8Data);
+
+unsigned char I2C_ReadRegister(unsigned char u8Addr, unsigned char u8Reg, unsigned char * au8DataBuff, unsigned short u16Size);
+unsigned char I2C_WriteRegister(unsigned char u8Addr, unsigned char u8Reg, unsigned char * au8DataBuff, unsigned short u16Size);
+
+unsigned char I2C_DeviceScan(unsigned char au8AddrTab[], unsigned char u8ScanNum);
 
 #endif

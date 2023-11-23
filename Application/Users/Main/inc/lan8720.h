@@ -8,29 +8,29 @@
 #include "stm32f4xx_eth.h"
 
 //////////////////////////////////////////////////////////////////////////////////	 
-//±¾³ÌÐòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßÐí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
-//ALIENTEK STM32F407¿ª·¢°å
-//LAN8720 Çý¶¯´úÂë	   
-//ÕýµãÔ­×Ó@ALIENTEK
-//¼¼ÊõÂÛÌ³:www.openedv.com
-//´´½¨ÈÕÆÚ:2014/8/15
-//°æ±¾£ºV1.0
-//°æÈ¨ËùÓÐ£¬µÁ°æ±Ø¾¿¡£
-//Copyright(C) ¹ãÖÝÊÐÐÇÒíµç×Ó¿Æ¼¼ÓÐÏÞ¹«Ë¾ 2014-2024
+//æœ¬ç¨‹åºåªä¾›å­¦ä¹ ä½¿ç”¨ï¼Œæœªç»ä½œè€…è®¸å¯ï¼Œä¸å¾—ç”¨äºŽå…¶å®ƒä»»ä½•ç”¨é€”
+//ALIENTEK STM32F407å¼€å‘æ¿
+//LAN8720 é©±åŠ¨ä»£ç 	   
+//æ­£ç‚¹åŽŸå­@ALIENTEK
+//æŠ€æœ¯è®ºå›:www.openedv.com
+//åˆ›å»ºæ—¥æœŸ:2014/8/15
+//ç‰ˆæœ¬ï¼šV1.0
+//ç‰ˆæƒæ‰€æœ‰ï¼Œç›—ç‰ˆå¿…ç©¶ã€‚
+//Copyright(C) å¹¿å·žå¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸ 2014-2024
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 
 
 
-#define LAN8720_PHY_ADDRESS  	0x00				//LAN8720 PHYÐ¾Æ¬µØÖ·.
-#define LAN8720_RST 		   	PDout(3) 			//LAN8720¸´Î»Òý½Å	 
+#define LAN8720_PHY_ADDRESS  	0x00				//LAN8720 PHYèŠ¯ç‰‡åœ°å€.
+#define LAN8720_RST 		   	PDout(3) 			//LAN8720å¤ä½å¼•è„š	 
 
-extern ETH_DMADESCTypeDef *DMARxDscrTab;			//ÒÔÌ«ÍøDMA½ÓÊÕÃèÊö·ûÊý¾Ý½á¹¹ÌåÖ¸Õë
-extern ETH_DMADESCTypeDef *DMATxDscrTab;			//ÒÔÌ«ÍøDMA·¢ËÍÃèÊö·ûÊý¾Ý½á¹¹ÌåÖ¸Õë 
-extern uint8_t *Rx_Buff; 							//ÒÔÌ«Íøµ×²ãÇý¶¯½ÓÊÕbuffersÖ¸Õë 
-extern uint8_t *Tx_Buff; 							//ÒÔÌ«Íøµ×²ãÇý¶¯·¢ËÍbuffersÖ¸Õë
-extern ETH_DMADESCTypeDef  *DMATxDescToSet;			//DMA·¢ËÍÃèÊö·û×·×ÙÖ¸Õë
-extern ETH_DMADESCTypeDef  *DMARxDescToGet; 		//DMA½ÓÊÕÃèÊö·û×·×ÙÖ¸Õë 
-extern ETH_DMA_Rx_Frame_infos *DMA_RX_FRAME_infos;	//DMA×îºó½ÓÊÕµ½µÄÖ¡ÐÅÏ¢Ö¸Õë
+extern ETH_DMADESCTypeDef *DMARxDscrTab;			//ä»¥å¤ªç½‘DMAæŽ¥æ”¶æè¿°ç¬¦æ•°æ®ç»“æž„ä½“æŒ‡é’ˆ
+extern ETH_DMADESCTypeDef *DMATxDscrTab;			//ä»¥å¤ªç½‘DMAå‘é€æè¿°ç¬¦æ•°æ®ç»“æž„ä½“æŒ‡é’ˆ 
+extern uint8_t *Rx_Buff; 							//ä»¥å¤ªç½‘åº•å±‚é©±åŠ¨æŽ¥æ”¶buffersæŒ‡é’ˆ 
+extern uint8_t *Tx_Buff; 							//ä»¥å¤ªç½‘åº•å±‚é©±åŠ¨å‘é€buffersæŒ‡é’ˆ
+extern ETH_DMADESCTypeDef  *DMATxDescToSet;			//DMAå‘é€æè¿°ç¬¦è¿½è¸ªæŒ‡é’ˆ
+extern ETH_DMADESCTypeDef  *DMARxDescToGet; 		//DMAæŽ¥æ”¶æè¿°ç¬¦è¿½è¸ªæŒ‡é’ˆ 
+extern ETH_DMA_Rx_Frame_infos *DMA_RX_FRAME_infos;	//DMAæœ€åŽæŽ¥æ”¶åˆ°çš„å¸§ä¿¡æ¯æŒ‡é’ˆ
  
 
 u8 LAN8720_Init(void);

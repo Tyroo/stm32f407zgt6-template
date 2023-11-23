@@ -25,14 +25,13 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usb_core.h"
-#include "delay.h"
-#include "usart.h"
-#include "system.h"
-
+#include "usb_dcd_int.h"
 /** @addtogroup USB_OTG_DRIVER
   * @{
   */
-  
+
+extern USB_OTG_CORE_HANDLE USB_Core;
+
 /** @defgroup USB_BSP
   * @brief This file is the 
   * @{

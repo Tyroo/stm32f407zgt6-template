@@ -72,27 +72,27 @@ void DMA1_C0S0_5_Start(void)
 }
 
 
-// SPI3 DMA½ÓÊÕÍê³ÉÖÐ¶Ï
+// SPI3 DMAæŽ¥æ”¶å®Œæˆä¸­æ–­
 void DMA1_Stream0_IRQHandler(void)
 {
 	DMA_ClearFlag(DMA1_Stream0, DMA_IT_TCIF0);
 	DMA_Cmd(DMA1_Stream0, DISABLE);
 	
 	DMA_SetCurrDataCounter(DMA1_Stream0, SPI3_RTX_BUFF_SIZE);
-	// ÉèÖÃ´«ÊäÄÚ´æÊ×µØÖ·
+	// è®¾ç½®ä¼ è¾“å†…å­˜é¦–åœ°å€
 	DMA1_Stream0->M0AR = (uint32_t)(&Spi3_DmaReadData[0]);
 	
 	DMA_C0S0_5_StartProcess = 1;
 }
 
-// SPI3 DMA·¢ËÍÍê³ÉÖÐ¶Ï
+// SPI3 DMAå‘é€å®Œæˆä¸­æ–­
 void DMA1_Stream5_IRQHandler(void)
 {
 	DMA_ClearFlag(DMA1_Stream5, DMA_IT_TCIF5);
 	DMA_Cmd(DMA1_Stream5, DISABLE);
 	
 	DMA_SetCurrDataCounter(DMA1_Stream5, SPI3_RTX_BUFF_SIZE);
-	// ÉèÖÃ´«ÊäÄÚ´æÊ×µØÖ·
+	// è®¾ç½®ä¼ è¾“å†…å­˜é¦–åœ°å€
 	DMA1_Stream5->M0AR = (uint32_t)(&Spi3_DmaWriteData[0]);
 }
 

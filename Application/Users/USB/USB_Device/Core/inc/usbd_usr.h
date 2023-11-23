@@ -31,9 +31,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
+#include "usb_bsp.h"
 #include "usbd_core.h"
-#include "usart.h"
-
+#include "usbd_msc_core.h"
 
 /** @addtogroup USBD_USER
   * @{
@@ -53,11 +53,8 @@
   * @{
   */ 
 
-extern  USBD_Usr_cb_TypeDef USR_USBD_cb;
-extern  USBD_Usr_cb_TypeDef USR_USBD_FS_cb;
-extern  USBD_Usr_cb_TypeDef USR_USBD_HS_cb;
-
-
+extern USBD_DEVICE USBD_Msc;
+extern USBD_Usr_cb_TypeDef USBD_Usr_cb;
 
 /**
   * @}

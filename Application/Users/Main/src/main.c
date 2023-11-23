@@ -1,153 +1,37 @@
 #include "main.h"
 
 
-uint16_t Fsmc_Rx_Buff[1] = {0x61};
-
-
-uint8_t SendChar;
-
-uint8_t WordsArr[32] = {0x04,0x80,0x0E,0xA0,0x78,0x90,0x08,0x90,
-      0x08,0x84,0xFF,0xFE,0x08,0x80,0x08,0x90,
-      0x0A,0x90,0x0C,0x60,0x18,0x40,0x68,0xA0,
-      0x09,0x20,0x0A,0x14,0x28,0x14,0x10,0x0C};
-
-extern FRESULT F_Sate;
-extern FATFS* Fs;
-extern FIL*   Fi;
-extern UINT FatfsReadSize;
-extern UINT FatfsWriteSize;
-extern BYTE* ReadTextBuff;
-extern char* WriteTextBuff;
-extern BYTE Work[FF_MAX_SS];
-
-int USBH_USR_Application()
+int main() 
 {
-	/* USBÓÃ»§Ó¦ÓÃ³ÌĞò */
-	return 0;
-}
-extern USBH_HOST              USB_Host;
-extern USB_OTG_CORE_HANDLE    USB_OTG_Core;
-
-u8 u8I2C_TxData[5] = {0x88,0x89,0x90,0x91,0x92};
-u8 u8I2C_RxData[5];
-
-int main() {
-
-	Nvic_Init(2);		// ÖĞ¶Ï·Ö×é£¬ÖĞ¶Ï·Ö×é2
-	Key_Init();			// °´¼ü³õÊ¼»¯
-	Led_Init();			// ³õÊ¼»¯LEDÄ£¿é
-	Delay_Init();		// ³õÊ¼»¯ÑÓÊ±Ä£¿é
+	Nvic_Init(2);		// ä¸­æ–­åˆ†ç»„ï¼Œä¸­æ–­åˆ†ç»„2
 	
-	#if 0
+	Led_Init();			// åˆå§‹åŒ–LEDæ¨¡å—
 	
-	Uart1_Init(115200);	// ³õÊ¼»¯USAER1Ä£¿é
+	Uart1_Init(115200);	// åˆå§‹åŒ–USAER1æ¨¡å—
 	Timer3_Init(99, 839);
-//	FsmcSram_Init();
-//	my_mem_init(SRAMIN);//³õÊ¼»¯ÄÚ²¿ÄÚ´æ³Ø
-
+	FsmcSram_Init();
+	
 	DMA1_C0S0_5_Init();
 	SPI3_Init();
-	#endif
-
-//	LAN8720_Init();
 	
-//	TFTLCD_Init();		// ³õÊ¼»¯LCDTFTÄ£¿é
+	LAN8720_Init();
+	TFTLCD_Init();		// åˆå§‹åŒ–LCDTFTæ¨¡å—
+	// LWIPåˆå§‹åŒ–
+	lwip_app_init();
+	// LWIP UDPé€šä¿¡åˆå§‹åŒ–
+	stcLwipObject.udpstatus = lwip_app_udp_init();
+	// LWIP TCPé€šä¿¡åˆå§‹åŒ–
+	lwip_app_tcp_client_init();
 	
-	// LWIP³õÊ¼»¯
-//	lwip_app_init();
-	// LWIP UDPÍ¨ĞÅ³õÊ¼»¯
-//	stcLwipObject.udpstatus = lwip_app_udp_init();
-	// LWIP TCPÍ¨ĞÅ³õÊ¼»¯
-//	lwip_app_tcp_client_init();
-    
-//	for(EleBoxIndex=0;EleBoxIndex<6;EleBoxIndex++) {
-//		EleBox.Ele_BoxProp.Ele_Box_Height -= 35;
-//		DrawBox(EleBoxIndex*40, 20, EleBox);
-//	}
+	USBD_Init(&USB_Core, USB_OTG_FS_CORE_ID, &USBD_Msc, &USBD_MSC_cb, &USBD_Usr_cb);
 	
-//	CANTxMessage.DLC = 2;					// Êı¾İ³¤¶È
-//	CANTxMessage.Data[0] = 0x01;	// Êı¾İµÍÎ»
-//	CANTxMessage.Data[1] = 0x02;	// Êı¾İ¸ßÎ»
-//	CANTxMessage.IDE = 0;					// ±ê×¢±êÊ¶·ûÄ£Ê½
-//	CANTxMessage.StdId = 0x12;
-//	CANTxMessage.ExtId = 0x12;		// À©Õ¹±êÊ¶·ûÎª0
-//	CANTxMessage.RTR = 0;					// Êı¾İÖ¡
-//	FatfsWriteSize = 0;
-//	FatfsReadSize = 0;
-//	Fs = (FATFS*)mymalloc(SRAMIN, sizeof(FATFS));
-//	Fi = (FIL*)mymalloc(SRAMIN, sizeof(FIL));
-//	ReadTextBuff = (BYTE*)mymalloc(SRAMIN, 512);
-//	WriteTextBuff = "wrty2y55ytuu68766tytiiook\r\n";
-//	
-//	F_Sate = f_mount(Fs, "2:", 0);
-//	
-//	if (F_Sate == FR_OK)
-//	{
-//		printf("ÎÄ¼şÏµÍ³¹ÒÔØ³É¹¦£¡\r\n");
-//	}
-//	else
-//	{
-//		printf("ÎÄ¼şÏµÍ³¹ÒÔØÊ§°Ü£¡\r\n");
-//		printf("Ê§°ÜÔ­Òò£º%d\r\n", F_Sate);
-//	}
-//	
-//	if (F_Sate == FR_NO_FILESYSTEM)
-//	{
-//		printf("ÕıÔÚ¸ñÊ½»¯ÎÄ¼şÏµÍ³...\r\n");
-//		F_Sate = f_mkfs("2:", 0, Work, sizeof(Work));
-//		if (F_Sate == FR_OK)
-//		{
-//			F_Sate = f_mount(NULL, "2:", 1);
-//			F_Sate = f_mount(Fs, "2:", 1);
-//			printf("¸ñÊ½»¯ÎÄ¼şÏµÍ³Íê³É...\r\n");
-//		}
-//	}
-
-//	USBH_Init(&USB_OTG_Core, USB_OTG_FS_CORE_ID, &USB_Host, &USBH_MSC_cb, &USR_USBH_cb);
+	my_mem_init(SRAMIN);//åˆå§‹åŒ–å†…éƒ¨å†…å­˜æ± 
+	Delay_Init();		// åˆå§‹åŒ–å»¶æ—¶æ¨¡å—
 	
-//	Led_Control(0);
-
-	GPIO_SetBits(GPIOF, GPIO_Pin_10);	// ¹Ø±ÕLED1
-	GPIO_SetBits(GPIOF, GPIO_Pin_9);	// ¹Ø±ÕLED0
-
-//	FatfsResult = f_open(&File, "2:123.txt", FA_OPEN_EXISTING|FA_READ);
-//	FatfsResult = f_read(&File, ReadTextBuff, f_size(&File), &FatfsReadSize);
-	
-//	if (FatfsResult != FR_OK)
-//	{
-//		Uart1_Send("ÎÄ¼şÏµÍ³¹ÒÔØÊ§°Ü£¡");
-//	}
-//	else
-//	{
-////		Uart1_Send(ReadTextBuff);
-//		Uart1_Send("aaaa");
-//	}
-
 	Keyboard_Init();
-	Task_Init();
 	
-	IIC_Init();
-	
-	AT24C02_TxData(u8I2C_TxData, 0, 5);
-	AT24C02_RxData(u8I2C_RxData, 0, 5);
-
-	while(1) {
-		
-//		if (USB_Manage.State == 0)
-//		{
-//			USBH_Process(&USB_OTG_Core, &USB_Host);
-//		}
-//		else 
-//		{
-//			Led_Control(0);
-//		}
-//		lwip_app_udp_client();
-//		lwip_periodic_handle();
-		//lwip_app_loop();
-//		sys_check_timeouts();
-		//DMA1_C0S0_5_Start();
-		Event_Process();
-		Task_Scheduler();
+	for( ; ; )
+	{
 		
 	}
 }

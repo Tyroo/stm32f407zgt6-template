@@ -2,13 +2,13 @@
 
 
 
-const char *udp_app_send_buff = "hello world!\r\n";	//UDP½ÓÊÕÊı¾İ»º³åÇø
-uint8_t udp_app_recv_buff[UDP_APP_RX_BUFF_SIZE];	//UDP½ÓÊÕÊı¾İ»º³åÇø
+const char *udp_app_send_buff = "hello world!\r\n";	//UDPæ¥æ”¶æ•°æ®ç¼“å†²åŒº
+uint8_t udp_app_recv_buff[UDP_APP_RX_BUFF_SIZE];	//UDPæ¥æ”¶æ•°æ®ç¼“å†²åŒº
 
 struct udp_pcb *pstcLwipUdpPcb;
 
 
-// UDPÍ¨ĞÅ³õÊ¼»¯
+// UDPé€šä¿¡åˆå§‹åŒ–
 err_t lwip_app_udp_init(void)
 {
 	err_t UdpState = ERR_OK;
@@ -16,10 +16,10 @@ err_t lwip_app_udp_init(void)
 	ip_addr_t stcLocalIpAddr;
 	uint16_t numUdpPort = 8089;
 
-	// ÉèÖÃÔ¶¶ËIPµØÖ·
+	// è®¾ç½®è¿œç«¯IPåœ°å€
 	lwip_app_remote_ip_set(192,168,0,101);
 	
-	// IP×ª»»
+	// IPè½¬æ¢
 	IP4_ADDR(
 		&stcRemoteIpAddr,
 		stcLwipObject.remoteip[0],
@@ -36,7 +36,7 @@ err_t lwip_app_udp_init(void)
 		stcLwipObject.ip[3]
 	);
 	
-	// ´´½¨Ò»¸öUDP¶ÔÏó
+	// åˆ›å»ºä¸€ä¸ªUDPå¯¹è±¡
 	pstcLwipUdpPcb = udp_new();
 	
 	if (pstcLwipUdpPcb == NULL)
@@ -44,7 +44,7 @@ err_t lwip_app_udp_init(void)
 		return enUdpObjCrtErr;
 	}
 	
-	// °ó¶¨±¾µØ·şÎñ
+	// ç»‘å®šæœ¬åœ°æœåŠ¡
 	UdpState = udp_bind(pstcLwipUdpPcb, &stcLocalIpAddr, numUdpPort);
 	
 	if (UdpState != enUdpInitOK)
@@ -52,7 +52,7 @@ err_t lwip_app_udp_init(void)
 		return enUdpBindErr;
 	}
 		
-	// Á¬½ÓÔ¶³ÌUDP·şÎñ¶Ë
+	// è¿æ¥è¿œç¨‹UDPæœåŠ¡ç«¯
 	UdpState = udp_connect(pstcLwipUdpPcb, &stcRemoteIpAddr, numUdpPort);
 	
 	if (UdpState != enUdpInitOK)
@@ -60,14 +60,14 @@ err_t lwip_app_udp_init(void)
 		return enUdpConnErr;
 	}
 	
-	// ×¢²á½ÓÊÕ»Øµ÷º¯Êı
+	// æ³¨å†Œæ¥æ”¶å›è°ƒå‡½æ•°
 	udp_recv(pstcLwipUdpPcb, lwip_app_udp_recv_data, NULL);
 	
 	return enUdpInitOK;
 }
 
 
-// UDP¿Í»§¶Ë½ø³Ì
+// UDPå®¢æˆ·ç«¯è¿›ç¨‹
 void lwip_app_udp_client(void)
 {
 	if (stcLwipObject.udpstatus == enUdpRecvOK)
@@ -83,7 +83,7 @@ void lwip_app_udp_client(void)
 }
 
 
-// UDP½ÓÊÕÊı¾İ
+// UDPæ¥æ”¶æ•°æ®
 void lwip_app_udp_recv_data(void *arg, struct udp_pcb *pUdpPcb, struct pbuf *p,
     const ip_addr_t *addr, u16_t port)
 {
@@ -96,7 +96,7 @@ void lwip_app_udp_recv_data(void *arg, struct udp_pcb *pUdpPcb, struct pbuf *p,
 		
 		memset(udp_app_recv_buff, 0, UDP_APP_RX_BUFF_SIZE);
 		
-		// µ±½ÓÊÕµ½µÄÊı¾İ²»Îª¿ÕÊ±£¬³öÁĞ½ÓÊÕµ½µÄÊı¾İ
+		// å½“æ¥æ”¶åˆ°çš„æ•°æ®ä¸ä¸ºç©ºæ—¶ï¼Œå‡ºåˆ—æ¥æ”¶åˆ°çš„æ•°æ®
 		for (pData=p; pData!=NULL; pData=pData->next)
 		{
 			if (pData->len > (UDP_APP_RX_BUFF_SIZE - numSize))
@@ -118,28 +118,28 @@ void lwip_app_udp_recv_data(void *arg, struct udp_pcb *pUdpPcb, struct pbuf *p,
 		stcLwipObject.remoteip[3] = (pUdpPcb->remote_ip.addr>>24) & 0xff;//IADDR1 
 	}
 	
-	//ÊÍ·ÅÄÚ´æ
+	//é‡Šæ”¾å†…å­˜
 	pbuf_free(p);
 	
 }
 
 
-// UDP·¢ËÍÊı¾İ
+// UDPå‘é€æ•°æ®
 void lwip_app_udp_send_data(struct udp_pcb *pUdpPcb, const char *pData, uint16_t length)
 {
 	struct pbuf *pBuff = NULL;
 	
 	stcLwipObject.udpstatus = enUdpSendErr;
 	
-	//ÉêÇëÄÚ´æ
+	//ç”³è¯·å†…å­˜
 	pBuff = pbuf_alloc(PBUF_TRANSPORT, length, PBUF_POOL); 
 	
 	if (pBuff != NULL)
 	{
-		// Ìî³ä»º³åÇøÊı¾İ
+		// å¡«å……ç¼“å†²åŒºæ•°æ®
         if (pbuf_take(pBuff, pData, strlen(pData)) == ERR_OK)
 		{
-			// UDP·¢ËÍÊı¾İ
+			// UDPå‘é€æ•°æ®
 			if (udp_send(pUdpPcb, pBuff) == ERR_OK)
 			{
 				stcLwipObject.udpstatus = enUdpSendOK;
@@ -147,14 +147,14 @@ void lwip_app_udp_send_data(struct udp_pcb *pUdpPcb, const char *pData, uint16_t
 		}
 	}
 	
-	// ÊÍ·ÅÄÚ´æ
+	// é‡Šæ”¾å†…å­˜
 	pbuf_free(pBuff);
 }
 
 
-// UDP¹Ø±ÕÁ¬½Ó
+// UDPå…³é—­è¿æ¥
 void lwip_app_udp_conn_close(struct udp_pcb *pUdpPcb)
 {
-	udp_disconnect(pUdpPcb); 	// ¶Ï¿ªÁ¬½Ó
-	udp_remove(pUdpPcb);		// É¾³ıÁ¬½Ó
+	udp_disconnect(pUdpPcb); 	// æ–­å¼€è¿æ¥
+	udp_remove(pUdpPcb);		// åˆ é™¤è¿æ¥
 }

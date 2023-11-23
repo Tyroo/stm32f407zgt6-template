@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 
-#define TASK_HANDLER_MAX_NUM	(20)	// ×î´óÈÎÎñÊıÁ¿
+#define TASK_HANDLER_MAX_NUM	(20)	// æœ€å¤§ä»»åŠ¡æ•°é‡
 #define TASK_ASSERT(v)			do {if ((v) == 0) return;} while(0)
 	
 

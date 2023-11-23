@@ -3,12 +3,12 @@
 
 #define TCP_APP_CLIENT_RX_BUFF_SIZE  (200)
 
-//tcp·şÎñÆ÷Á¬½Ó×´Ì¬
+//tcpæœåŠ¡å™¨è¿æ¥çŠ¶æ€
 enum enTcpClientConnStatus
 {
-	enTcpClientNone,	//Ã»ÓĞÁ¬½Ó
-	enTcpClientClose,	//¹Ø±ÕÁ¬½Ó
-	enTcpClientConn,	//Á¬½Ó³É¹¦
+	enTcpClientNone,	//æ²¡æœ‰è¿æ¥
+	enTcpClientClose,	//å…³é—­è¿æ¥
+	enTcpClientConn,	//è¿æ¥æˆåŠŸ
 	enTcpClientRecvOK,
 	enTcpClientSendOK,
 	enTcpClientAckWait,

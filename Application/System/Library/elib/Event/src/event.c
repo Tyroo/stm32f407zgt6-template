@@ -1,9 +1,9 @@
 /*******************************************************************************
-** Ãû³Æ£ºevent.c
-** ¹¦ÄÜ£ºÊÂ¼ş´¦Àí
-** °æ±¾£ºV1.0
-** ×÷Õß£ºÕÅ¼ÎÁ¼ 
-** ÈÕÆÚ£º2023Äê1ÔÂ4ÈÕ
+** åç§°ï¼ševent.c
+** åŠŸèƒ½ï¼šäº‹ä»¶å¤„ç†
+** ç‰ˆæœ¬ï¼šV1.0
+** ä½œè€…ï¼šå¼ å˜‰è‰¯ 
+** æ—¥æœŸï¼š2023å¹´1æœˆ4æ—¥
 *******************************************************************************/
 
 #include "main.h"
@@ -12,7 +12,7 @@
 stcEventManage_t stcEventManageObject;
 
 
-// ×¢²áÒ»¸öÊÂ¼ş
+// æ³¨å†Œä¸€ä¸ªäº‹ä»¶
 void Event_Register(stcEventHandler_t *pstcEvent,
 					void *pstcEventSource, 
 					EventSignal_t u32RegisterSignal, 
@@ -37,7 +37,7 @@ void Event_Register(stcEventHandler_t *pstcEvent,
 		
 		if (u32RegisterSignal >= pstcTmpEvent->u32EventRegisterSignal)
 		{
-			// ½«±íÎ²²åÈëµÄÔªËØ²åÈëµ½Á´±íÖ¸¶¨Î»ÖÃÉÏ
+			// å°†è¡¨å°¾æ’å…¥çš„å…ƒç´ æ’å…¥åˆ°é“¾è¡¨æŒ‡å®šä½ç½®ä¸Š
 			pstcTmpEvent->_pstcEventHandlerNext->_pstcEventHandlerPrev = pstcEvent;
 			pstcEvent->_pstcEventHandlerNext = pstcTmpEvent->_pstcEventHandlerNext;
 			pstcTmpEvent->_pstcEventHandlerNext = pstcEvent;
@@ -47,7 +47,7 @@ void Event_Register(stcEventHandler_t *pstcEvent,
 		}
 	}
 	
-	// ÔÚÊÂ¼şÁ´±íÍ·½Úµã´¦²åÈëÒ»¸öÊÂ¼ş
+	// åœ¨äº‹ä»¶é“¾è¡¨å¤´èŠ‚ç‚¹å¤„æ’å…¥ä¸€ä¸ªäº‹ä»¶
 	if (pstcTmpEvent != NULL)
 	{
 		pstcEvent->_pstcEventHandlerNext = pstcTmpEvent;
@@ -66,7 +66,7 @@ void Event_Register(stcEventHandler_t *pstcEvent,
 }
 
 
-// ÉèÖÃÊÂ¼şµÄ×´Ì¬
+// è®¾ç½®äº‹ä»¶çš„çŠ¶æ€
 void Event_SetStatus(stcEventHandler_t *pstcEvent, enEventStatus_t enState)
 {
 	EVENT_ASSERT(pstcEvent != NULL);
@@ -85,34 +85,34 @@ void Event_SetStatus(stcEventHandler_t *pstcEvent, enEventStatus_t enState)
 	EVENT_ASSERT(pstcTmpEventSource != NULL);
 	EVENT_ASSERT(pstcTmpEventSource->pstcEventHandlerList != NULL);
 	
-	// Èç¹û½«Ò»¸öÊÂ¼şÏú»Ù
-	// Èç¹ûÊÂ¼şÏú»Ù·¢ÉúÔÚÊÂ¼ş±éÀúÊ±
+	// å¦‚æœå°†ä¸€ä¸ªäº‹ä»¶é”€æ¯
+	// å¦‚æœäº‹ä»¶é”€æ¯å‘ç”Ÿåœ¨äº‹ä»¶éå†æ—¶
 	if (pstcTmpEventSource->u8EventWaitNumber > 0)
 	{
-		// ÒªÏú»ÙµÄÊÂ¼şËùÔÚµÄÔ´Óëµ±Ç°±éÀúµÄÊÂ¼şÔ´ÏàÍ¬Ê±
+		// è¦é”€æ¯çš„äº‹ä»¶æ‰€åœ¨çš„æºä¸å½“å‰éå†çš„äº‹ä»¶æºç›¸åŒæ—¶
 		if (pstcEvent->pstcEventSource == stcEventManageObject.pstcEventCurrHandler->pstcEventSource)
 		{
-			// ÊÂ¼şÔ´ÏàÍ¬£¬µ«ÊÇÒªÏú»ÙµÄÊÂ¼şÓëµ±Ç°ÕıÔÚÖ´ĞĞµÄÊÂ¼ş²»ÊÇÍ¬Ò»¸öÊÂ¼ş
-			// Ôò¸ù¾İµ±Ç°ÊÂ¼şµÄĞÅºÅÊıÖµÓëÒªÏú»ÙµÄÊÂ¼şµÄĞÅºÅÊıÖµ×÷±È½Ï£¬
-			// Èç¹ûĞ¡ÓÚµÈÓÚÔò½«´ı±éÀúµÄÊÂ¼ş¼ÆÊıÆ÷¼õ1
+			// äº‹ä»¶æºç›¸åŒï¼Œä½†æ˜¯è¦é”€æ¯çš„äº‹ä»¶ä¸å½“å‰æ­£åœ¨æ‰§è¡Œçš„äº‹ä»¶ä¸æ˜¯åŒä¸€ä¸ªäº‹ä»¶
+			// åˆ™æ ¹æ®å½“å‰äº‹ä»¶çš„ä¿¡å·æ•°å€¼ä¸è¦é”€æ¯çš„äº‹ä»¶çš„ä¿¡å·æ•°å€¼ä½œæ¯”è¾ƒï¼Œ
+			// å¦‚æœå°äºç­‰äºåˆ™å°†å¾…éå†çš„äº‹ä»¶è®¡æ•°å™¨å‡1
 			if (pstcEvent != stcEventManageObject.pstcEventCurrHandler)
 				pstcTmpEventSource->u8EventWaitNumber -= (
 					pstcEvent->u32EventRegisterSignal >= 
 					stcEventManageObject.pstcEventCurrHandler->u32EventRegisterSignal
 				);
-			// ÊÂ¼şÔ´ÏàÍ¬£¬µ«ÊÇÒªÏú»ÙµÄÊÂ¼şÓëµ±Ç°ÕıÔÚÖ´ĞĞµÄÊÂ¼şÊÇÍ¬Ò»¸öÊÂ¼ş
-			// Ôò½øĞĞÒ»´ÎÊÂ¼şÇĞ»»£¬½«µ±Ç°ÊÂ¼şÖ¸ÕëÖ¸ÏòÉÏÒ»¸öÊÂ¼ş
+			// äº‹ä»¶æºç›¸åŒï¼Œä½†æ˜¯è¦é”€æ¯çš„äº‹ä»¶ä¸å½“å‰æ­£åœ¨æ‰§è¡Œçš„äº‹ä»¶æ˜¯åŒä¸€ä¸ªäº‹ä»¶
+			// åˆ™è¿›è¡Œä¸€æ¬¡äº‹ä»¶åˆ‡æ¢ï¼Œå°†å½“å‰äº‹ä»¶æŒ‡é’ˆæŒ‡å‘ä¸Šä¸€ä¸ªäº‹ä»¶
 			else
 				stcEventManageObject.pstcEventCurrHandler = pstcEvent->_pstcEventHandlerPrev;
 		}
 	}
 	
-	// ½«µ±Ç°ÊÂ¼ş´Ó¸ÃÔ´µÄÊÂ¼şÁ´±íÖĞÒÆ³ı
+	// å°†å½“å‰äº‹ä»¶ä»è¯¥æºçš„äº‹ä»¶é“¾è¡¨ä¸­ç§»é™¤
 	pstcEvent->_pstcEventHandlerPrev->_pstcEventHandlerNext = pstcEvent->_pstcEventHandlerNext;
 	pstcEvent->_pstcEventHandlerNext->_pstcEventHandlerPrev = pstcEvent->_pstcEventHandlerPrev;
 	
-	// Èç¹ûÒªÏú»ÙµÄÊÂ¼şÊÇ¸ÃÊÂ¼şËù´¦µÄÔ´ÖĞµÄµÚÒ»¸öÊÂ¼ş
-	// ÔòĞèÒª½«¸ÃÊÂ¼şÔ´ÖĞµÄÊÂ¼şÁ´±íÍ·½ÚµãÖ¸ÕëpstcEventHandlerList¸ü¸ÄÎªÖ¸ÏòÏÂÒ»¸öÊÂ¼ş
+	// å¦‚æœè¦é”€æ¯çš„äº‹ä»¶æ˜¯è¯¥äº‹ä»¶æ‰€å¤„çš„æºä¸­çš„ç¬¬ä¸€ä¸ªäº‹ä»¶
+	// åˆ™éœ€è¦å°†è¯¥äº‹ä»¶æºä¸­çš„äº‹ä»¶é“¾è¡¨å¤´èŠ‚ç‚¹æŒ‡é’ˆpstcEventHandlerListæ›´æ”¹ä¸ºæŒ‡å‘ä¸‹ä¸€ä¸ªäº‹ä»¶
 	if (pstcEvent == pstcTmpEventSource->pstcEventHandlerList)
 	{
 		pstcTmpEventSource->pstcEventHandlerList = 
@@ -120,21 +120,21 @@ void Event_SetStatus(stcEventHandler_t *pstcEvent, enEventStatus_t enState)
 			pstcEvent->_pstcEventHandlerNext : NULL;
 	}
 	
-	// ¶Ï¿ª¸Ã½Úµã
+	// æ–­å¼€è¯¥èŠ‚ç‚¹
 	pstcEvent->_pstcEventHandlerNext = NULL;
 	pstcEvent->_pstcEventHandlerPrev = NULL;
-	// ½«´ËÊÂ¼şµÄÊÂ¼şÔ´ÖĞµÄÊÂ¼şÊı¼õ1
+	// å°†æ­¤äº‹ä»¶çš„äº‹ä»¶æºä¸­çš„äº‹ä»¶æ•°å‡1
 	pstcTmpEventSource->u8EventTotalNumber--;
 }
 
 
-// ÊÂ¼ş´¦Àí
+// äº‹ä»¶å¤„ç†
 void Event_Process(void)
 {
 	static stcEventHandler_t *pstcCurrEventHandler;
 	static stcEventSource_t *pstcCurrEventSource;
 	
-	/* Èç¹ûÊÂ¼ş¶ÓÁĞÖĞÃ»ÓĞÊÂ¼ş */
+	/* å¦‚æœäº‹ä»¶é˜Ÿåˆ—ä¸­æ²¡æœ‰äº‹ä»¶ */
 	if (stcEventManageObject.u8EventSourceFirstIndex == 
 		stcEventManageObject.u8EventSourceLastIndex)
 	{
@@ -143,29 +143,29 @@ void Event_Process(void)
 		return;
 	}
 	
-	/* Èç¹ûÊÂ¼ş¶ÓÁĞÖĞÓĞÊÂ¼ş */
-	// ÒÀ´ÎÈ¡³öÊÂ¼ş¶ÓÁĞÖĞµÄÊÂ¼şÔ´
+	/* å¦‚æœäº‹ä»¶é˜Ÿåˆ—ä¸­æœ‰äº‹ä»¶ */
+	// ä¾æ¬¡å–å‡ºäº‹ä»¶é˜Ÿåˆ—ä¸­çš„äº‹ä»¶æº
 	pstcCurrEventSource = stcEventManageObject.pstcEventSourceQueue[
 		stcEventManageObject.u8EventSourceFirstIndex
 	];
 	
 	stcEventManageObject.pstcEventCurrHandler = pstcCurrEventSource->pstcEventHandlerList;
 	
-	// »ñÈ¡ÊÂ¼şÔ´ÖĞ×¢²áµÄÊÂ¼şĞÅºÅÖÖÀà¸öÊı
+	// è·å–äº‹ä»¶æºä¸­æ³¨å†Œçš„äº‹ä»¶ä¿¡å·ç§ç±»ä¸ªæ•°
 	pstcCurrEventSource->u8EventWaitNumber = pstcCurrEventSource->u8EventTotalNumber;
 	
-	// ±éÀúÊÂ¼şÔ´ÖĞµÄÊÂ¼ş£¬ÕÒµ½Óëµ±Ç°·¢ÉúµÄÊÂ¼şĞÅºÅ¶ÔÓ¦µÄËùÓĞÊÂ¼ş£¬²¢´¦Àí
+	// éå†äº‹ä»¶æºä¸­çš„äº‹ä»¶ï¼Œæ‰¾åˆ°ä¸å½“å‰å‘ç”Ÿçš„äº‹ä»¶ä¿¡å·å¯¹åº”çš„æ‰€æœ‰äº‹ä»¶ï¼Œå¹¶å¤„ç†
 	while(pstcCurrEventSource->u8EventWaitNumber > 0)
 	{
 		pstcCurrEventSource->u8EventWaitNumber--;
 		
 		pstcCurrEventHandler = stcEventManageObject.pstcEventCurrHandler;
 		
-		// Èç¹ûµ±Ç°·¢ÉúµÄÊÂ¼şĞÅºÅÓë´ËÊÂ¼şµÄĞÅºÅÒ»ÖÂ£¬ÔòÖ´ĞĞ´ËÊÂ¼şµÄÊÂ¼ş»Øµ÷º¯Êı
+		// å¦‚æœå½“å‰å‘ç”Ÿçš„äº‹ä»¶ä¿¡å·ä¸æ­¤äº‹ä»¶çš„ä¿¡å·ä¸€è‡´ï¼Œåˆ™æ‰§è¡Œæ­¤äº‹ä»¶çš„äº‹ä»¶å›è°ƒå‡½æ•°
 		if( pstcCurrEventHandler->u32EventRegisterSignal == 
 			pstcCurrEventSource->u32EventTriggerSignal )
 		{
-			// Èç¹ûÏÂÒ»¸öÊÂ¼şĞÅºÅµÄÊıÖµ´óÓÚµ±Ç°ÊÂ¼şĞÅºÅµÄÊıÖµ£¬ÔòÍË³ö±éÀú
+			// å¦‚æœä¸‹ä¸€ä¸ªäº‹ä»¶ä¿¡å·çš„æ•°å€¼å¤§äºå½“å‰äº‹ä»¶ä¿¡å·çš„æ•°å€¼ï¼Œåˆ™é€€å‡ºéå†
 			if( pstcCurrEventHandler->_pstcEventHandlerNext->u32EventRegisterSignal > 
 				pstcCurrEventSource->u32EventTriggerSignal )
 			{
@@ -174,13 +174,13 @@ void Event_Process(void)
 			
 			switch(pstcCurrEventHandler->enEventState)
 			{
-				// Èç¹û¸ÃÊÂ¼ş×´Ì¬ÎªÊ¹ÄÜ£¬Ôòµ÷ÓÃÊÂ¼ş»Øµ÷º¯Êı
+				// å¦‚æœè¯¥äº‹ä»¶çŠ¶æ€ä¸ºä½¿èƒ½ï¼Œåˆ™è°ƒç”¨äº‹ä»¶å›è°ƒå‡½æ•°
 				case enEventStatus_ENABLE:
 					pstcCurrEventHandler->pEventFunc(pstcCurrEventHandler);
 					break;
 				case enEventStatus_DISABLE:
 					break;
-				// Èç¹û¸ÃÊÂ¼ş×´Ì¬ÎªAT_ENABLE£¬ÔòÔÚ±»±éÀúºóÊ¹ÄÜ
+				// å¦‚æœè¯¥äº‹ä»¶çŠ¶æ€ä¸ºAT_ENABLEï¼Œåˆ™åœ¨è¢«éå†åä½¿èƒ½
 				case enEventStatus_AT_ENABLE:
 					pstcCurrEventHandler->enEventState = enEventStatus_ENABLE;
 					break;
@@ -188,10 +188,10 @@ void Event_Process(void)
 					break;
 			}
 		}
-		// ´ÓÊÂ¼şÁ´±íÖĞÈ¡³öÏÂÒ»¸öÊÂ¼ş
+		// ä»äº‹ä»¶é“¾è¡¨ä¸­å–å‡ºä¸‹ä¸€ä¸ªäº‹ä»¶
 		stcEventManageObject.pstcEventCurrHandler = 
 			stcEventManageObject.pstcEventCurrHandler->_pstcEventHandlerNext;
 	}
-	// ÊÂ¼ş¶ÓÁĞÍ·Ë÷Òı×ÔÔö
+	// äº‹ä»¶é˜Ÿåˆ—å¤´ç´¢å¼•è‡ªå¢
 	stcEventManageObject.u8EventSourceFirstIndex++;
 }

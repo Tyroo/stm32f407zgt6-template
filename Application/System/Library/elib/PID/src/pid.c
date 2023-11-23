@@ -1,7 +1,7 @@
 #include "pid.h"
 
 
-// 位置式PID
+// 浣嶇疆寮廝ID
 void PID_Positional_Loop(PID_ObjectType *pidobj)
 {
 	pidobj->pid_currError = pidobj->pid_refValue - pidobj->pid_flbValue;
@@ -20,7 +20,7 @@ void PID_Positional_Loop(PID_ObjectType *pidobj)
 }
 
 
-// 增量式PID
+// 澧為噺寮廝ID
 void PID_Incremental_Loop(PID_ObjectType *pidobj)
 {
 	pidobj->pid_currError = pidobj->pid_refValue - pidobj->pid_flbValue;

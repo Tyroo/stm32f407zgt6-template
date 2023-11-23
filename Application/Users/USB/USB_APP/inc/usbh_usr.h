@@ -56,9 +56,9 @@ extern  USBH_Usr_cb_TypeDef USR_USBH_cb;
 
 typedef struct
 {
-	uint8_t Mode   :4;	// 0£ºUSB HOST MSCÄ£Ê½(Ä¬ÈÏÄ£Ê½,½ÓUÅÌ)£¬1£ºUSB HOST HIDÄ£Ê½(Çı¶¯Êó±ê¼üÅÌµÈ)£¬2£ºUSB Device MSCÄ£Ê½(USB¶Á¿¨Æ÷)
-	uint8_t State  :8;	// 0£º¶Ï¿ª×´Ì¬£¬1£ºÁ¬½Ó×´Ì¬£¬3£º³öÏÖ´íÎó
-	uint8_t Type   :4;	// 0: ÎŞÉè±¸£¬1£ºSD¿¨£¬2£ºFlashÉè±¸£¬3£ºUSBÉÁ´æÉè±¸
+	uint8_t Mode   :4;	// 0ï¼šUSB HOST MSCæ¨¡å¼(é»˜è®¤æ¨¡å¼,æ¥Uç›˜)ï¼Œ1ï¼šUSB HOST HIDæ¨¡å¼(é©±åŠ¨é¼ æ ‡é”®ç›˜ç­‰)ï¼Œ2ï¼šUSB Device MSCæ¨¡å¼(USBè¯»å¡å™¨)
+	uint8_t State  :8;	// 0ï¼šæ–­å¼€çŠ¶æ€ï¼Œ1ï¼šè¿æ¥çŠ¶æ€ï¼Œ3ï¼šå‡ºç°é”™è¯¯
+	uint8_t Type   :4;	// 0: æ— è®¾å¤‡ï¼Œ1ï¼šSDå¡ï¼Œ2ï¼šFlashè®¾å¤‡ï¼Œ3ï¼šUSBé—ªå­˜è®¾å¤‡
 } USB_ManageType;
 
 /**
@@ -71,10 +71,10 @@ typedef struct
   * @{
   */ 
 /* State Machine for the USBH_USR_ApplicationState */
-#define USH_USR_FS_INIT                   0	// ³õÊ¼»¯
-#define USH_USR_FS_WAIT_OPERATION		  1	// ÕıÔÚ¶ÔUSBÉè±¸½øĞĞ²Ù×÷
-#define USH_USR_FS_OK_OPERATION			  2 // ²Ù×÷Íê³É
-#define USH_USR_FS_ERR_OPERATION          3 // ²Ù×÷Ê§°Ü
+#define USH_USR_FS_INIT                   0	// åˆå§‹åŒ–
+#define USH_USR_FS_WAIT_OPERATION		  1	// æ­£åœ¨å¯¹USBè®¾å¤‡è¿›è¡Œæ“ä½œ
+#define USH_USR_FS_OK_OPERATION			  2 // æ“ä½œå®Œæˆ
+#define USH_USR_FS_ERR_OPERATION          3 // æ“ä½œå¤±è´¥
 /**
   * @}
   */ 
@@ -89,7 +89,7 @@ typedef struct
 /** @defgroup USBH_USR_Exported_Variables
   * @{
   */ 
-extern  uint8_t USBH_USR_ApplicationState ;
+extern uint8_t USBH_USR_ApplicationState;
 /**
   * @}
   */ 

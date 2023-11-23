@@ -43,24 +43,24 @@ void DrawBox(uint16_t StartXPix, uint16_t StartYPix,
     LineObj.Ele_LineProp.Ele_Line_Width = BoxTotalWidth;
     LineObj.Ele_LineProp.Ele_Line_Height = BorderHeight;
 	
-	// ��Box�ϱ߿�
+	// »­BoxÉÏ±ß¿ò
 	LineObj.Display(StartXPix, StartYPix, &LineObj);
-    // ��Box�±߿�
+    // »­BoxÏÂ±ß¿ò
 	LineObj.Display(StartXPix, StartYPix+BoxTotalHeight-BorderHeight, 
         &LineObj);
     
     LineObj.Ele_LineProp.Ele_Line_Width = BorderWidth;
     LineObj.Ele_LineProp.Ele_Line_Height = BoxHeight;
 	
-    // ��Box�ұ߿�
+    // »­BoxÓÒ±ß¿ò
 	LineObj.Display(StartXPix+BoxTotalWidth-BorderWidth, 
         StartYPix+BorderHeight, &LineObj);
-	// ��Box��߿�
+	// »­Box×ó±ß¿ò
 	LineObj.Display(StartXPix, StartYPix+BorderHeight, &LineObj);
 	
 	if(!BoxObj.Ele_BoxProp.Ele_Box_IsSolid) return;
 	
-    // ��Boxʵ�Ĳ���
+    // »­BoxÊµÐÄ²¿·Ö
     LineObj.Ele_LineProp.Ele_Line_Width = BoxWidth;
     LineObj.Ele_LineProp.Ele_Line_Height = BoxHeight;
     LineObj.Ele_LineProp.Ele_Line_Color = BoxColor;

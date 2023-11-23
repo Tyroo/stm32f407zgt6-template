@@ -8,12 +8,12 @@ void FsmcSram_Init(void) {
 	u8 GPIOF_AF_Array[10] = {0,1,2,3,4,5,12,13,14,15};
 	u8 GPIOG_AF_Array[7]  = {0,1,2,3,4,5,10};
 	
-	/* ¶¨ÒåÅäÖÃ½á¹¹Ìå */
+	/* å®šä¹‰é…ç½®ç»“æ„ä½“ */
 	GPIO_InitTypeDef GPIO_InitStructure;
 	FSMC_NORSRAMInitTypeDef FSMC_InitStructure;
 	FSMC_NORSRAMTimingInitTypeDef FSMC_ReadWriteTiming; 
 
-	/* Ê±ÖÓÊ¹ÄÜ/Ê§ÄÜ */
+	/* æ—¶é’Ÿä½¿èƒ½/å¤±èƒ½ */
 	RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
@@ -21,65 +21,65 @@ void FsmcSram_Init(void) {
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE);
 	
-	/* ÅäÖÃGPIO */
-	// GPIOBÅäÖÃ
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;					//PB15 ÍÆÍìÊä³ö,¿ØÖÆ±³¹â
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;				//ÆÕÍ¨Êä³öÄ£Ê½
+	/* é…ç½®GPIO */
+	// GPIOBé…ç½®
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;					//PB15 æ¨æŒ½è¾“å‡º,æ§åˆ¶èƒŒå…‰
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;				//æ™®é€šè¾“å‡ºæ¨¡å¼
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;			//50MHz
-	GPIO_Init(GPIOB, &GPIO_InitStructure);						//³õÊ¼»¯ //PB15 ÍÆÍìÊä³ö,¿ØÖÆ±³¹â
-	// GPIODÅäÖÃ
+	GPIO_Init(GPIOB, &GPIO_InitStructure);						//åˆå§‹åŒ– //PB15 æ¨æŒ½è¾“å‡º,æ§åˆ¶èƒŒå…‰
+	// GPIODé…ç½®
 	GPIO_InitStructure.GPIO_Pin = (3<<0)|(3<<4)|(0XFF<<8);		// PD0,1,4,5,8~15,NOE,NWE
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;				// ¸´ÓÃÊä³ö
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;				// ÍÆÍìÊä³ö
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;				// å¤ç”¨è¾“å‡º
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;				// æ¨æŒ½è¾“å‡º
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;			// 100MHz
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;				// ÉÏÀ­
-	GPIO_Init(GPIOD, &GPIO_InitStructure);						// ³õÊ¼»¯Êı¾İÏß
-	// GPIOEÅäÖÃ
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;				// ä¸Šæ‹‰
+	GPIO_Init(GPIOD, &GPIO_InitStructure);						// åˆå§‹åŒ–æ•°æ®çº¿
+	// GPIOEé…ç½®
 	GPIO_InitStructure.GPIO_Pin = (3<<0)|(0X1FF<<7);			// PE0,1,7~15,NBL0,NBL1
-	GPIO_Init(GPIOE, &GPIO_InitStructure);						// ³õÊ¼»¯Êı¾İÏß
-	// GPIOFÅäÖÃ
+	GPIO_Init(GPIOE, &GPIO_InitStructure);						// åˆå§‹åŒ–æ•°æ®çº¿
+	// GPIOFé…ç½®
 	GPIO_InitStructure.GPIO_Pin = (0X3F<<0)|(0XF<<12);			// PB15
-	GPIO_Init(GPIOF, &GPIO_InitStructure);						// ³õÊ¼»¯µØÖ·Ïß
-	// GPIOGÅäÖÃ	
+	GPIO_Init(GPIOF, &GPIO_InitStructure);						// åˆå§‹åŒ–åœ°å€çº¿
+	// GPIOGé…ç½®	
 	GPIO_InitStructure.GPIO_Pin =(0X3F<<0)| GPIO_Pin_10;		// PG0~5,10,NE3
-	GPIO_Init(GPIOG, &GPIO_InitStructure);						// ³õÊ¼»¯µØÖ·Ïß
+	GPIO_Init(GPIOG, &GPIO_InitStructure);						// åˆå§‹åŒ–åœ°å€çº¿
 	
-	/* GPIO¸´ÓÃÅäÖÃ */
+	/* GPIOå¤ç”¨é…ç½® */
 	Fsmc_AF_Config(GPIOD, GPIOD_AF_Array, 12);
 	Fsmc_AF_Config(GPIOE, GPIOE_AF_Array, 11);
 	Fsmc_AF_Config(GPIOF, GPIOF_AF_Array, 10);
 	Fsmc_AF_Config(GPIOG, GPIOG_AF_Array, 7);
 	
-	/* FSMCÅäÖÃ */
-	// FSMC¶ÁĞ´Ê±ĞòÅäÖÃ
-	FSMC_ReadWriteTiming.FSMC_AddressSetupTime = 0x00; 			//µØÖ·½¨Á¢Ê±¼äÎª 2 ¸ö HCLK
-	FSMC_ReadWriteTiming.FSMC_AddressHoldTime = 0x00; 			//µØÖ·±£³ÖÊ±¼äÄ£Ê½ A Î´ÓÃµ½
-	FSMC_ReadWriteTiming.FSMC_DataSetupTime = 0x08; 			//Êı¾İ±£³ÖÊ±¼äÎª 9¸ö HCLK
+	/* FSMCé…ç½® */
+	// FSMCè¯»å†™æ—¶åºé…ç½®
+	FSMC_ReadWriteTiming.FSMC_AddressSetupTime = 0x00; 			//åœ°å€å»ºç«‹æ—¶é—´ä¸º 2 ä¸ª HCLK
+	FSMC_ReadWriteTiming.FSMC_AddressHoldTime = 0x00; 			//åœ°å€ä¿æŒæ—¶é—´æ¨¡å¼ A æœªç”¨åˆ°
+	FSMC_ReadWriteTiming.FSMC_DataSetupTime = 0x08; 			//æ•°æ®ä¿æŒæ—¶é—´ä¸º 9ä¸ª HCLK
 	FSMC_ReadWriteTiming.FSMC_BusTurnAroundDuration = 0x00;
 	FSMC_ReadWriteTiming.FSMC_CLKDivision = 0x00;
 	FSMC_ReadWriteTiming.FSMC_DataLatency = 0x00;
-	FSMC_ReadWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A; 	//Ä£Ê½ A 
-	// FSMCÅäÖÃ
-	FSMC_InitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM3;			// ÉèÖÃFSMC¹ÜÀíµÄÍâ²¿SRAMµÄµØÖ·£¨Bank1µÄ¿é3£©
+	FSMC_ReadWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A; 	//æ¨¡å¼ A 
+	// FSMCé…ç½®
+	FSMC_InitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM3;			// è®¾ç½®FSMCç®¡ç†çš„å¤–éƒ¨SRAMçš„åœ°å€ï¼ˆBank1çš„å—3ï¼‰
 	FSMC_InitStructure.FSMC_AsynchronousWait = FSMC_AsynchronousWait_Disable;
 	FSMC_InitStructure.FSMC_BurstAccessMode = FSMC_BurstAccessMode_Disable;
 	FSMC_InitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable; 
-	FSMC_InitStructure.FSMC_MemoryType = FSMC_MemoryType_SRAM;			// ÄÚ´æÀàĞÍÎªSRAM
-	FSMC_InitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b; //´æ´¢Æ÷Êı¾İ¿í¶ÈÎª8bit 
+	FSMC_InitStructure.FSMC_MemoryType = FSMC_MemoryType_SRAM;			// å†…å­˜ç±»å‹ä¸ºSRAM
+	FSMC_InitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b; //å­˜å‚¨å™¨æ•°æ®å®½åº¦ä¸º8bit 
 	FSMC_InitStructure.FSMC_WaitSignalPolarity = FSMC_WaitSignalPolarity_Low;
 	FSMC_InitStructure.FSMC_AsynchronousWait = FSMC_AsynchronousWait_Disable;
 	FSMC_InitStructure.FSMC_WrapMode = FSMC_WrapMode_Disable; 
 	FSMC_InitStructure.FSMC_WaitSignalActive = FSMC_WaitSignalActive_BeforeWaitState; 
-	FSMC_InitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;//´æ´¢Æ÷Ğ´Ê¹ÄÜ
+	FSMC_InitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;//å­˜å‚¨å™¨å†™ä½¿èƒ½
 	FSMC_InitStructure.FSMC_WaitSignal = FSMC_WaitSignal_Disable; 
-	FSMC_InitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Disable; 	// ¶ÁĞ´Ê¹ÓÃÏàÍ¬µÄÊ±Ğò
+	FSMC_InitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Disable; 	// è¯»å†™ä½¿ç”¨ç›¸åŒçš„æ—¶åº
 	FSMC_InitStructure.FSMC_WriteBurst = FSMC_WriteBurst_Disable;
 	FSMC_InitStructure.FSMC_ReadWriteTimingStruct = &FSMC_ReadWriteTiming;
-	FSMC_InitStructure.FSMC_WriteTimingStruct = &FSMC_ReadWriteTiming; 	//¶ÁĞ´Í¬ÑùÊ±Ğò
+	FSMC_InitStructure.FSMC_WriteTimingStruct = &FSMC_ReadWriteTiming; 	//è¯»å†™åŒæ ·æ—¶åº
 	
-	/* Ê¹ÄÜ/Ê§ÄÜ */
-	FSMC_NORSRAMInit(&FSMC_InitStructure); 			//³õÊ¼»¯ FSMC ÅäÖÃ
-	FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM3, ENABLE);	// Ê¹ÄÜ BANK1 ÇøÓò 3
+	/* ä½¿èƒ½/å¤±èƒ½ */
+	FSMC_NORSRAMInit(&FSMC_InitStructure); 			//åˆå§‹åŒ– FSMC é…ç½®
+	FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM3, ENABLE);	// ä½¿èƒ½ BANK1 åŒºåŸŸ 3
 
 }
 

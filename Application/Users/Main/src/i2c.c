@@ -1,139 +1,252 @@
-/* Èí¼şIICÄ£¿é£¨ÑéÖ¤Í¨¹ı£© */
 #include "i2c.h"
 
 
-void IIC_Init(void) 
+// å‘é€èµ·å§‹ä¿¡å·ï¼ŒSCKé«˜ç”µå¹³ä¸‹ï¼ŒSDAç”±é«˜å˜ä½
+static void I2C_Start(void)
 {
-	/* ÅäÖÃ½á¹¹Ìå¶¨Òå */
-	GPIO_InitTypeDef GPIO_InitStructure;						// ¶¨ÒåÒ»¸öGPIOÅäÖÃ½á¹¹Ìå
+	I2C_SCL_H();
 	
-	/* Ê¹ÄÜÊ±ÖÓ */
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);		// Ê¹ÄÜGPIOBÊ±ÖÓ
+	I2C_SDA_H();
 	
-	/* ÅäÖÃGPIO */
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;				// GPIOÊä³ö
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;				// ÍÆÍìÊä³ö
-	GPIO_InitStructure.GPIO_PuPd =  GPIO_PuPd_UP;				// ÉÏÀ­Ä£Ê½
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8 | GPIO_Pin_9;		// ÅäÖÃPin8~9
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;			// Êä³öËÙ¶ÈÎª100MHz
+	I2C_DELAY_US(I2C_DATA_HOLD_TIME_US >> 1);
 	
-	/* ³õÊ¼»¯GPIO */
-	GPIO_Init(GPIOB, &GPIO_InitStructure);						// Ó¦ÓÃGPIOBÅäÖÃ
-	GPIO_SetBits(GPIOB, GPIO_Pin_8 | GPIO_Pin_9);				// ³õÊ¼À­¸ßSCK£¨Pin8£©ºÍSDA£¨Pin9£©
-}
-
-
-// ·¢ËÍÆğÊ¼ĞÅºÅ£¬SCK¸ßµçÆ½ÏÂ£¬SDAÓÉ¸ß±äµÍ
-void IIC_Start(void) 
-{
-	IIC_Mode_Tx();     //sdaÏßÊä³ö
-	IIC_SDA_OUT = 1;	  	  
-	IIC_SCL = 1;
-	Delay_Us(2);
- 	IIC_SDA_OUT = 0;
-	Delay_Us(2);
-	IIC_SCL = 0;//Ç¯×¡I2C×ÜÏß£¬×¼±¸·¢ËÍ»ò½ÓÊÕÊı¾İ 
+	I2C_SDA_L();
+	
+	I2C_DELAY_US(I2C_DATA_HOLD_TIME_US >> 1);
+	
+	I2C_SCL_L();
 }
 
     
-// ·¢ËÍ½áÊøĞÅºÅ£¬SCK¸ßµçÆ½ÏÂ£¬SDAÓÉµÍ±ä¸ß
-void IIC_Stop(void) 
+// å‘é€ç»“æŸä¿¡å·ï¼ŒSCKé«˜ç”µå¹³ä¸‹ï¼ŒSDAç”±ä½å˜é«˜
+static void I2C_Stop(void) 
 {
-	IIC_Mode_Tx();	// SDAÏßÊä³ö
-	IIC_SCL = 0;
-	IIC_SDA_OUT = 0;
- 	Delay_Us(2);
-	IIC_SCL = 1; 
-	IIC_SDA_OUT = 1;//·¢ËÍI2C×ÜÏß½áÊøĞÅºÅ
-	Delay_Us(2);	
+	I2C_DELAY_US(I2C_DATA_PREP_TIME_US >> 1);
+	
+	I2C_SDA_L();
+	
+	I2C_DELAY_US(I2C_DATA_PREP_TIME_US >> 1);
+	
+	I2C_SCL_H();
+	
+	I2C_DELAY_US(I2C_DATA_HOLD_TIME_US >> 1);
+	
+	I2C_SDA_H();
+	
+	I2C_DELAY_US(I2C_DATA_HOLD_TIME_US >> 1);
 }
 
 
-// ·¢ËÍÏìÓ¦ĞÅºÅ£¨Ó¦´ğ¡¢·ÇÓ¦´ğ£©£¬½ÓÊÕÍêÊı¾İºó½«SDAÀ­¸ß
-static void IIC_TxReply(uint8_t Res)
-{ 
-	IIC_SCL = 0;
-	IIC_Mode_Tx();
-	
-	IIC_SDA_OUT = (1 - Res);	// ½«SDAÀ­µÍÔòÓ¦´ğ£¬·ñÔò²»Ó¦´ğ
-	Delay_Us(2);
-	
-	IIC_SCL = 1;
-	Delay_Us(2);
-	
-	IIC_SCL = 0;
-}
-
-
-// ½ÓÊÕÏìÓ¦ĞÅºÅ£¨Ó¦´ğ¡¢·ÇÓ¦´ğ£©£¬½ÓÊÕÍêÊı¾İºó½«SDAÀ­¸ß
-static bool IIC_RxReply(void)
-{ 
-	uint8_t ReplyTime;
-	
-	ReplyTime = 0;
-
-	IIC_Mode_Rx();
-	Delay_Us(1);	   
-	IIC_SCL=1;
-	
-	while(IIC_SDA_IN)
+// å‘é€8ä½æ•°æ®
+static void I2C_TxByte(unsigned char u8Data) 
+{
+	for(unsigned char u8Bit = 0; u8Bit < 8; u8Bit++) 
 	{
-		ReplyTime++;
-		if(ReplyTime>250)
+		I2C_DELAY_US(I2C_DATA_PREP_TIME_US >> 1);
+		
+		(u8Data & 0x80) ? I2C_SDA_H() : I2C_SDA_L();
+		u8Data <<= 1;
+		
+		I2C_DELAY_US(I2C_DATA_PREP_TIME_US >> 1);
+		
+		I2C_SCL_H();
+		
+		I2C_DELAY_US(I2C_DATA_HOLD_TIME_US);
+		
+		I2C_SCL_L();
+	}
+}
+
+
+// æ¥æ”¶8ä½æ•°æ®
+static unsigned char I2C_RxByte(void) 
+{
+	unsigned char u8Data = 0;
+	
+	for(unsigned char u8Bit = 0; u8Bit < 8; u8Bit++) 
+	{
+		I2C_DELAY_US(I2C_DATA_PREP_TIME_US >> 1);
+		
+		I2C_SDA_H();
+		
+		I2C_DELAY_US(I2C_DATA_PREP_TIME_US >> 1);
+		
+		I2C_SCL_H();
+		
+		I2C_DELAY_US(I2C_DATA_HOLD_TIME_US >> 1);
+		
+		u8Data <<= 1;
+		u8Data |= I2C_SDA_R();
+		
+		I2C_DELAY_US(I2C_DATA_HOLD_TIME_US >> 1);
+		
+		I2C_SCL_L();
+	}
+	
+	return u8Data;
+}
+
+
+// å‘é€å“åº”ä¿¡å·ï¼ˆåº”ç­”ã€éåº”ç­”ï¼‰ï¼Œæ¥æ”¶å®Œæ•°æ®åå°†SDAæ‹‰é«˜
+static void I2C_TxReply(unsigned char u8Ack)
+{
+	I2C_DELAY_US(I2C_DATA_PREP_TIME_US >> 1);
+	
+	u8Ack ? I2C_SDA_L() : I2C_SDA_H();
+	
+	I2C_DELAY_US(I2C_DATA_PREP_TIME_US >> 1);
+	
+	I2C_SCL_H();
+	
+	I2C_DELAY_US(I2C_DATA_HOLD_TIME_US);
+	
+	I2C_SCL_L();
+}
+
+
+// æ¥æ”¶å“åº”ä¿¡å·ï¼ˆåº”ç­”ã€éåº”ç­”ï¼‰ï¼Œæ¥æ”¶å®Œæ•°æ®åå°†SDAæ‹‰é«˜
+static unsigned char I2C_RxReply(void)
+{
+	unsigned char u8Ask = 0;
+	
+	I2C_DELAY_US(I2C_DATA_PREP_TIME_US >> 1);
+	
+	I2C_SDA_H();
+	
+	I2C_DELAY_US(I2C_DATA_PREP_TIME_US >> 1);
+	
+	I2C_SCL_H();
+	
+	I2C_DELAY_US(I2C_DATA_HOLD_TIME_US >> 1);
+	
+	u8Ask = (I2C_SDA_R() == 0);
+
+	I2C_DELAY_US(I2C_DATA_HOLD_TIME_US >> 1);
+	
+	I2C_SCL_L();
+	
+	return u8Ask;
+}
+
+
+unsigned char I2C_ReadByte(void)
+{
+	unsigned char u8Data;
+	
+	I2C_Start();
+	
+	u8Data = I2C_RxByte();
+	
+	I2C_TxReply(0);
+	
+	I2C_Stop();
+	
+	return u8Data;
+}
+
+
+unsigned char I2C_WriteByte(unsigned char u8Data)
+{
+	unsigned char u8Ack;
+	
+	I2C_Start();
+	
+	I2C_TxByte(u8Data);
+	
+	u8Ack = I2C_RxReply();
+	
+	I2C_Stop();
+	
+	return u8Ack;
+}
+
+
+unsigned char I2C_ReadRegister(unsigned char u8Addr, unsigned char u8Reg, unsigned char * au8DataBuff, unsigned short u16Size)
+{
+	I2C_Start();
+	
+	// å‘é€è®¾å¤‡åœ°å€ï¼ˆå†™å…¥æ•°æ®ï¼‰
+	I2C_TxByte(u8Addr & 0xFE);
+	if (I2C_RxReply() == 0) { I2C_Stop(); return 0; }
+	
+	// å‘é€å¯„å­˜å™¨åœ°å€
+	I2C_TxByte(u8Reg);
+	if (I2C_RxReply() == 0) { I2C_Stop(); return 0; }
+	
+	I2C_Stop();
+	
+	I2C_Start();
+	
+	// å‘é€è®¾å¤‡åœ°å€ï¼ˆè¯»å‡ºæ•°æ®ï¼‰
+	I2C_TxByte(u8Addr | 0x01);
+	if (I2C_RxReply() == 0) { I2C_Stop(); return 0; }
+	
+	unsigned char u8Index = 0;
+	
+	for( ; u8Index < u16Size; u8Index++)
+	{
+		au8DataBuff[u8Index] = I2C_RxByte();
+		I2C_TxReply(1);
+	}
+	
+	I2C_Stop();
+	
+	return 1;
+}
+
+
+unsigned char I2C_WriteRegister(unsigned char u8Addr, unsigned char u8Reg, unsigned char * au8DataBuff, unsigned short u16Size)
+{
+	I2C_Start();
+	
+	// å‘é€è®¾å¤‡åœ°å€ï¼ˆå†™å…¥æ•°æ®ï¼‰
+	I2C_TxByte(u8Addr & 0xFE);
+	if (I2C_RxReply() == 0) { I2C_Stop(); return 0; }
+	
+	// å‘é€å¯„å­˜å™¨åœ°å€
+	I2C_TxByte(u8Reg);
+	if (I2C_RxReply() == 0) { I2C_Stop(); return 0; }
+	
+	unsigned char u8Index = 0;
+	
+	for( ; u8Index < u16Size; u8Index++)
+	{
+		I2C_TxByte(au8DataBuff[u8Index]);
+		
+		if (I2C_RxReply() == 0) 
 		{
-			IIC_Stop();
-			return false;
+			break;
 		}
 	}
-
-	IIC_SCL = 0;
 	
-	return true;	
+	I2C_Stop();
+	
+	return (u8Index == u16Size);
 }
 
 
-// ·¢ËÍ8Î»Êı¾İ
-bool IIC_Send_Byte(uint8_t Data) 
+unsigned char I2C_DeviceScan(unsigned char au8AddrTab[], unsigned char u8ScanNum)
 {
-	uint8_t Bit;
+	unsigned char u8DeviceAddr = 2, u8DeviceNum = 0;
 	
-	IIC_Mode_Tx();	// ½«IICÉèÖÃÎª·¢ËÍÄ£Ê½
+	if (u8ScanNum > 127) u8ScanNum = 127;
 	
-	for(Bit=0;Bit<8;Bit++) 
+	while(u8ScanNum--)
 	{
-		IIC_SDA_OUT = (Data&0x80)>>7;
-		Data<<=1;
-		Delay_Us(1);
+		I2C_Start();
 		
-		IIC_SCL = 1;
-		Delay_Us(2);
+		I2C_TxByte(u8DeviceAddr);
 		
-		IIC_SCL = 0;// À­µÍSCLµçÆ½£¬×¼±¸·¢ËÍµÚÒ»Ö¡Êı¾İ
-
-	}
-	return IIC_RxReply();
-}
-
-
-// ½ÓÊÕ8Î»Êı¾İ
-uint8_t IIC_Read_Byte(uint8_t IsAck) 
-{
-	uint8_t RxData, RxIndex;
-	
-	IIC_Mode_Rx();
-	
-	for (RxIndex=0;RxIndex<8;RxIndex++) 
-	{
-		IIC_SCL = 0;
-		Delay_Us(2);
+		if (I2C_RxReply())
+		{
+			au8AddrTab[u8DeviceNum] = u8DeviceAddr;
+			u8DeviceNum++;
+		}
 		
-		IIC_SCL = 1;
-		RxData <<= 1;
-		if (IIC_SDA_IN) RxData++;
-		Delay_Us(1);
+		u8DeviceAddr += 2;
+		
+		I2C_Stop();
 	}
 	
-	IIC_TxReply(IsAck);
-	
-	return RxData;
+	return u8DeviceNum;
 }

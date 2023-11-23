@@ -4,7 +4,7 @@
 #include "stm32f4xx.h"
 
 
-// TFTLCDÃüÁî/Êı¾İ¶ÁĞ´½á¹¹Ìå
+// TFTLCDå‘½ä»¤/æ•°æ®è¯»å†™ç»“æ„ä½“
 typedef struct {
 	
 	uint16_t RWCD_REG;
@@ -13,15 +13,15 @@ typedef struct {
 } TFTLCD_RWCD;
 
 
-// TFTLCDÃüÁî¼¯
+// TFTLCDå‘½ä»¤é›†
 typedef struct {
 	
-	uint8_t CMD_Read_ID;			// »ñÈ¡IDÖ¸Áî
+	uint8_t CMD_Read_ID;			// è·å–IDæŒ‡ä»¤
 	
-	uint8_t CMD_Write_ScanDir;// ÉèÖÃÉ¨Ãè·½Ïò
+	uint8_t CMD_Write_ScanDir;// è®¾ç½®æ‰«ææ–¹å‘
 	
-	uint8_t CMD_Write_XPos;	  // X×ø±êÉèÖÃÖ¸Áî
-	uint8_t CMD_Write_YPos;		// Y×ø±êÉèÖÃÖ¸Áî
+	uint8_t CMD_Write_XPos;	  // Xåæ ‡è®¾ç½®æŒ‡ä»¤
+	uint8_t CMD_Write_YPos;		// Yåæ ‡è®¾ç½®æŒ‡ä»¤
 	
 	uint8_t CMD_Write_ColorCode;
 	uint8_t CMD_Read_ColorCode;
@@ -29,14 +29,14 @@ typedef struct {
 } TFTLCD_CMD;
 
 
-// TFTLCDÅäÖÃ½á¹¹Ìå
+// TFTLCDé…ç½®ç»“æ„ä½“
 typedef struct {
 	
-	uint16_t TFTLCD_Width;	// ÆÁÄ»¿í¶È
-	uint16_t TFTLCD_Height;	// ÆÁÄ»¸ß¶È
-	uint16_t TFTLCD_Id;			// ÆÁÄ»ICĞÍºÅ
-	uint8_t TFTLCD_Dir;			// ÆÁÄ»ÏÔÊ¾·½Ïò
-	TFTLCD_CMD TFTLCD_Cmd;	// TFTLCDÆÁÄ»ICµÄÖ¸Áî¼¯
+	uint16_t TFTLCD_Width;	// å±å¹•å®½åº¦
+	uint16_t TFTLCD_Height;	// å±å¹•é«˜åº¦
+	uint16_t TFTLCD_Id;			// å±å¹•ICå‹å·
+	uint8_t TFTLCD_Dir;			// å±å¹•æ˜¾ç¤ºæ–¹å‘
+	TFTLCD_CMD TFTLCD_Cmd;	// TFTLCDå±å¹•ICçš„æŒ‡ä»¤é›†
 	
 } TFTLCD_Config;
 

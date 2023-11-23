@@ -31,19 +31,19 @@
 
 
 
-#define LWIP_MAX_DHCP_TRIES		4   //DHCP·şÎñÆ÷×î´óÖØÊÔ´ÎÊı
+#define LWIP_MAX_DHCP_TRIES		4   //DHCPæœåŠ¡å™¨æœ€å¤§é‡è¯•æ¬¡æ•°
 
 typedef volatile unsigned char vuint8_t;
 
 
 typedef struct 
 {
-	uint8_t mac[6]; 		//MAC µØÖ·
-	uint8_t remoteip[4]; 	//Ô¶¶ËÖ÷»ú IP µØÖ·
-	uint8_t ip[4]; 			//±¾»ú IP µØÖ·
-	uint8_t netmask[4]; 	//×ÓÍøÑÚÂë
-	uint8_t gateway[4]; 	//Ä¬ÈÏÍø¹ØµÄ IP µØÖ·
-	vuint8_t dhcpstatus; 	// DHCP×´Ì¬£º{ 0£ºÎ¬»¤Å¼DHCPµØÖ·£»1£º½øÈëDHCP»ñÈ¡×´Ì¬£»2£º³É¹¦»ñÈ¡DHCPµØÖ·£»0xff£º»ñÈ¡DHCPµØÖ·Ê§°Ü }
+	uint8_t mac[6]; 		//MAC åœ°å€
+	uint8_t remoteip[4]; 	//è¿œç«¯ä¸»æœº IP åœ°å€
+	uint8_t ip[4]; 			//æœ¬æœº IP åœ°å€
+	uint8_t netmask[4]; 	//å­ç½‘æ©ç 
+	uint8_t gateway[4]; 	//é»˜è®¤ç½‘å…³çš„ IP åœ°å€
+	vuint8_t dhcpstatus; 	// DHCPçŠ¶æ€ï¼š{ 0ï¼šç»´æŠ¤å¶DHCPåœ°å€ï¼›1ï¼šè¿›å…¥DHCPè·å–çŠ¶æ€ï¼›2ï¼šæˆåŠŸè·å–DHCPåœ°å€ï¼›0xffï¼šè·å–DHCPåœ°å€å¤±è´¥ }
 	
 	int8_t udpstatus;
 } LwipObjectTypeDef;

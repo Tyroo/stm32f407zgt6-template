@@ -21,10 +21,13 @@
 
 /* Includes ------------------------------------------------------------------ */
 #include "usbd_usr.h"
+#include "usart.h"
 
 /** @addtogroup USBD_USER
   * @{
   */
+
+USBD_DEVICE USBD_Msc;
 
 /** @addtogroup USBD_MSC_DEMO_USER_CALLBACKS
   * @{
@@ -65,7 +68,7 @@
 /* Points to the DEVICE_PROP structure of current device */
 /* The purpose of this register is to speed up the execution */
 
-USBD_Usr_cb_TypeDef USR_USBD_cb = {
+USBD_Usr_cb_TypeDef USBD_Usr_cb = {
   USBD_USR_Init,
   USBD_USR_DeviceReset,
   USBD_USR_DeviceConfigured,
@@ -75,6 +78,7 @@ USBD_Usr_cb_TypeDef USR_USBD_cb = {
   USBD_USR_DeviceConnected,
   USBD_USR_DeviceDisconnected,
 };
+
 
 /**
   * @}
@@ -111,9 +115,8 @@ USBD_Usr_cb_TypeDef USR_USBD_cb = {
 */
 void USBD_USR_Init(void)
 {
-  Uart1_Send(USER_INFORMATION1);
-  Uart1_Send(USER_INFORMATION2);
-
+  //Uart1_Send(USER_INFORMATION1);
+  //Uart1_Send(USER_INFORMATION2);
 }
 
 /**
@@ -133,7 +136,7 @@ void USBD_USR_DeviceReset(uint8_t speed)
 */
 void USBD_USR_DeviceConfigured(void)
 {
-  Uart1_Send("> MSC Interface started.\n");
+  //Uart1_Send("> MSC Interface started.\n");
 }
 
 /**
@@ -143,7 +146,7 @@ void USBD_USR_DeviceConfigured(void)
 */
 void USBD_USR_DeviceSuspended(void)
 {
-  Uart1_Send("> Device In suspend mode.\n");
+  //Uart1_Send("> Device In suspend mode.\n");
 }
 
 
@@ -166,7 +169,7 @@ void USBD_USR_DeviceResumed(void)
 */
 void USBD_USR_DeviceConnected(void)
 {
-  Uart1_Send("> USB Device Connected.\n");
+  //Uart1_Send("> USB Device Connected.\n");
 }
 
 
@@ -178,7 +181,7 @@ void USBD_USR_DeviceConnected(void)
 */
 void USBD_USR_DeviceDisconnected(void)
 {
-  Uart1_Send("> USB Device Disconnected.\n");
+  //Uart1_Send("> USB Device Disconnected.\n");
 }
 
 /**

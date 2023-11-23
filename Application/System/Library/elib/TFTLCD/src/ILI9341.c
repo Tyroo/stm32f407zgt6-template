@@ -93,7 +93,7 @@ void ILI9341_Init(uint16_t* Reg, uint16_t* Data) {
 		*Data = (0x00);
 		*Data = (0x00);
 		*Data = (0xef);	 
-		*Reg = (0x11); // ÍË³öÑÓÊ±
+		*Reg = (0x11); // é€€å‡ºå»¶æ—¶
 		Delay_Ms(120);
-		*Reg = (0x29); // ¿ªÆôÏÔÊ¾
+		*Reg = (0x29); // å¼€å¯æ˜¾ç¤º
 }

@@ -654,7 +654,7 @@ ip4_reass(struct pbuf *p)
     /* copy the original ip header back to the first pbuf */
     fraghdr = (struct ip_hdr *)(ipr->p->payload);
 	/* zjl.20220726 */
-//    SMEMCPY(fraghdr, &ipr->iphdr, IP_HLEN);	// ·ÀÖ¹´Ë´¦²úÉú·ÇÄÚ´æ¶ÔÆë·ÃÎÊ
+//    SMEMCPY(fraghdr, &ipr->iphdr, IP_HLEN);	// é˜²æ­¢æ­¤å¤„äº§ç”Ÿéžå†…å­˜å¯¹é½è®¿é—®
 	
 	fraghdr->dest.addr = ipr->iphdr.dest.addr;
 	fraghdr->src.addr = ipr->iphdr.src.addr;
