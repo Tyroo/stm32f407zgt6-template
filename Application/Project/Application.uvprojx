@@ -483,6 +483,11 @@
               <FileType>1</FileType>
               <FilePath>..\Users\Main\src\mx25l64.c</FilePath>
             </File>
+            <File>
+              <FileName>crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Users\Main\src\crc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -732,6 +737,26 @@
               <FileName>pid.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\System\Library\elib\PID\src\pid.c</FilePath>
+            </File>
+            <File>
+              <FileName>modbus_rtu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\System\Library\elib\ModbusRTU\modbus_rtu.c</FilePath>
+            </File>
+            <File>
+              <FileName>modbus_rtu_para.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\System\Library\elib\ModbusRTU\modbus_rtu_para.c</FilePath>
+            </File>
+            <File>
+              <FileName>at_commond.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\System\Library\elib\AT_Command\at_commond.c</FilePath>
+            </File>
+            <File>
+              <FileName>at_command_instruct.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\System\Library\elib\AT_Command\at_command_instruct.c</FilePath>
             </File>
           </Files>
         </Group>

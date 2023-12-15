@@ -2,7 +2,7 @@
 
 #if USE_NEW_MALLOC_MOD
 // 内存池，指定32字节位对齐
-__align(32) uint8_t Memory_Pond_Int[MEM1_MAX_SIZE];																	// 内部内存块
+__align(32) uint8_t Memory_Pond_Int[MEM1_MAX_SIZE];									// 内部内存块
 __align(32) uint8_t Memory_Pond_Ext[MEM2_MAX_SIZE] __attribute__((at(0x68000000)));	// 外部SRAM内存
 __align(32) uint8_t Memory_Pond_Ccm[MEM3_MAX_SIZE] __attribute__((at(0x10000000)));	// 内部CCM内存
 

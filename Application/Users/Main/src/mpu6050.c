@@ -20,7 +20,7 @@ bool MPU6050_Init(void)
 	
 	/* 设置其他参数 */
 	MPU6050_Rx_Data(MPU6050_DEV_ADDR, MPU6050_DEVICE_ID_REG, 1, &RxDev);
-
+	
 	Res = (bool)(RxDev == MPU6050_DEV_ADDR);
 	
 	mpu_dmp_init();	// MPU6050 DMP初始化
@@ -155,7 +155,7 @@ uint8_t MPU6050_GetAccelerometer(short *Ax,short *Ay,short *Az)
 
 // 发送数据给MPU6050
 bool MPU6050_Tx_Data(uint8_t DevAddr, uint16_t RegAddr, 
-		uint8_t TxLen, uint8_t* Buff) 
+					 uint8_t TxLen, uint8_t* Buff) 
 {
 	return (bool)(I2C_WriteRegister(DevAddr, RegAddr, Buff, TxLen));
 }
@@ -163,7 +163,7 @@ bool MPU6050_Tx_Data(uint8_t DevAddr, uint16_t RegAddr,
 
 // 接收来自MPU6050的数据
 bool MPU6050_Rx_Data(uint8_t DevAddr, uint16_t RegAddr, 
-		uint8_t RxLen, uint8_t* Buff) 
+					 uint8_t RxLen, uint8_t* Buff) 
 {
 	return (bool)(I2C_WriteRegister(DevAddr, RegAddr, Buff, RxLen));
 }
